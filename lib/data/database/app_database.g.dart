@@ -8867,6 +8867,1865 @@ class DiscoveriesCompanion extends UpdateCompanion<DiscoveryData> {
   }
 }
 
+class $BacktestResultsTable extends BacktestResults
+    with TableInfo<$BacktestResultsTable, BacktestResultData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $BacktestResultsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _strategyMeta = const VerificationMeta(
+    'strategy',
+  );
+  @override
+  late final GeneratedColumn<String> strategy = GeneratedColumn<String>(
+    'strategy',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _startDateMeta = const VerificationMeta(
+    'startDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> startDate = GeneratedColumn<DateTime>(
+    'start_date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _endDateMeta = const VerificationMeta(
+    'endDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> endDate = GeneratedColumn<DateTime>(
+    'end_date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _initialCapitalMeta = const VerificationMeta(
+    'initialCapital',
+  );
+  @override
+  late final GeneratedColumn<double> initialCapital = GeneratedColumn<double>(
+    'initial_capital',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _finalCapitalMeta = const VerificationMeta(
+    'finalCapital',
+  );
+  @override
+  late final GeneratedColumn<double> finalCapital = GeneratedColumn<double>(
+    'final_capital',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _totalReturnMeta = const VerificationMeta(
+    'totalReturn',
+  );
+  @override
+  late final GeneratedColumn<double> totalReturn = GeneratedColumn<double>(
+    'total_return',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _totalReturnPercentMeta =
+      const VerificationMeta('totalReturnPercent');
+  @override
+  late final GeneratedColumn<double> totalReturnPercent =
+      GeneratedColumn<double>(
+        'total_return_percent',
+        aliasedName,
+        false,
+        type: DriftSqlType.double,
+        requiredDuringInsert: true,
+      );
+  static const VerificationMeta _maxDrawdownMeta = const VerificationMeta(
+    'maxDrawdown',
+  );
+  @override
+  late final GeneratedColumn<double> maxDrawdown = GeneratedColumn<double>(
+    'max_drawdown',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _maxDrawdownPercentMeta =
+      const VerificationMeta('maxDrawdownPercent');
+  @override
+  late final GeneratedColumn<double> maxDrawdownPercent =
+      GeneratedColumn<double>(
+        'max_drawdown_percent',
+        aliasedName,
+        false,
+        type: DriftSqlType.double,
+        requiredDuringInsert: true,
+      );
+  static const VerificationMeta _totalTradesMeta = const VerificationMeta(
+    'totalTrades',
+  );
+  @override
+  late final GeneratedColumn<int> totalTrades = GeneratedColumn<int>(
+    'total_trades',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _winningTradesMeta = const VerificationMeta(
+    'winningTrades',
+  );
+  @override
+  late final GeneratedColumn<int> winningTrades = GeneratedColumn<int>(
+    'winning_trades',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _losingTradesMeta = const VerificationMeta(
+    'losingTrades',
+  );
+  @override
+  late final GeneratedColumn<int> losingTrades = GeneratedColumn<int>(
+    'losing_trades',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _winRateMeta = const VerificationMeta(
+    'winRate',
+  );
+  @override
+  late final GeneratedColumn<double> winRate = GeneratedColumn<double>(
+    'win_rate',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _avgWinMeta = const VerificationMeta('avgWin');
+  @override
+  late final GeneratedColumn<double> avgWin = GeneratedColumn<double>(
+    'avg_win',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _avgLossMeta = const VerificationMeta(
+    'avgLoss',
+  );
+  @override
+  late final GeneratedColumn<double> avgLoss = GeneratedColumn<double>(
+    'avg_loss',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _profitFactorMeta = const VerificationMeta(
+    'profitFactor',
+  );
+  @override
+  late final GeneratedColumn<double> profitFactor = GeneratedColumn<double>(
+    'profit_factor',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _symbolsMeta = const VerificationMeta(
+    'symbols',
+  );
+  @override
+  late final GeneratedColumn<String> symbols = GeneratedColumn<String>(
+    'symbols',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    strategy,
+    startDate,
+    endDate,
+    initialCapital,
+    finalCapital,
+    totalReturn,
+    totalReturnPercent,
+    maxDrawdown,
+    maxDrawdownPercent,
+    totalTrades,
+    winningTrades,
+    losingTrades,
+    winRate,
+    avgWin,
+    avgLoss,
+    profitFactor,
+    symbols,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'backtest_results';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<BacktestResultData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('strategy')) {
+      context.handle(
+        _strategyMeta,
+        strategy.isAcceptableOrUnknown(data['strategy']!, _strategyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_strategyMeta);
+    }
+    if (data.containsKey('start_date')) {
+      context.handle(
+        _startDateMeta,
+        startDate.isAcceptableOrUnknown(data['start_date']!, _startDateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_startDateMeta);
+    }
+    if (data.containsKey('end_date')) {
+      context.handle(
+        _endDateMeta,
+        endDate.isAcceptableOrUnknown(data['end_date']!, _endDateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_endDateMeta);
+    }
+    if (data.containsKey('initial_capital')) {
+      context.handle(
+        _initialCapitalMeta,
+        initialCapital.isAcceptableOrUnknown(
+          data['initial_capital']!,
+          _initialCapitalMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_initialCapitalMeta);
+    }
+    if (data.containsKey('final_capital')) {
+      context.handle(
+        _finalCapitalMeta,
+        finalCapital.isAcceptableOrUnknown(
+          data['final_capital']!,
+          _finalCapitalMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_finalCapitalMeta);
+    }
+    if (data.containsKey('total_return')) {
+      context.handle(
+        _totalReturnMeta,
+        totalReturn.isAcceptableOrUnknown(
+          data['total_return']!,
+          _totalReturnMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_totalReturnMeta);
+    }
+    if (data.containsKey('total_return_percent')) {
+      context.handle(
+        _totalReturnPercentMeta,
+        totalReturnPercent.isAcceptableOrUnknown(
+          data['total_return_percent']!,
+          _totalReturnPercentMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_totalReturnPercentMeta);
+    }
+    if (data.containsKey('max_drawdown')) {
+      context.handle(
+        _maxDrawdownMeta,
+        maxDrawdown.isAcceptableOrUnknown(
+          data['max_drawdown']!,
+          _maxDrawdownMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_maxDrawdownMeta);
+    }
+    if (data.containsKey('max_drawdown_percent')) {
+      context.handle(
+        _maxDrawdownPercentMeta,
+        maxDrawdownPercent.isAcceptableOrUnknown(
+          data['max_drawdown_percent']!,
+          _maxDrawdownPercentMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_maxDrawdownPercentMeta);
+    }
+    if (data.containsKey('total_trades')) {
+      context.handle(
+        _totalTradesMeta,
+        totalTrades.isAcceptableOrUnknown(
+          data['total_trades']!,
+          _totalTradesMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_totalTradesMeta);
+    }
+    if (data.containsKey('winning_trades')) {
+      context.handle(
+        _winningTradesMeta,
+        winningTrades.isAcceptableOrUnknown(
+          data['winning_trades']!,
+          _winningTradesMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_winningTradesMeta);
+    }
+    if (data.containsKey('losing_trades')) {
+      context.handle(
+        _losingTradesMeta,
+        losingTrades.isAcceptableOrUnknown(
+          data['losing_trades']!,
+          _losingTradesMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_losingTradesMeta);
+    }
+    if (data.containsKey('win_rate')) {
+      context.handle(
+        _winRateMeta,
+        winRate.isAcceptableOrUnknown(data['win_rate']!, _winRateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_winRateMeta);
+    }
+    if (data.containsKey('avg_win')) {
+      context.handle(
+        _avgWinMeta,
+        avgWin.isAcceptableOrUnknown(data['avg_win']!, _avgWinMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_avgWinMeta);
+    }
+    if (data.containsKey('avg_loss')) {
+      context.handle(
+        _avgLossMeta,
+        avgLoss.isAcceptableOrUnknown(data['avg_loss']!, _avgLossMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_avgLossMeta);
+    }
+    if (data.containsKey('profit_factor')) {
+      context.handle(
+        _profitFactorMeta,
+        profitFactor.isAcceptableOrUnknown(
+          data['profit_factor']!,
+          _profitFactorMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_profitFactorMeta);
+    }
+    if (data.containsKey('symbols')) {
+      context.handle(
+        _symbolsMeta,
+        symbols.isAcceptableOrUnknown(data['symbols']!, _symbolsMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_symbolsMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  BacktestResultData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return BacktestResultData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      strategy: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}strategy'],
+      )!,
+      startDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}start_date'],
+      )!,
+      endDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}end_date'],
+      )!,
+      initialCapital: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}initial_capital'],
+      )!,
+      finalCapital: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}final_capital'],
+      )!,
+      totalReturn: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}total_return'],
+      )!,
+      totalReturnPercent: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}total_return_percent'],
+      )!,
+      maxDrawdown: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}max_drawdown'],
+      )!,
+      maxDrawdownPercent: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}max_drawdown_percent'],
+      )!,
+      totalTrades: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}total_trades'],
+      )!,
+      winningTrades: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}winning_trades'],
+      )!,
+      losingTrades: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}losing_trades'],
+      )!,
+      winRate: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}win_rate'],
+      )!,
+      avgWin: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}avg_win'],
+      )!,
+      avgLoss: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}avg_loss'],
+      )!,
+      profitFactor: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}profit_factor'],
+      )!,
+      symbols: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}symbols'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $BacktestResultsTable createAlias(String alias) {
+    return $BacktestResultsTable(attachedDatabase, alias);
+  }
+}
+
+class BacktestResultData extends DataClass
+    implements Insertable<BacktestResultData> {
+  final int id;
+  final String strategy;
+  final DateTime startDate;
+  final DateTime endDate;
+  final double initialCapital;
+  final double finalCapital;
+  final double totalReturn;
+  final double totalReturnPercent;
+  final double maxDrawdown;
+  final double maxDrawdownPercent;
+  final int totalTrades;
+  final int winningTrades;
+  final int losingTrades;
+  final double winRate;
+  final double avgWin;
+  final double avgLoss;
+  final double profitFactor;
+  final String symbols;
+  final DateTime createdAt;
+  const BacktestResultData({
+    required this.id,
+    required this.strategy,
+    required this.startDate,
+    required this.endDate,
+    required this.initialCapital,
+    required this.finalCapital,
+    required this.totalReturn,
+    required this.totalReturnPercent,
+    required this.maxDrawdown,
+    required this.maxDrawdownPercent,
+    required this.totalTrades,
+    required this.winningTrades,
+    required this.losingTrades,
+    required this.winRate,
+    required this.avgWin,
+    required this.avgLoss,
+    required this.profitFactor,
+    required this.symbols,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['strategy'] = Variable<String>(strategy);
+    map['start_date'] = Variable<DateTime>(startDate);
+    map['end_date'] = Variable<DateTime>(endDate);
+    map['initial_capital'] = Variable<double>(initialCapital);
+    map['final_capital'] = Variable<double>(finalCapital);
+    map['total_return'] = Variable<double>(totalReturn);
+    map['total_return_percent'] = Variable<double>(totalReturnPercent);
+    map['max_drawdown'] = Variable<double>(maxDrawdown);
+    map['max_drawdown_percent'] = Variable<double>(maxDrawdownPercent);
+    map['total_trades'] = Variable<int>(totalTrades);
+    map['winning_trades'] = Variable<int>(winningTrades);
+    map['losing_trades'] = Variable<int>(losingTrades);
+    map['win_rate'] = Variable<double>(winRate);
+    map['avg_win'] = Variable<double>(avgWin);
+    map['avg_loss'] = Variable<double>(avgLoss);
+    map['profit_factor'] = Variable<double>(profitFactor);
+    map['symbols'] = Variable<String>(symbols);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  BacktestResultsCompanion toCompanion(bool nullToAbsent) {
+    return BacktestResultsCompanion(
+      id: Value(id),
+      strategy: Value(strategy),
+      startDate: Value(startDate),
+      endDate: Value(endDate),
+      initialCapital: Value(initialCapital),
+      finalCapital: Value(finalCapital),
+      totalReturn: Value(totalReturn),
+      totalReturnPercent: Value(totalReturnPercent),
+      maxDrawdown: Value(maxDrawdown),
+      maxDrawdownPercent: Value(maxDrawdownPercent),
+      totalTrades: Value(totalTrades),
+      winningTrades: Value(winningTrades),
+      losingTrades: Value(losingTrades),
+      winRate: Value(winRate),
+      avgWin: Value(avgWin),
+      avgLoss: Value(avgLoss),
+      profitFactor: Value(profitFactor),
+      symbols: Value(symbols),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory BacktestResultData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return BacktestResultData(
+      id: serializer.fromJson<int>(json['id']),
+      strategy: serializer.fromJson<String>(json['strategy']),
+      startDate: serializer.fromJson<DateTime>(json['startDate']),
+      endDate: serializer.fromJson<DateTime>(json['endDate']),
+      initialCapital: serializer.fromJson<double>(json['initialCapital']),
+      finalCapital: serializer.fromJson<double>(json['finalCapital']),
+      totalReturn: serializer.fromJson<double>(json['totalReturn']),
+      totalReturnPercent: serializer.fromJson<double>(
+        json['totalReturnPercent'],
+      ),
+      maxDrawdown: serializer.fromJson<double>(json['maxDrawdown']),
+      maxDrawdownPercent: serializer.fromJson<double>(
+        json['maxDrawdownPercent'],
+      ),
+      totalTrades: serializer.fromJson<int>(json['totalTrades']),
+      winningTrades: serializer.fromJson<int>(json['winningTrades']),
+      losingTrades: serializer.fromJson<int>(json['losingTrades']),
+      winRate: serializer.fromJson<double>(json['winRate']),
+      avgWin: serializer.fromJson<double>(json['avgWin']),
+      avgLoss: serializer.fromJson<double>(json['avgLoss']),
+      profitFactor: serializer.fromJson<double>(json['profitFactor']),
+      symbols: serializer.fromJson<String>(json['symbols']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'strategy': serializer.toJson<String>(strategy),
+      'startDate': serializer.toJson<DateTime>(startDate),
+      'endDate': serializer.toJson<DateTime>(endDate),
+      'initialCapital': serializer.toJson<double>(initialCapital),
+      'finalCapital': serializer.toJson<double>(finalCapital),
+      'totalReturn': serializer.toJson<double>(totalReturn),
+      'totalReturnPercent': serializer.toJson<double>(totalReturnPercent),
+      'maxDrawdown': serializer.toJson<double>(maxDrawdown),
+      'maxDrawdownPercent': serializer.toJson<double>(maxDrawdownPercent),
+      'totalTrades': serializer.toJson<int>(totalTrades),
+      'winningTrades': serializer.toJson<int>(winningTrades),
+      'losingTrades': serializer.toJson<int>(losingTrades),
+      'winRate': serializer.toJson<double>(winRate),
+      'avgWin': serializer.toJson<double>(avgWin),
+      'avgLoss': serializer.toJson<double>(avgLoss),
+      'profitFactor': serializer.toJson<double>(profitFactor),
+      'symbols': serializer.toJson<String>(symbols),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  BacktestResultData copyWith({
+    int? id,
+    String? strategy,
+    DateTime? startDate,
+    DateTime? endDate,
+    double? initialCapital,
+    double? finalCapital,
+    double? totalReturn,
+    double? totalReturnPercent,
+    double? maxDrawdown,
+    double? maxDrawdownPercent,
+    int? totalTrades,
+    int? winningTrades,
+    int? losingTrades,
+    double? winRate,
+    double? avgWin,
+    double? avgLoss,
+    double? profitFactor,
+    String? symbols,
+    DateTime? createdAt,
+  }) => BacktestResultData(
+    id: id ?? this.id,
+    strategy: strategy ?? this.strategy,
+    startDate: startDate ?? this.startDate,
+    endDate: endDate ?? this.endDate,
+    initialCapital: initialCapital ?? this.initialCapital,
+    finalCapital: finalCapital ?? this.finalCapital,
+    totalReturn: totalReturn ?? this.totalReturn,
+    totalReturnPercent: totalReturnPercent ?? this.totalReturnPercent,
+    maxDrawdown: maxDrawdown ?? this.maxDrawdown,
+    maxDrawdownPercent: maxDrawdownPercent ?? this.maxDrawdownPercent,
+    totalTrades: totalTrades ?? this.totalTrades,
+    winningTrades: winningTrades ?? this.winningTrades,
+    losingTrades: losingTrades ?? this.losingTrades,
+    winRate: winRate ?? this.winRate,
+    avgWin: avgWin ?? this.avgWin,
+    avgLoss: avgLoss ?? this.avgLoss,
+    profitFactor: profitFactor ?? this.profitFactor,
+    symbols: symbols ?? this.symbols,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  BacktestResultData copyWithCompanion(BacktestResultsCompanion data) {
+    return BacktestResultData(
+      id: data.id.present ? data.id.value : this.id,
+      strategy: data.strategy.present ? data.strategy.value : this.strategy,
+      startDate: data.startDate.present ? data.startDate.value : this.startDate,
+      endDate: data.endDate.present ? data.endDate.value : this.endDate,
+      initialCapital: data.initialCapital.present
+          ? data.initialCapital.value
+          : this.initialCapital,
+      finalCapital: data.finalCapital.present
+          ? data.finalCapital.value
+          : this.finalCapital,
+      totalReturn: data.totalReturn.present
+          ? data.totalReturn.value
+          : this.totalReturn,
+      totalReturnPercent: data.totalReturnPercent.present
+          ? data.totalReturnPercent.value
+          : this.totalReturnPercent,
+      maxDrawdown: data.maxDrawdown.present
+          ? data.maxDrawdown.value
+          : this.maxDrawdown,
+      maxDrawdownPercent: data.maxDrawdownPercent.present
+          ? data.maxDrawdownPercent.value
+          : this.maxDrawdownPercent,
+      totalTrades: data.totalTrades.present
+          ? data.totalTrades.value
+          : this.totalTrades,
+      winningTrades: data.winningTrades.present
+          ? data.winningTrades.value
+          : this.winningTrades,
+      losingTrades: data.losingTrades.present
+          ? data.losingTrades.value
+          : this.losingTrades,
+      winRate: data.winRate.present ? data.winRate.value : this.winRate,
+      avgWin: data.avgWin.present ? data.avgWin.value : this.avgWin,
+      avgLoss: data.avgLoss.present ? data.avgLoss.value : this.avgLoss,
+      profitFactor: data.profitFactor.present
+          ? data.profitFactor.value
+          : this.profitFactor,
+      symbols: data.symbols.present ? data.symbols.value : this.symbols,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BacktestResultData(')
+          ..write('id: $id, ')
+          ..write('strategy: $strategy, ')
+          ..write('startDate: $startDate, ')
+          ..write('endDate: $endDate, ')
+          ..write('initialCapital: $initialCapital, ')
+          ..write('finalCapital: $finalCapital, ')
+          ..write('totalReturn: $totalReturn, ')
+          ..write('totalReturnPercent: $totalReturnPercent, ')
+          ..write('maxDrawdown: $maxDrawdown, ')
+          ..write('maxDrawdownPercent: $maxDrawdownPercent, ')
+          ..write('totalTrades: $totalTrades, ')
+          ..write('winningTrades: $winningTrades, ')
+          ..write('losingTrades: $losingTrades, ')
+          ..write('winRate: $winRate, ')
+          ..write('avgWin: $avgWin, ')
+          ..write('avgLoss: $avgLoss, ')
+          ..write('profitFactor: $profitFactor, ')
+          ..write('symbols: $symbols, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    strategy,
+    startDate,
+    endDate,
+    initialCapital,
+    finalCapital,
+    totalReturn,
+    totalReturnPercent,
+    maxDrawdown,
+    maxDrawdownPercent,
+    totalTrades,
+    winningTrades,
+    losingTrades,
+    winRate,
+    avgWin,
+    avgLoss,
+    profitFactor,
+    symbols,
+    createdAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is BacktestResultData &&
+          other.id == this.id &&
+          other.strategy == this.strategy &&
+          other.startDate == this.startDate &&
+          other.endDate == this.endDate &&
+          other.initialCapital == this.initialCapital &&
+          other.finalCapital == this.finalCapital &&
+          other.totalReturn == this.totalReturn &&
+          other.totalReturnPercent == this.totalReturnPercent &&
+          other.maxDrawdown == this.maxDrawdown &&
+          other.maxDrawdownPercent == this.maxDrawdownPercent &&
+          other.totalTrades == this.totalTrades &&
+          other.winningTrades == this.winningTrades &&
+          other.losingTrades == this.losingTrades &&
+          other.winRate == this.winRate &&
+          other.avgWin == this.avgWin &&
+          other.avgLoss == this.avgLoss &&
+          other.profitFactor == this.profitFactor &&
+          other.symbols == this.symbols &&
+          other.createdAt == this.createdAt);
+}
+
+class BacktestResultsCompanion extends UpdateCompanion<BacktestResultData> {
+  final Value<int> id;
+  final Value<String> strategy;
+  final Value<DateTime> startDate;
+  final Value<DateTime> endDate;
+  final Value<double> initialCapital;
+  final Value<double> finalCapital;
+  final Value<double> totalReturn;
+  final Value<double> totalReturnPercent;
+  final Value<double> maxDrawdown;
+  final Value<double> maxDrawdownPercent;
+  final Value<int> totalTrades;
+  final Value<int> winningTrades;
+  final Value<int> losingTrades;
+  final Value<double> winRate;
+  final Value<double> avgWin;
+  final Value<double> avgLoss;
+  final Value<double> profitFactor;
+  final Value<String> symbols;
+  final Value<DateTime> createdAt;
+  const BacktestResultsCompanion({
+    this.id = const Value.absent(),
+    this.strategy = const Value.absent(),
+    this.startDate = const Value.absent(),
+    this.endDate = const Value.absent(),
+    this.initialCapital = const Value.absent(),
+    this.finalCapital = const Value.absent(),
+    this.totalReturn = const Value.absent(),
+    this.totalReturnPercent = const Value.absent(),
+    this.maxDrawdown = const Value.absent(),
+    this.maxDrawdownPercent = const Value.absent(),
+    this.totalTrades = const Value.absent(),
+    this.winningTrades = const Value.absent(),
+    this.losingTrades = const Value.absent(),
+    this.winRate = const Value.absent(),
+    this.avgWin = const Value.absent(),
+    this.avgLoss = const Value.absent(),
+    this.profitFactor = const Value.absent(),
+    this.symbols = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  });
+  BacktestResultsCompanion.insert({
+    this.id = const Value.absent(),
+    required String strategy,
+    required DateTime startDate,
+    required DateTime endDate,
+    required double initialCapital,
+    required double finalCapital,
+    required double totalReturn,
+    required double totalReturnPercent,
+    required double maxDrawdown,
+    required double maxDrawdownPercent,
+    required int totalTrades,
+    required int winningTrades,
+    required int losingTrades,
+    required double winRate,
+    required double avgWin,
+    required double avgLoss,
+    required double profitFactor,
+    required String symbols,
+    this.createdAt = const Value.absent(),
+  }) : strategy = Value(strategy),
+       startDate = Value(startDate),
+       endDate = Value(endDate),
+       initialCapital = Value(initialCapital),
+       finalCapital = Value(finalCapital),
+       totalReturn = Value(totalReturn),
+       totalReturnPercent = Value(totalReturnPercent),
+       maxDrawdown = Value(maxDrawdown),
+       maxDrawdownPercent = Value(maxDrawdownPercent),
+       totalTrades = Value(totalTrades),
+       winningTrades = Value(winningTrades),
+       losingTrades = Value(losingTrades),
+       winRate = Value(winRate),
+       avgWin = Value(avgWin),
+       avgLoss = Value(avgLoss),
+       profitFactor = Value(profitFactor),
+       symbols = Value(symbols);
+  static Insertable<BacktestResultData> custom({
+    Expression<int>? id,
+    Expression<String>? strategy,
+    Expression<DateTime>? startDate,
+    Expression<DateTime>? endDate,
+    Expression<double>? initialCapital,
+    Expression<double>? finalCapital,
+    Expression<double>? totalReturn,
+    Expression<double>? totalReturnPercent,
+    Expression<double>? maxDrawdown,
+    Expression<double>? maxDrawdownPercent,
+    Expression<int>? totalTrades,
+    Expression<int>? winningTrades,
+    Expression<int>? losingTrades,
+    Expression<double>? winRate,
+    Expression<double>? avgWin,
+    Expression<double>? avgLoss,
+    Expression<double>? profitFactor,
+    Expression<String>? symbols,
+    Expression<DateTime>? createdAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (strategy != null) 'strategy': strategy,
+      if (startDate != null) 'start_date': startDate,
+      if (endDate != null) 'end_date': endDate,
+      if (initialCapital != null) 'initial_capital': initialCapital,
+      if (finalCapital != null) 'final_capital': finalCapital,
+      if (totalReturn != null) 'total_return': totalReturn,
+      if (totalReturnPercent != null)
+        'total_return_percent': totalReturnPercent,
+      if (maxDrawdown != null) 'max_drawdown': maxDrawdown,
+      if (maxDrawdownPercent != null)
+        'max_drawdown_percent': maxDrawdownPercent,
+      if (totalTrades != null) 'total_trades': totalTrades,
+      if (winningTrades != null) 'winning_trades': winningTrades,
+      if (losingTrades != null) 'losing_trades': losingTrades,
+      if (winRate != null) 'win_rate': winRate,
+      if (avgWin != null) 'avg_win': avgWin,
+      if (avgLoss != null) 'avg_loss': avgLoss,
+      if (profitFactor != null) 'profit_factor': profitFactor,
+      if (symbols != null) 'symbols': symbols,
+      if (createdAt != null) 'created_at': createdAt,
+    });
+  }
+
+  BacktestResultsCompanion copyWith({
+    Value<int>? id,
+    Value<String>? strategy,
+    Value<DateTime>? startDate,
+    Value<DateTime>? endDate,
+    Value<double>? initialCapital,
+    Value<double>? finalCapital,
+    Value<double>? totalReturn,
+    Value<double>? totalReturnPercent,
+    Value<double>? maxDrawdown,
+    Value<double>? maxDrawdownPercent,
+    Value<int>? totalTrades,
+    Value<int>? winningTrades,
+    Value<int>? losingTrades,
+    Value<double>? winRate,
+    Value<double>? avgWin,
+    Value<double>? avgLoss,
+    Value<double>? profitFactor,
+    Value<String>? symbols,
+    Value<DateTime>? createdAt,
+  }) {
+    return BacktestResultsCompanion(
+      id: id ?? this.id,
+      strategy: strategy ?? this.strategy,
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
+      initialCapital: initialCapital ?? this.initialCapital,
+      finalCapital: finalCapital ?? this.finalCapital,
+      totalReturn: totalReturn ?? this.totalReturn,
+      totalReturnPercent: totalReturnPercent ?? this.totalReturnPercent,
+      maxDrawdown: maxDrawdown ?? this.maxDrawdown,
+      maxDrawdownPercent: maxDrawdownPercent ?? this.maxDrawdownPercent,
+      totalTrades: totalTrades ?? this.totalTrades,
+      winningTrades: winningTrades ?? this.winningTrades,
+      losingTrades: losingTrades ?? this.losingTrades,
+      winRate: winRate ?? this.winRate,
+      avgWin: avgWin ?? this.avgWin,
+      avgLoss: avgLoss ?? this.avgLoss,
+      profitFactor: profitFactor ?? this.profitFactor,
+      symbols: symbols ?? this.symbols,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (strategy.present) {
+      map['strategy'] = Variable<String>(strategy.value);
+    }
+    if (startDate.present) {
+      map['start_date'] = Variable<DateTime>(startDate.value);
+    }
+    if (endDate.present) {
+      map['end_date'] = Variable<DateTime>(endDate.value);
+    }
+    if (initialCapital.present) {
+      map['initial_capital'] = Variable<double>(initialCapital.value);
+    }
+    if (finalCapital.present) {
+      map['final_capital'] = Variable<double>(finalCapital.value);
+    }
+    if (totalReturn.present) {
+      map['total_return'] = Variable<double>(totalReturn.value);
+    }
+    if (totalReturnPercent.present) {
+      map['total_return_percent'] = Variable<double>(totalReturnPercent.value);
+    }
+    if (maxDrawdown.present) {
+      map['max_drawdown'] = Variable<double>(maxDrawdown.value);
+    }
+    if (maxDrawdownPercent.present) {
+      map['max_drawdown_percent'] = Variable<double>(maxDrawdownPercent.value);
+    }
+    if (totalTrades.present) {
+      map['total_trades'] = Variable<int>(totalTrades.value);
+    }
+    if (winningTrades.present) {
+      map['winning_trades'] = Variable<int>(winningTrades.value);
+    }
+    if (losingTrades.present) {
+      map['losing_trades'] = Variable<int>(losingTrades.value);
+    }
+    if (winRate.present) {
+      map['win_rate'] = Variable<double>(winRate.value);
+    }
+    if (avgWin.present) {
+      map['avg_win'] = Variable<double>(avgWin.value);
+    }
+    if (avgLoss.present) {
+      map['avg_loss'] = Variable<double>(avgLoss.value);
+    }
+    if (profitFactor.present) {
+      map['profit_factor'] = Variable<double>(profitFactor.value);
+    }
+    if (symbols.present) {
+      map['symbols'] = Variable<String>(symbols.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BacktestResultsCompanion(')
+          ..write('id: $id, ')
+          ..write('strategy: $strategy, ')
+          ..write('startDate: $startDate, ')
+          ..write('endDate: $endDate, ')
+          ..write('initialCapital: $initialCapital, ')
+          ..write('finalCapital: $finalCapital, ')
+          ..write('totalReturn: $totalReturn, ')
+          ..write('totalReturnPercent: $totalReturnPercent, ')
+          ..write('maxDrawdown: $maxDrawdown, ')
+          ..write('maxDrawdownPercent: $maxDrawdownPercent, ')
+          ..write('totalTrades: $totalTrades, ')
+          ..write('winningTrades: $winningTrades, ')
+          ..write('losingTrades: $losingTrades, ')
+          ..write('winRate: $winRate, ')
+          ..write('avgWin: $avgWin, ')
+          ..write('avgLoss: $avgLoss, ')
+          ..write('profitFactor: $profitFactor, ')
+          ..write('symbols: $symbols, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $JournalEntriesTable extends JournalEntries
+    with TableInfo<$JournalEntriesTable, JournalEntryData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $JournalEntriesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _symbolMeta = const VerificationMeta('symbol');
+  @override
+  late final GeneratedColumn<String> symbol = GeneratedColumn<String>(
+    'symbol',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 1,
+      maxTextLength: 10,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+    'type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _entryPriceMeta = const VerificationMeta(
+    'entryPrice',
+  );
+  @override
+  late final GeneratedColumn<double> entryPrice = GeneratedColumn<double>(
+    'entry_price',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _exitPriceMeta = const VerificationMeta(
+    'exitPrice',
+  );
+  @override
+  late final GeneratedColumn<double> exitPrice = GeneratedColumn<double>(
+    'exit_price',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _sharesMeta = const VerificationMeta('shares');
+  @override
+  late final GeneratedColumn<double> shares = GeneratedColumn<double>(
+    'shares',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _pnlMeta = const VerificationMeta('pnl');
+  @override
+  late final GeneratedColumn<double> pnl = GeneratedColumn<double>(
+    'pnl',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _entryDateMeta = const VerificationMeta(
+    'entryDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> entryDate = GeneratedColumn<DateTime>(
+    'entry_date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _exitDateMeta = const VerificationMeta(
+    'exitDate',
+  );
+  @override
+  late final GeneratedColumn<DateTime> exitDate = GeneratedColumn<DateTime>(
+    'exit_date',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _notesMeta = const VerificationMeta('notes');
+  @override
+  late final GeneratedColumn<String> notes = GeneratedColumn<String>(
+    'notes',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _moodMeta = const VerificationMeta('mood');
+  @override
+  late final GeneratedColumn<String> mood = GeneratedColumn<String>(
+    'mood',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _tagsMeta = const VerificationMeta('tags');
+  @override
+  late final GeneratedColumn<String> tags = GeneratedColumn<String>(
+    'tags',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _isClosedMeta = const VerificationMeta(
+    'isClosed',
+  );
+  @override
+  late final GeneratedColumn<bool> isClosed = GeneratedColumn<bool>(
+    'is_closed',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_closed" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    symbol,
+    type,
+    entryPrice,
+    exitPrice,
+    shares,
+    pnl,
+    entryDate,
+    exitDate,
+    notes,
+    mood,
+    tags,
+    isClosed,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'journal_entries';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<JournalEntryData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('symbol')) {
+      context.handle(
+        _symbolMeta,
+        symbol.isAcceptableOrUnknown(data['symbol']!, _symbolMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_symbolMeta);
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+        _typeMeta,
+        type.isAcceptableOrUnknown(data['type']!, _typeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('entry_price')) {
+      context.handle(
+        _entryPriceMeta,
+        entryPrice.isAcceptableOrUnknown(data['entry_price']!, _entryPriceMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_entryPriceMeta);
+    }
+    if (data.containsKey('exit_price')) {
+      context.handle(
+        _exitPriceMeta,
+        exitPrice.isAcceptableOrUnknown(data['exit_price']!, _exitPriceMeta),
+      );
+    }
+    if (data.containsKey('shares')) {
+      context.handle(
+        _sharesMeta,
+        shares.isAcceptableOrUnknown(data['shares']!, _sharesMeta),
+      );
+    }
+    if (data.containsKey('pnl')) {
+      context.handle(
+        _pnlMeta,
+        pnl.isAcceptableOrUnknown(data['pnl']!, _pnlMeta),
+      );
+    }
+    if (data.containsKey('entry_date')) {
+      context.handle(
+        _entryDateMeta,
+        entryDate.isAcceptableOrUnknown(data['entry_date']!, _entryDateMeta),
+      );
+    }
+    if (data.containsKey('exit_date')) {
+      context.handle(
+        _exitDateMeta,
+        exitDate.isAcceptableOrUnknown(data['exit_date']!, _exitDateMeta),
+      );
+    }
+    if (data.containsKey('notes')) {
+      context.handle(
+        _notesMeta,
+        notes.isAcceptableOrUnknown(data['notes']!, _notesMeta),
+      );
+    }
+    if (data.containsKey('mood')) {
+      context.handle(
+        _moodMeta,
+        mood.isAcceptableOrUnknown(data['mood']!, _moodMeta),
+      );
+    }
+    if (data.containsKey('tags')) {
+      context.handle(
+        _tagsMeta,
+        tags.isAcceptableOrUnknown(data['tags']!, _tagsMeta),
+      );
+    }
+    if (data.containsKey('is_closed')) {
+      context.handle(
+        _isClosedMeta,
+        isClosed.isAcceptableOrUnknown(data['is_closed']!, _isClosedMeta),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  JournalEntryData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return JournalEntryData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      symbol: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}symbol'],
+      )!,
+      type: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}type'],
+      )!,
+      entryPrice: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}entry_price'],
+      )!,
+      exitPrice: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}exit_price'],
+      ),
+      shares: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}shares'],
+      ),
+      pnl: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}pnl'],
+      ),
+      entryDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}entry_date'],
+      )!,
+      exitDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}exit_date'],
+      ),
+      notes: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}notes'],
+      )!,
+      mood: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}mood'],
+      )!,
+      tags: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}tags'],
+      )!,
+      isClosed: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_closed'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $JournalEntriesTable createAlias(String alias) {
+    return $JournalEntriesTable(attachedDatabase, alias);
+  }
+}
+
+class JournalEntryData extends DataClass
+    implements Insertable<JournalEntryData> {
+  final int id;
+  final String symbol;
+  final String type;
+  final double entryPrice;
+  final double? exitPrice;
+  final double? shares;
+  final double? pnl;
+  final DateTime entryDate;
+  final DateTime? exitDate;
+  final String notes;
+  final String mood;
+  final String tags;
+  final bool isClosed;
+  final DateTime createdAt;
+  const JournalEntryData({
+    required this.id,
+    required this.symbol,
+    required this.type,
+    required this.entryPrice,
+    this.exitPrice,
+    this.shares,
+    this.pnl,
+    required this.entryDate,
+    this.exitDate,
+    required this.notes,
+    required this.mood,
+    required this.tags,
+    required this.isClosed,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['symbol'] = Variable<String>(symbol);
+    map['type'] = Variable<String>(type);
+    map['entry_price'] = Variable<double>(entryPrice);
+    if (!nullToAbsent || exitPrice != null) {
+      map['exit_price'] = Variable<double>(exitPrice);
+    }
+    if (!nullToAbsent || shares != null) {
+      map['shares'] = Variable<double>(shares);
+    }
+    if (!nullToAbsent || pnl != null) {
+      map['pnl'] = Variable<double>(pnl);
+    }
+    map['entry_date'] = Variable<DateTime>(entryDate);
+    if (!nullToAbsent || exitDate != null) {
+      map['exit_date'] = Variable<DateTime>(exitDate);
+    }
+    map['notes'] = Variable<String>(notes);
+    map['mood'] = Variable<String>(mood);
+    map['tags'] = Variable<String>(tags);
+    map['is_closed'] = Variable<bool>(isClosed);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  JournalEntriesCompanion toCompanion(bool nullToAbsent) {
+    return JournalEntriesCompanion(
+      id: Value(id),
+      symbol: Value(symbol),
+      type: Value(type),
+      entryPrice: Value(entryPrice),
+      exitPrice: exitPrice == null && nullToAbsent
+          ? const Value.absent()
+          : Value(exitPrice),
+      shares: shares == null && nullToAbsent
+          ? const Value.absent()
+          : Value(shares),
+      pnl: pnl == null && nullToAbsent ? const Value.absent() : Value(pnl),
+      entryDate: Value(entryDate),
+      exitDate: exitDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(exitDate),
+      notes: Value(notes),
+      mood: Value(mood),
+      tags: Value(tags),
+      isClosed: Value(isClosed),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory JournalEntryData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return JournalEntryData(
+      id: serializer.fromJson<int>(json['id']),
+      symbol: serializer.fromJson<String>(json['symbol']),
+      type: serializer.fromJson<String>(json['type']),
+      entryPrice: serializer.fromJson<double>(json['entryPrice']),
+      exitPrice: serializer.fromJson<double?>(json['exitPrice']),
+      shares: serializer.fromJson<double?>(json['shares']),
+      pnl: serializer.fromJson<double?>(json['pnl']),
+      entryDate: serializer.fromJson<DateTime>(json['entryDate']),
+      exitDate: serializer.fromJson<DateTime?>(json['exitDate']),
+      notes: serializer.fromJson<String>(json['notes']),
+      mood: serializer.fromJson<String>(json['mood']),
+      tags: serializer.fromJson<String>(json['tags']),
+      isClosed: serializer.fromJson<bool>(json['isClosed']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'symbol': serializer.toJson<String>(symbol),
+      'type': serializer.toJson<String>(type),
+      'entryPrice': serializer.toJson<double>(entryPrice),
+      'exitPrice': serializer.toJson<double?>(exitPrice),
+      'shares': serializer.toJson<double?>(shares),
+      'pnl': serializer.toJson<double?>(pnl),
+      'entryDate': serializer.toJson<DateTime>(entryDate),
+      'exitDate': serializer.toJson<DateTime?>(exitDate),
+      'notes': serializer.toJson<String>(notes),
+      'mood': serializer.toJson<String>(mood),
+      'tags': serializer.toJson<String>(tags),
+      'isClosed': serializer.toJson<bool>(isClosed),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  JournalEntryData copyWith({
+    int? id,
+    String? symbol,
+    String? type,
+    double? entryPrice,
+    Value<double?> exitPrice = const Value.absent(),
+    Value<double?> shares = const Value.absent(),
+    Value<double?> pnl = const Value.absent(),
+    DateTime? entryDate,
+    Value<DateTime?> exitDate = const Value.absent(),
+    String? notes,
+    String? mood,
+    String? tags,
+    bool? isClosed,
+    DateTime? createdAt,
+  }) => JournalEntryData(
+    id: id ?? this.id,
+    symbol: symbol ?? this.symbol,
+    type: type ?? this.type,
+    entryPrice: entryPrice ?? this.entryPrice,
+    exitPrice: exitPrice.present ? exitPrice.value : this.exitPrice,
+    shares: shares.present ? shares.value : this.shares,
+    pnl: pnl.present ? pnl.value : this.pnl,
+    entryDate: entryDate ?? this.entryDate,
+    exitDate: exitDate.present ? exitDate.value : this.exitDate,
+    notes: notes ?? this.notes,
+    mood: mood ?? this.mood,
+    tags: tags ?? this.tags,
+    isClosed: isClosed ?? this.isClosed,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  JournalEntryData copyWithCompanion(JournalEntriesCompanion data) {
+    return JournalEntryData(
+      id: data.id.present ? data.id.value : this.id,
+      symbol: data.symbol.present ? data.symbol.value : this.symbol,
+      type: data.type.present ? data.type.value : this.type,
+      entryPrice: data.entryPrice.present
+          ? data.entryPrice.value
+          : this.entryPrice,
+      exitPrice: data.exitPrice.present ? data.exitPrice.value : this.exitPrice,
+      shares: data.shares.present ? data.shares.value : this.shares,
+      pnl: data.pnl.present ? data.pnl.value : this.pnl,
+      entryDate: data.entryDate.present ? data.entryDate.value : this.entryDate,
+      exitDate: data.exitDate.present ? data.exitDate.value : this.exitDate,
+      notes: data.notes.present ? data.notes.value : this.notes,
+      mood: data.mood.present ? data.mood.value : this.mood,
+      tags: data.tags.present ? data.tags.value : this.tags,
+      isClosed: data.isClosed.present ? data.isClosed.value : this.isClosed,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('JournalEntryData(')
+          ..write('id: $id, ')
+          ..write('symbol: $symbol, ')
+          ..write('type: $type, ')
+          ..write('entryPrice: $entryPrice, ')
+          ..write('exitPrice: $exitPrice, ')
+          ..write('shares: $shares, ')
+          ..write('pnl: $pnl, ')
+          ..write('entryDate: $entryDate, ')
+          ..write('exitDate: $exitDate, ')
+          ..write('notes: $notes, ')
+          ..write('mood: $mood, ')
+          ..write('tags: $tags, ')
+          ..write('isClosed: $isClosed, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    symbol,
+    type,
+    entryPrice,
+    exitPrice,
+    shares,
+    pnl,
+    entryDate,
+    exitDate,
+    notes,
+    mood,
+    tags,
+    isClosed,
+    createdAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is JournalEntryData &&
+          other.id == this.id &&
+          other.symbol == this.symbol &&
+          other.type == this.type &&
+          other.entryPrice == this.entryPrice &&
+          other.exitPrice == this.exitPrice &&
+          other.shares == this.shares &&
+          other.pnl == this.pnl &&
+          other.entryDate == this.entryDate &&
+          other.exitDate == this.exitDate &&
+          other.notes == this.notes &&
+          other.mood == this.mood &&
+          other.tags == this.tags &&
+          other.isClosed == this.isClosed &&
+          other.createdAt == this.createdAt);
+}
+
+class JournalEntriesCompanion extends UpdateCompanion<JournalEntryData> {
+  final Value<int> id;
+  final Value<String> symbol;
+  final Value<String> type;
+  final Value<double> entryPrice;
+  final Value<double?> exitPrice;
+  final Value<double?> shares;
+  final Value<double?> pnl;
+  final Value<DateTime> entryDate;
+  final Value<DateTime?> exitDate;
+  final Value<String> notes;
+  final Value<String> mood;
+  final Value<String> tags;
+  final Value<bool> isClosed;
+  final Value<DateTime> createdAt;
+  const JournalEntriesCompanion({
+    this.id = const Value.absent(),
+    this.symbol = const Value.absent(),
+    this.type = const Value.absent(),
+    this.entryPrice = const Value.absent(),
+    this.exitPrice = const Value.absent(),
+    this.shares = const Value.absent(),
+    this.pnl = const Value.absent(),
+    this.entryDate = const Value.absent(),
+    this.exitDate = const Value.absent(),
+    this.notes = const Value.absent(),
+    this.mood = const Value.absent(),
+    this.tags = const Value.absent(),
+    this.isClosed = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  });
+  JournalEntriesCompanion.insert({
+    this.id = const Value.absent(),
+    required String symbol,
+    required String type,
+    required double entryPrice,
+    this.exitPrice = const Value.absent(),
+    this.shares = const Value.absent(),
+    this.pnl = const Value.absent(),
+    this.entryDate = const Value.absent(),
+    this.exitDate = const Value.absent(),
+    this.notes = const Value.absent(),
+    this.mood = const Value.absent(),
+    this.tags = const Value.absent(),
+    this.isClosed = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  }) : symbol = Value(symbol),
+       type = Value(type),
+       entryPrice = Value(entryPrice);
+  static Insertable<JournalEntryData> custom({
+    Expression<int>? id,
+    Expression<String>? symbol,
+    Expression<String>? type,
+    Expression<double>? entryPrice,
+    Expression<double>? exitPrice,
+    Expression<double>? shares,
+    Expression<double>? pnl,
+    Expression<DateTime>? entryDate,
+    Expression<DateTime>? exitDate,
+    Expression<String>? notes,
+    Expression<String>? mood,
+    Expression<String>? tags,
+    Expression<bool>? isClosed,
+    Expression<DateTime>? createdAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (symbol != null) 'symbol': symbol,
+      if (type != null) 'type': type,
+      if (entryPrice != null) 'entry_price': entryPrice,
+      if (exitPrice != null) 'exit_price': exitPrice,
+      if (shares != null) 'shares': shares,
+      if (pnl != null) 'pnl': pnl,
+      if (entryDate != null) 'entry_date': entryDate,
+      if (exitDate != null) 'exit_date': exitDate,
+      if (notes != null) 'notes': notes,
+      if (mood != null) 'mood': mood,
+      if (tags != null) 'tags': tags,
+      if (isClosed != null) 'is_closed': isClosed,
+      if (createdAt != null) 'created_at': createdAt,
+    });
+  }
+
+  JournalEntriesCompanion copyWith({
+    Value<int>? id,
+    Value<String>? symbol,
+    Value<String>? type,
+    Value<double>? entryPrice,
+    Value<double?>? exitPrice,
+    Value<double?>? shares,
+    Value<double?>? pnl,
+    Value<DateTime>? entryDate,
+    Value<DateTime?>? exitDate,
+    Value<String>? notes,
+    Value<String>? mood,
+    Value<String>? tags,
+    Value<bool>? isClosed,
+    Value<DateTime>? createdAt,
+  }) {
+    return JournalEntriesCompanion(
+      id: id ?? this.id,
+      symbol: symbol ?? this.symbol,
+      type: type ?? this.type,
+      entryPrice: entryPrice ?? this.entryPrice,
+      exitPrice: exitPrice ?? this.exitPrice,
+      shares: shares ?? this.shares,
+      pnl: pnl ?? this.pnl,
+      entryDate: entryDate ?? this.entryDate,
+      exitDate: exitDate ?? this.exitDate,
+      notes: notes ?? this.notes,
+      mood: mood ?? this.mood,
+      tags: tags ?? this.tags,
+      isClosed: isClosed ?? this.isClosed,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (symbol.present) {
+      map['symbol'] = Variable<String>(symbol.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    if (entryPrice.present) {
+      map['entry_price'] = Variable<double>(entryPrice.value);
+    }
+    if (exitPrice.present) {
+      map['exit_price'] = Variable<double>(exitPrice.value);
+    }
+    if (shares.present) {
+      map['shares'] = Variable<double>(shares.value);
+    }
+    if (pnl.present) {
+      map['pnl'] = Variable<double>(pnl.value);
+    }
+    if (entryDate.present) {
+      map['entry_date'] = Variable<DateTime>(entryDate.value);
+    }
+    if (exitDate.present) {
+      map['exit_date'] = Variable<DateTime>(exitDate.value);
+    }
+    if (notes.present) {
+      map['notes'] = Variable<String>(notes.value);
+    }
+    if (mood.present) {
+      map['mood'] = Variable<String>(mood.value);
+    }
+    if (tags.present) {
+      map['tags'] = Variable<String>(tags.value);
+    }
+    if (isClosed.present) {
+      map['is_closed'] = Variable<bool>(isClosed.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('JournalEntriesCompanion(')
+          ..write('id: $id, ')
+          ..write('symbol: $symbol, ')
+          ..write('type: $type, ')
+          ..write('entryPrice: $entryPrice, ')
+          ..write('exitPrice: $exitPrice, ')
+          ..write('shares: $shares, ')
+          ..write('pnl: $pnl, ')
+          ..write('entryDate: $entryDate, ')
+          ..write('exitDate: $exitDate, ')
+          ..write('notes: $notes, ')
+          ..write('mood: $mood, ')
+          ..write('tags: $tags, ')
+          ..write('isClosed: $isClosed, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -8897,6 +10756,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $InstitutionalHoldersTable institutionalHolders =
       $InstitutionalHoldersTable(this);
   late final $DiscoveriesTable discoveries = $DiscoveriesTable(this);
+  late final $BacktestResultsTable backtestResults = $BacktestResultsTable(
+    this,
+  );
+  late final $JournalEntriesTable journalEntries = $JournalEntriesTable(this);
   late final Index idxWatchlistSymbol = Index(
     'idx_watchlist_symbol',
     'CREATE INDEX idx_watchlist_symbol ON watchlist_items (symbol)',
@@ -8949,6 +10812,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     'idx_disc_symbol',
     'CREATE INDEX idx_disc_symbol ON discoveries (symbol)',
   );
+  late final Index idxJournalSymbol = Index(
+    'idx_journal_symbol',
+    'CREATE INDEX idx_journal_symbol ON journal_entries (symbol)',
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -8970,6 +10837,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     insiderTransactions,
     institutionalHolders,
     discoveries,
+    backtestResults,
+    journalEntries,
     idxWatchlistSymbol,
     idxCacheSymbol,
     idxStageUnique,
@@ -8983,6 +10852,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     idxInsiderSymbol,
     idxInstSymbol,
     idxDiscSymbol,
+    idxJournalSymbol,
   ];
 }
 
@@ -13467,6 +15337,869 @@ typedef $$DiscoveriesTableProcessedTableManager =
       DiscoveryData,
       PrefetchHooks Function()
     >;
+typedef $$BacktestResultsTableCreateCompanionBuilder =
+    BacktestResultsCompanion Function({
+      Value<int> id,
+      required String strategy,
+      required DateTime startDate,
+      required DateTime endDate,
+      required double initialCapital,
+      required double finalCapital,
+      required double totalReturn,
+      required double totalReturnPercent,
+      required double maxDrawdown,
+      required double maxDrawdownPercent,
+      required int totalTrades,
+      required int winningTrades,
+      required int losingTrades,
+      required double winRate,
+      required double avgWin,
+      required double avgLoss,
+      required double profitFactor,
+      required String symbols,
+      Value<DateTime> createdAt,
+    });
+typedef $$BacktestResultsTableUpdateCompanionBuilder =
+    BacktestResultsCompanion Function({
+      Value<int> id,
+      Value<String> strategy,
+      Value<DateTime> startDate,
+      Value<DateTime> endDate,
+      Value<double> initialCapital,
+      Value<double> finalCapital,
+      Value<double> totalReturn,
+      Value<double> totalReturnPercent,
+      Value<double> maxDrawdown,
+      Value<double> maxDrawdownPercent,
+      Value<int> totalTrades,
+      Value<int> winningTrades,
+      Value<int> losingTrades,
+      Value<double> winRate,
+      Value<double> avgWin,
+      Value<double> avgLoss,
+      Value<double> profitFactor,
+      Value<String> symbols,
+      Value<DateTime> createdAt,
+    });
+
+class $$BacktestResultsTableFilterComposer
+    extends Composer<_$AppDatabase, $BacktestResultsTable> {
+  $$BacktestResultsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get strategy => $composableBuilder(
+    column: $table.strategy,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get startDate => $composableBuilder(
+    column: $table.startDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get endDate => $composableBuilder(
+    column: $table.endDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get initialCapital => $composableBuilder(
+    column: $table.initialCapital,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get finalCapital => $composableBuilder(
+    column: $table.finalCapital,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get totalReturn => $composableBuilder(
+    column: $table.totalReturn,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get totalReturnPercent => $composableBuilder(
+    column: $table.totalReturnPercent,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get maxDrawdown => $composableBuilder(
+    column: $table.maxDrawdown,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get maxDrawdownPercent => $composableBuilder(
+    column: $table.maxDrawdownPercent,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get totalTrades => $composableBuilder(
+    column: $table.totalTrades,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get winningTrades => $composableBuilder(
+    column: $table.winningTrades,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get losingTrades => $composableBuilder(
+    column: $table.losingTrades,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get winRate => $composableBuilder(
+    column: $table.winRate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get avgWin => $composableBuilder(
+    column: $table.avgWin,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get avgLoss => $composableBuilder(
+    column: $table.avgLoss,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get profitFactor => $composableBuilder(
+    column: $table.profitFactor,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get symbols => $composableBuilder(
+    column: $table.symbols,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$BacktestResultsTableOrderingComposer
+    extends Composer<_$AppDatabase, $BacktestResultsTable> {
+  $$BacktestResultsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get strategy => $composableBuilder(
+    column: $table.strategy,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get startDate => $composableBuilder(
+    column: $table.startDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get endDate => $composableBuilder(
+    column: $table.endDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get initialCapital => $composableBuilder(
+    column: $table.initialCapital,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get finalCapital => $composableBuilder(
+    column: $table.finalCapital,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get totalReturn => $composableBuilder(
+    column: $table.totalReturn,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get totalReturnPercent => $composableBuilder(
+    column: $table.totalReturnPercent,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get maxDrawdown => $composableBuilder(
+    column: $table.maxDrawdown,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get maxDrawdownPercent => $composableBuilder(
+    column: $table.maxDrawdownPercent,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get totalTrades => $composableBuilder(
+    column: $table.totalTrades,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get winningTrades => $composableBuilder(
+    column: $table.winningTrades,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get losingTrades => $composableBuilder(
+    column: $table.losingTrades,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get winRate => $composableBuilder(
+    column: $table.winRate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get avgWin => $composableBuilder(
+    column: $table.avgWin,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get avgLoss => $composableBuilder(
+    column: $table.avgLoss,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get profitFactor => $composableBuilder(
+    column: $table.profitFactor,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get symbols => $composableBuilder(
+    column: $table.symbols,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$BacktestResultsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $BacktestResultsTable> {
+  $$BacktestResultsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get strategy =>
+      $composableBuilder(column: $table.strategy, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get startDate =>
+      $composableBuilder(column: $table.startDate, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get endDate =>
+      $composableBuilder(column: $table.endDate, builder: (column) => column);
+
+  GeneratedColumn<double> get initialCapital => $composableBuilder(
+    column: $table.initialCapital,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get finalCapital => $composableBuilder(
+    column: $table.finalCapital,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get totalReturn => $composableBuilder(
+    column: $table.totalReturn,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get totalReturnPercent => $composableBuilder(
+    column: $table.totalReturnPercent,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get maxDrawdown => $composableBuilder(
+    column: $table.maxDrawdown,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get maxDrawdownPercent => $composableBuilder(
+    column: $table.maxDrawdownPercent,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get totalTrades => $composableBuilder(
+    column: $table.totalTrades,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get winningTrades => $composableBuilder(
+    column: $table.winningTrades,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get losingTrades => $composableBuilder(
+    column: $table.losingTrades,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get winRate =>
+      $composableBuilder(column: $table.winRate, builder: (column) => column);
+
+  GeneratedColumn<double> get avgWin =>
+      $composableBuilder(column: $table.avgWin, builder: (column) => column);
+
+  GeneratedColumn<double> get avgLoss =>
+      $composableBuilder(column: $table.avgLoss, builder: (column) => column);
+
+  GeneratedColumn<double> get profitFactor => $composableBuilder(
+    column: $table.profitFactor,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get symbols =>
+      $composableBuilder(column: $table.symbols, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$BacktestResultsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $BacktestResultsTable,
+          BacktestResultData,
+          $$BacktestResultsTableFilterComposer,
+          $$BacktestResultsTableOrderingComposer,
+          $$BacktestResultsTableAnnotationComposer,
+          $$BacktestResultsTableCreateCompanionBuilder,
+          $$BacktestResultsTableUpdateCompanionBuilder,
+          (
+            BacktestResultData,
+            BaseReferences<
+              _$AppDatabase,
+              $BacktestResultsTable,
+              BacktestResultData
+            >,
+          ),
+          BacktestResultData,
+          PrefetchHooks Function()
+        > {
+  $$BacktestResultsTableTableManager(
+    _$AppDatabase db,
+    $BacktestResultsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$BacktestResultsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$BacktestResultsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$BacktestResultsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> strategy = const Value.absent(),
+                Value<DateTime> startDate = const Value.absent(),
+                Value<DateTime> endDate = const Value.absent(),
+                Value<double> initialCapital = const Value.absent(),
+                Value<double> finalCapital = const Value.absent(),
+                Value<double> totalReturn = const Value.absent(),
+                Value<double> totalReturnPercent = const Value.absent(),
+                Value<double> maxDrawdown = const Value.absent(),
+                Value<double> maxDrawdownPercent = const Value.absent(),
+                Value<int> totalTrades = const Value.absent(),
+                Value<int> winningTrades = const Value.absent(),
+                Value<int> losingTrades = const Value.absent(),
+                Value<double> winRate = const Value.absent(),
+                Value<double> avgWin = const Value.absent(),
+                Value<double> avgLoss = const Value.absent(),
+                Value<double> profitFactor = const Value.absent(),
+                Value<String> symbols = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+              }) => BacktestResultsCompanion(
+                id: id,
+                strategy: strategy,
+                startDate: startDate,
+                endDate: endDate,
+                initialCapital: initialCapital,
+                finalCapital: finalCapital,
+                totalReturn: totalReturn,
+                totalReturnPercent: totalReturnPercent,
+                maxDrawdown: maxDrawdown,
+                maxDrawdownPercent: maxDrawdownPercent,
+                totalTrades: totalTrades,
+                winningTrades: winningTrades,
+                losingTrades: losingTrades,
+                winRate: winRate,
+                avgWin: avgWin,
+                avgLoss: avgLoss,
+                profitFactor: profitFactor,
+                symbols: symbols,
+                createdAt: createdAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String strategy,
+                required DateTime startDate,
+                required DateTime endDate,
+                required double initialCapital,
+                required double finalCapital,
+                required double totalReturn,
+                required double totalReturnPercent,
+                required double maxDrawdown,
+                required double maxDrawdownPercent,
+                required int totalTrades,
+                required int winningTrades,
+                required int losingTrades,
+                required double winRate,
+                required double avgWin,
+                required double avgLoss,
+                required double profitFactor,
+                required String symbols,
+                Value<DateTime> createdAt = const Value.absent(),
+              }) => BacktestResultsCompanion.insert(
+                id: id,
+                strategy: strategy,
+                startDate: startDate,
+                endDate: endDate,
+                initialCapital: initialCapital,
+                finalCapital: finalCapital,
+                totalReturn: totalReturn,
+                totalReturnPercent: totalReturnPercent,
+                maxDrawdown: maxDrawdown,
+                maxDrawdownPercent: maxDrawdownPercent,
+                totalTrades: totalTrades,
+                winningTrades: winningTrades,
+                losingTrades: losingTrades,
+                winRate: winRate,
+                avgWin: avgWin,
+                avgLoss: avgLoss,
+                profitFactor: profitFactor,
+                symbols: symbols,
+                createdAt: createdAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$BacktestResultsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $BacktestResultsTable,
+      BacktestResultData,
+      $$BacktestResultsTableFilterComposer,
+      $$BacktestResultsTableOrderingComposer,
+      $$BacktestResultsTableAnnotationComposer,
+      $$BacktestResultsTableCreateCompanionBuilder,
+      $$BacktestResultsTableUpdateCompanionBuilder,
+      (
+        BacktestResultData,
+        BaseReferences<
+          _$AppDatabase,
+          $BacktestResultsTable,
+          BacktestResultData
+        >,
+      ),
+      BacktestResultData,
+      PrefetchHooks Function()
+    >;
+typedef $$JournalEntriesTableCreateCompanionBuilder =
+    JournalEntriesCompanion Function({
+      Value<int> id,
+      required String symbol,
+      required String type,
+      required double entryPrice,
+      Value<double?> exitPrice,
+      Value<double?> shares,
+      Value<double?> pnl,
+      Value<DateTime> entryDate,
+      Value<DateTime?> exitDate,
+      Value<String> notes,
+      Value<String> mood,
+      Value<String> tags,
+      Value<bool> isClosed,
+      Value<DateTime> createdAt,
+    });
+typedef $$JournalEntriesTableUpdateCompanionBuilder =
+    JournalEntriesCompanion Function({
+      Value<int> id,
+      Value<String> symbol,
+      Value<String> type,
+      Value<double> entryPrice,
+      Value<double?> exitPrice,
+      Value<double?> shares,
+      Value<double?> pnl,
+      Value<DateTime> entryDate,
+      Value<DateTime?> exitDate,
+      Value<String> notes,
+      Value<String> mood,
+      Value<String> tags,
+      Value<bool> isClosed,
+      Value<DateTime> createdAt,
+    });
+
+class $$JournalEntriesTableFilterComposer
+    extends Composer<_$AppDatabase, $JournalEntriesTable> {
+  $$JournalEntriesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get symbol => $composableBuilder(
+    column: $table.symbol,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get entryPrice => $composableBuilder(
+    column: $table.entryPrice,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get exitPrice => $composableBuilder(
+    column: $table.exitPrice,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get shares => $composableBuilder(
+    column: $table.shares,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get pnl => $composableBuilder(
+    column: $table.pnl,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get entryDate => $composableBuilder(
+    column: $table.entryDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get exitDate => $composableBuilder(
+    column: $table.exitDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get notes => $composableBuilder(
+    column: $table.notes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get mood => $composableBuilder(
+    column: $table.mood,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get tags => $composableBuilder(
+    column: $table.tags,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isClosed => $composableBuilder(
+    column: $table.isClosed,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$JournalEntriesTableOrderingComposer
+    extends Composer<_$AppDatabase, $JournalEntriesTable> {
+  $$JournalEntriesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get symbol => $composableBuilder(
+    column: $table.symbol,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get entryPrice => $composableBuilder(
+    column: $table.entryPrice,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get exitPrice => $composableBuilder(
+    column: $table.exitPrice,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get shares => $composableBuilder(
+    column: $table.shares,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get pnl => $composableBuilder(
+    column: $table.pnl,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get entryDate => $composableBuilder(
+    column: $table.entryDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get exitDate => $composableBuilder(
+    column: $table.exitDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get notes => $composableBuilder(
+    column: $table.notes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get mood => $composableBuilder(
+    column: $table.mood,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get tags => $composableBuilder(
+    column: $table.tags,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isClosed => $composableBuilder(
+    column: $table.isClosed,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$JournalEntriesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $JournalEntriesTable> {
+  $$JournalEntriesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get symbol =>
+      $composableBuilder(column: $table.symbol, builder: (column) => column);
+
+  GeneratedColumn<String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<double> get entryPrice => $composableBuilder(
+    column: $table.entryPrice,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get exitPrice =>
+      $composableBuilder(column: $table.exitPrice, builder: (column) => column);
+
+  GeneratedColumn<double> get shares =>
+      $composableBuilder(column: $table.shares, builder: (column) => column);
+
+  GeneratedColumn<double> get pnl =>
+      $composableBuilder(column: $table.pnl, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get entryDate =>
+      $composableBuilder(column: $table.entryDate, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get exitDate =>
+      $composableBuilder(column: $table.exitDate, builder: (column) => column);
+
+  GeneratedColumn<String> get notes =>
+      $composableBuilder(column: $table.notes, builder: (column) => column);
+
+  GeneratedColumn<String> get mood =>
+      $composableBuilder(column: $table.mood, builder: (column) => column);
+
+  GeneratedColumn<String> get tags =>
+      $composableBuilder(column: $table.tags, builder: (column) => column);
+
+  GeneratedColumn<bool> get isClosed =>
+      $composableBuilder(column: $table.isClosed, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$JournalEntriesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $JournalEntriesTable,
+          JournalEntryData,
+          $$JournalEntriesTableFilterComposer,
+          $$JournalEntriesTableOrderingComposer,
+          $$JournalEntriesTableAnnotationComposer,
+          $$JournalEntriesTableCreateCompanionBuilder,
+          $$JournalEntriesTableUpdateCompanionBuilder,
+          (
+            JournalEntryData,
+            BaseReferences<
+              _$AppDatabase,
+              $JournalEntriesTable,
+              JournalEntryData
+            >,
+          ),
+          JournalEntryData,
+          PrefetchHooks Function()
+        > {
+  $$JournalEntriesTableTableManager(
+    _$AppDatabase db,
+    $JournalEntriesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$JournalEntriesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$JournalEntriesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$JournalEntriesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> symbol = const Value.absent(),
+                Value<String> type = const Value.absent(),
+                Value<double> entryPrice = const Value.absent(),
+                Value<double?> exitPrice = const Value.absent(),
+                Value<double?> shares = const Value.absent(),
+                Value<double?> pnl = const Value.absent(),
+                Value<DateTime> entryDate = const Value.absent(),
+                Value<DateTime?> exitDate = const Value.absent(),
+                Value<String> notes = const Value.absent(),
+                Value<String> mood = const Value.absent(),
+                Value<String> tags = const Value.absent(),
+                Value<bool> isClosed = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+              }) => JournalEntriesCompanion(
+                id: id,
+                symbol: symbol,
+                type: type,
+                entryPrice: entryPrice,
+                exitPrice: exitPrice,
+                shares: shares,
+                pnl: pnl,
+                entryDate: entryDate,
+                exitDate: exitDate,
+                notes: notes,
+                mood: mood,
+                tags: tags,
+                isClosed: isClosed,
+                createdAt: createdAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String symbol,
+                required String type,
+                required double entryPrice,
+                Value<double?> exitPrice = const Value.absent(),
+                Value<double?> shares = const Value.absent(),
+                Value<double?> pnl = const Value.absent(),
+                Value<DateTime> entryDate = const Value.absent(),
+                Value<DateTime?> exitDate = const Value.absent(),
+                Value<String> notes = const Value.absent(),
+                Value<String> mood = const Value.absent(),
+                Value<String> tags = const Value.absent(),
+                Value<bool> isClosed = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+              }) => JournalEntriesCompanion.insert(
+                id: id,
+                symbol: symbol,
+                type: type,
+                entryPrice: entryPrice,
+                exitPrice: exitPrice,
+                shares: shares,
+                pnl: pnl,
+                entryDate: entryDate,
+                exitDate: exitDate,
+                notes: notes,
+                mood: mood,
+                tags: tags,
+                isClosed: isClosed,
+                createdAt: createdAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$JournalEntriesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $JournalEntriesTable,
+      JournalEntryData,
+      $$JournalEntriesTableFilterComposer,
+      $$JournalEntriesTableOrderingComposer,
+      $$JournalEntriesTableAnnotationComposer,
+      $$JournalEntriesTableCreateCompanionBuilder,
+      $$JournalEntriesTableUpdateCompanionBuilder,
+      (
+        JournalEntryData,
+        BaseReferences<_$AppDatabase, $JournalEntriesTable, JournalEntryData>,
+      ),
+      JournalEntryData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -13503,4 +16236,8 @@ class $AppDatabaseManager {
       $$InstitutionalHoldersTableTableManager(_db, _db.institutionalHolders);
   $$DiscoveriesTableTableManager get discoveries =>
       $$DiscoveriesTableTableManager(_db, _db.discoveries);
+  $$BacktestResultsTableTableManager get backtestResults =>
+      $$BacktestResultsTableTableManager(_db, _db.backtestResults);
+  $$JournalEntriesTableTableManager get journalEntries =>
+      $$JournalEntriesTableTableManager(_db, _db.journalEntries);
 }

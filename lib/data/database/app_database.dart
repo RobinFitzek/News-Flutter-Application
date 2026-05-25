@@ -237,6 +237,48 @@ class Discoveries extends Table {
   RealColumn get potentialUpside => real().nullable()();
 }
 
+@DataClassName('BacktestResultData')
+class BacktestResults extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get strategy => text()();
+  DateTimeColumn get startDate => dateTime()();
+  DateTimeColumn get endDate => dateTime()();
+  RealColumn get initialCapital => real()();
+  RealColumn get finalCapital => real()();
+  RealColumn get totalReturn => real()();
+  RealColumn get totalReturnPercent => real()();
+  RealColumn get maxDrawdown => real()();
+  RealColumn get maxDrawdownPercent => real()();
+  IntColumn get totalTrades => integer()();
+  IntColumn get winningTrades => integer()();
+  IntColumn get losingTrades => integer()();
+  RealColumn get winRate => real()();
+  RealColumn get avgWin => real()();
+  RealColumn get avgLoss => real()();
+  RealColumn get profitFactor => real()();
+  TextColumn get symbols => text()();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+}
+
+@TableIndex(name: 'idx_journal_symbol', columns: {#symbol})
+@DataClassName('JournalEntryData')
+class JournalEntries extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get symbol => text().withLength(min: 1, max: 10)();
+  TextColumn get type => text()();
+  RealColumn get entryPrice => real()();
+  RealColumn get exitPrice => real().nullable()();
+  RealColumn get shares => real().nullable()();
+  RealColumn get pnl => real().nullable()();
+  DateTimeColumn get entryDate => dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get exitDate => dateTime().nullable()();
+  TextColumn get notes => text().withDefault(const Constant(''))();
+  TextColumn get mood => text().withDefault(const Constant(''))();
+  TextColumn get tags => text().withDefault(const Constant(''))();
+  BoolColumn get isClosed => boolean().withDefault(const Constant(false))();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+}
+
 @DriftDatabase(tables: [
   UserSettings,
   ApiKeys,
@@ -254,12 +296,14 @@ class Discoveries extends Table {
   InsiderTransactions,
   InstitutionalHolders,
   Discoveries,
+  BacktestResults,
+  JournalEntries,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 7;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -335,6 +379,10 @@ class AppDatabase extends _$AppDatabase {
           }
           if (from < 6) {
             await m.createTable(discoveries);
+          }
+          if (from < 7) {
+            await m.createTable(backtestResults);
+            await m.createTable(journalEntries);
           }
         },
       );

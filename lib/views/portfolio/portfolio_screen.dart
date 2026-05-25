@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'holdings_tab.dart';
 import 'paper_trading_tab.dart';
+import 'backtest_tab.dart';
+import 'journal_tab.dart';
 
 class PortfolioScreen extends StatelessWidget {
   const PortfolioScreen({super.key});
@@ -26,24 +28,11 @@ class PortfolioScreen extends StatelessWidget {
           children: [
             HoldingsTab(),
             PaperTradingTab(),
-            _PlaceholderTab(label: 'Backtest'),
-            _PlaceholderTab(label: 'Journal'),
+            BacktestTab(),
+            JournalTab(),
           ],
         ),
       ),
-    );
-  }
-}
-
-class _PlaceholderTab extends StatelessWidget {
-  const _PlaceholderTab({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('$label — coming soon'),
     );
   }
 }
