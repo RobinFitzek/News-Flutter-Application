@@ -115,14 +115,14 @@ class _AnalyzeScreenState extends ConsumerState<AnalyzeScreen> {
               height: 100,
               child: ListView(
                 scrollDirection: Axis.horizontal,
-                children: const [
-                  _ResearchToolChip(icon: Icons.person_search, label: 'Insider'),
-                  _ResearchToolChip(icon: Icons.water_drop, label: 'Dark Pool'),
-                  _ResearchToolChip(icon: Icons.public, label: 'Macro'),
-                  _ResearchToolChip(icon: Icons.compare_arrows, label: 'Pairs'),
-                  _ResearchToolChip(icon: Icons.call_split, label: 'Options'),
-                  _ResearchToolChip(icon: Icons.people, label: 'Institutions'),
-                ],
+                children: <Widget>[
+              _ResearchToolChip(icon: Icons.person_search, label: 'Insider', onTap: () => context.push('/research/insider')),
+              _ResearchToolChip(icon: Icons.water_drop, label: 'Dark Pool', onTap: () => context.push('/research/darkpool')),
+              _ResearchToolChip(icon: Icons.public, label: 'Macro', onTap: () => context.push('/research/macro')),
+              _ResearchToolChip(icon: Icons.compare_arrows, label: 'Pairs', onTap: () => context.push('/research/pairs')),
+              _ResearchToolChip(icon: Icons.call_split, label: 'Options', onTap: () => context.push('/research/options')),
+              _ResearchToolChip(icon: Icons.people, label: 'Institutions', onTap: () => context.push('/research/institutions')),
+            ],
               ),
             ),
             const SizedBox(height: 24),
@@ -420,17 +420,18 @@ class _ExpandableTextCardState extends State<_ExpandableTextCard> {
 }
 
 class _ResearchToolChip extends StatelessWidget {
-  const _ResearchToolChip({required this.icon, required this.label});
+  const _ResearchToolChip({required this.icon, required this.label, this.onTap});
 
   final IconData icon;
   final String label;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.only(right: 8),
       child: InkWell(
-        onTap: null,
+        onTap: onTap,
         borderRadius: BorderRadius.circular(12),
         child: SizedBox(
           width: 80,

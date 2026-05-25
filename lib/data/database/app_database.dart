@@ -221,6 +221,22 @@ class InstitutionalHolders extends Table {
   RealColumn get change => real().nullable()();
 }
 
+@TableIndex(name: 'idx_disc_symbol', columns: {#symbol})
+@DataClassName('DiscoveryData')
+class Discoveries extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get symbol => text().withLength(min: 1, max: 10)();
+  TextColumn get companyName => text().withDefault(const Constant(''))();
+  TextColumn get reason => text()();
+  TextColumn get strategy => text().withDefault(const Constant('ai'))();
+  RealColumn get currentPrice => real()();
+  RealColumn get confidence => real()();
+  DateTimeColumn get discoveredAt => dateTime().withDefault(currentDateAndTime)();
+  BoolColumn get isPromoted => boolean().withDefault(const Constant(false))();
+  BoolColumn get isDismissed => boolean().withDefault(const Constant(false))();
+  RealColumn get potentialUpside => real().nullable()();
+}
+
 @DriftDatabase(tables: [
   UserSettings,
   ApiKeys,
@@ -237,12 +253,13 @@ class InstitutionalHolders extends Table {
   EarningsEvents,
   InsiderTransactions,
   InstitutionalHolders,
+  Discoveries,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -315,6 +332,9 @@ class AppDatabase extends _$AppDatabase {
             await m.createTable(earningsEvents);
             await m.createTable(insiderTransactions);
             await m.createTable(institutionalHolders);
+          }
+          if (from < 6) {
+            await m.createTable(discoveries);
           }
         },
       );

@@ -8,6 +8,12 @@ import '../views/portfolio/portfolio_screen.dart';
 import '../views/settings/settings_screen.dart';
 import '../views/stock_detail/stock_detail_screen.dart';
 import '../views/analysis_detail/analysis_detail_screen.dart';
+import '../views/research/insider_screen.dart';
+import '../views/research/dark_pool_screen.dart';
+import '../views/research/macro_screen.dart';
+import '../views/research/pairs_screen.dart';
+import '../views/research/options_flow_screen.dart';
+import '../views/research/institutions_screen.dart';
 import '../widgets/app_scaffold.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -80,6 +86,30 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/auth/login',
         builder: (context, state) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: '/research/insider',
+        builder: (context, state) => const InsiderScreen(),
+      ),
+      GoRoute(
+        path: '/research/darkpool',
+        builder: (context, state) => const DarkPoolScreen(),
+      ),
+      GoRoute(
+        path: '/research/macro',
+        builder: (context, state) => const MacroScreen(),
+      ),
+      GoRoute(
+        path: '/research/pairs',
+        builder: (context, state) => const PairsScreen(),
+      ),
+      GoRoute(
+        path: '/research/options',
+        builder: (context, state) => const OptionsFlowScreen(),
+      ),
+      GoRoute(
+        path: '/research/institutions',
+        builder: (context, state) => const InstitutionsScreen(),
       ),
     ],
   );

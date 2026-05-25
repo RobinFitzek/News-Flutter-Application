@@ -8193,6 +8193,680 @@ class InstitutionalHoldersCompanion
   }
 }
 
+class $DiscoveriesTable extends Discoveries
+    with TableInfo<$DiscoveriesTable, DiscoveryData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $DiscoveriesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _symbolMeta = const VerificationMeta('symbol');
+  @override
+  late final GeneratedColumn<String> symbol = GeneratedColumn<String>(
+    'symbol',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 1,
+      maxTextLength: 10,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _companyNameMeta = const VerificationMeta(
+    'companyName',
+  );
+  @override
+  late final GeneratedColumn<String> companyName = GeneratedColumn<String>(
+    'company_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _reasonMeta = const VerificationMeta('reason');
+  @override
+  late final GeneratedColumn<String> reason = GeneratedColumn<String>(
+    'reason',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _strategyMeta = const VerificationMeta(
+    'strategy',
+  );
+  @override
+  late final GeneratedColumn<String> strategy = GeneratedColumn<String>(
+    'strategy',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('ai'),
+  );
+  static const VerificationMeta _currentPriceMeta = const VerificationMeta(
+    'currentPrice',
+  );
+  @override
+  late final GeneratedColumn<double> currentPrice = GeneratedColumn<double>(
+    'current_price',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _confidenceMeta = const VerificationMeta(
+    'confidence',
+  );
+  @override
+  late final GeneratedColumn<double> confidence = GeneratedColumn<double>(
+    'confidence',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _discoveredAtMeta = const VerificationMeta(
+    'discoveredAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> discoveredAt = GeneratedColumn<DateTime>(
+    'discovered_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _isPromotedMeta = const VerificationMeta(
+    'isPromoted',
+  );
+  @override
+  late final GeneratedColumn<bool> isPromoted = GeneratedColumn<bool>(
+    'is_promoted',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_promoted" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _isDismissedMeta = const VerificationMeta(
+    'isDismissed',
+  );
+  @override
+  late final GeneratedColumn<bool> isDismissed = GeneratedColumn<bool>(
+    'is_dismissed',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_dismissed" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _potentialUpsideMeta = const VerificationMeta(
+    'potentialUpside',
+  );
+  @override
+  late final GeneratedColumn<double> potentialUpside = GeneratedColumn<double>(
+    'potential_upside',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    symbol,
+    companyName,
+    reason,
+    strategy,
+    currentPrice,
+    confidence,
+    discoveredAt,
+    isPromoted,
+    isDismissed,
+    potentialUpside,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'discoveries';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<DiscoveryData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('symbol')) {
+      context.handle(
+        _symbolMeta,
+        symbol.isAcceptableOrUnknown(data['symbol']!, _symbolMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_symbolMeta);
+    }
+    if (data.containsKey('company_name')) {
+      context.handle(
+        _companyNameMeta,
+        companyName.isAcceptableOrUnknown(
+          data['company_name']!,
+          _companyNameMeta,
+        ),
+      );
+    }
+    if (data.containsKey('reason')) {
+      context.handle(
+        _reasonMeta,
+        reason.isAcceptableOrUnknown(data['reason']!, _reasonMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_reasonMeta);
+    }
+    if (data.containsKey('strategy')) {
+      context.handle(
+        _strategyMeta,
+        strategy.isAcceptableOrUnknown(data['strategy']!, _strategyMeta),
+      );
+    }
+    if (data.containsKey('current_price')) {
+      context.handle(
+        _currentPriceMeta,
+        currentPrice.isAcceptableOrUnknown(
+          data['current_price']!,
+          _currentPriceMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_currentPriceMeta);
+    }
+    if (data.containsKey('confidence')) {
+      context.handle(
+        _confidenceMeta,
+        confidence.isAcceptableOrUnknown(data['confidence']!, _confidenceMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_confidenceMeta);
+    }
+    if (data.containsKey('discovered_at')) {
+      context.handle(
+        _discoveredAtMeta,
+        discoveredAt.isAcceptableOrUnknown(
+          data['discovered_at']!,
+          _discoveredAtMeta,
+        ),
+      );
+    }
+    if (data.containsKey('is_promoted')) {
+      context.handle(
+        _isPromotedMeta,
+        isPromoted.isAcceptableOrUnknown(data['is_promoted']!, _isPromotedMeta),
+      );
+    }
+    if (data.containsKey('is_dismissed')) {
+      context.handle(
+        _isDismissedMeta,
+        isDismissed.isAcceptableOrUnknown(
+          data['is_dismissed']!,
+          _isDismissedMeta,
+        ),
+      );
+    }
+    if (data.containsKey('potential_upside')) {
+      context.handle(
+        _potentialUpsideMeta,
+        potentialUpside.isAcceptableOrUnknown(
+          data['potential_upside']!,
+          _potentialUpsideMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  DiscoveryData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return DiscoveryData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      symbol: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}symbol'],
+      )!,
+      companyName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}company_name'],
+      )!,
+      reason: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}reason'],
+      )!,
+      strategy: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}strategy'],
+      )!,
+      currentPrice: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}current_price'],
+      )!,
+      confidence: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}confidence'],
+      )!,
+      discoveredAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}discovered_at'],
+      )!,
+      isPromoted: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_promoted'],
+      )!,
+      isDismissed: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_dismissed'],
+      )!,
+      potentialUpside: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}potential_upside'],
+      ),
+    );
+  }
+
+  @override
+  $DiscoveriesTable createAlias(String alias) {
+    return $DiscoveriesTable(attachedDatabase, alias);
+  }
+}
+
+class DiscoveryData extends DataClass implements Insertable<DiscoveryData> {
+  final int id;
+  final String symbol;
+  final String companyName;
+  final String reason;
+  final String strategy;
+  final double currentPrice;
+  final double confidence;
+  final DateTime discoveredAt;
+  final bool isPromoted;
+  final bool isDismissed;
+  final double? potentialUpside;
+  const DiscoveryData({
+    required this.id,
+    required this.symbol,
+    required this.companyName,
+    required this.reason,
+    required this.strategy,
+    required this.currentPrice,
+    required this.confidence,
+    required this.discoveredAt,
+    required this.isPromoted,
+    required this.isDismissed,
+    this.potentialUpside,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['symbol'] = Variable<String>(symbol);
+    map['company_name'] = Variable<String>(companyName);
+    map['reason'] = Variable<String>(reason);
+    map['strategy'] = Variable<String>(strategy);
+    map['current_price'] = Variable<double>(currentPrice);
+    map['confidence'] = Variable<double>(confidence);
+    map['discovered_at'] = Variable<DateTime>(discoveredAt);
+    map['is_promoted'] = Variable<bool>(isPromoted);
+    map['is_dismissed'] = Variable<bool>(isDismissed);
+    if (!nullToAbsent || potentialUpside != null) {
+      map['potential_upside'] = Variable<double>(potentialUpside);
+    }
+    return map;
+  }
+
+  DiscoveriesCompanion toCompanion(bool nullToAbsent) {
+    return DiscoveriesCompanion(
+      id: Value(id),
+      symbol: Value(symbol),
+      companyName: Value(companyName),
+      reason: Value(reason),
+      strategy: Value(strategy),
+      currentPrice: Value(currentPrice),
+      confidence: Value(confidence),
+      discoveredAt: Value(discoveredAt),
+      isPromoted: Value(isPromoted),
+      isDismissed: Value(isDismissed),
+      potentialUpside: potentialUpside == null && nullToAbsent
+          ? const Value.absent()
+          : Value(potentialUpside),
+    );
+  }
+
+  factory DiscoveryData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return DiscoveryData(
+      id: serializer.fromJson<int>(json['id']),
+      symbol: serializer.fromJson<String>(json['symbol']),
+      companyName: serializer.fromJson<String>(json['companyName']),
+      reason: serializer.fromJson<String>(json['reason']),
+      strategy: serializer.fromJson<String>(json['strategy']),
+      currentPrice: serializer.fromJson<double>(json['currentPrice']),
+      confidence: serializer.fromJson<double>(json['confidence']),
+      discoveredAt: serializer.fromJson<DateTime>(json['discoveredAt']),
+      isPromoted: serializer.fromJson<bool>(json['isPromoted']),
+      isDismissed: serializer.fromJson<bool>(json['isDismissed']),
+      potentialUpside: serializer.fromJson<double?>(json['potentialUpside']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'symbol': serializer.toJson<String>(symbol),
+      'companyName': serializer.toJson<String>(companyName),
+      'reason': serializer.toJson<String>(reason),
+      'strategy': serializer.toJson<String>(strategy),
+      'currentPrice': serializer.toJson<double>(currentPrice),
+      'confidence': serializer.toJson<double>(confidence),
+      'discoveredAt': serializer.toJson<DateTime>(discoveredAt),
+      'isPromoted': serializer.toJson<bool>(isPromoted),
+      'isDismissed': serializer.toJson<bool>(isDismissed),
+      'potentialUpside': serializer.toJson<double?>(potentialUpside),
+    };
+  }
+
+  DiscoveryData copyWith({
+    int? id,
+    String? symbol,
+    String? companyName,
+    String? reason,
+    String? strategy,
+    double? currentPrice,
+    double? confidence,
+    DateTime? discoveredAt,
+    bool? isPromoted,
+    bool? isDismissed,
+    Value<double?> potentialUpside = const Value.absent(),
+  }) => DiscoveryData(
+    id: id ?? this.id,
+    symbol: symbol ?? this.symbol,
+    companyName: companyName ?? this.companyName,
+    reason: reason ?? this.reason,
+    strategy: strategy ?? this.strategy,
+    currentPrice: currentPrice ?? this.currentPrice,
+    confidence: confidence ?? this.confidence,
+    discoveredAt: discoveredAt ?? this.discoveredAt,
+    isPromoted: isPromoted ?? this.isPromoted,
+    isDismissed: isDismissed ?? this.isDismissed,
+    potentialUpside: potentialUpside.present
+        ? potentialUpside.value
+        : this.potentialUpside,
+  );
+  DiscoveryData copyWithCompanion(DiscoveriesCompanion data) {
+    return DiscoveryData(
+      id: data.id.present ? data.id.value : this.id,
+      symbol: data.symbol.present ? data.symbol.value : this.symbol,
+      companyName: data.companyName.present
+          ? data.companyName.value
+          : this.companyName,
+      reason: data.reason.present ? data.reason.value : this.reason,
+      strategy: data.strategy.present ? data.strategy.value : this.strategy,
+      currentPrice: data.currentPrice.present
+          ? data.currentPrice.value
+          : this.currentPrice,
+      confidence: data.confidence.present
+          ? data.confidence.value
+          : this.confidence,
+      discoveredAt: data.discoveredAt.present
+          ? data.discoveredAt.value
+          : this.discoveredAt,
+      isPromoted: data.isPromoted.present
+          ? data.isPromoted.value
+          : this.isPromoted,
+      isDismissed: data.isDismissed.present
+          ? data.isDismissed.value
+          : this.isDismissed,
+      potentialUpside: data.potentialUpside.present
+          ? data.potentialUpside.value
+          : this.potentialUpside,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DiscoveryData(')
+          ..write('id: $id, ')
+          ..write('symbol: $symbol, ')
+          ..write('companyName: $companyName, ')
+          ..write('reason: $reason, ')
+          ..write('strategy: $strategy, ')
+          ..write('currentPrice: $currentPrice, ')
+          ..write('confidence: $confidence, ')
+          ..write('discoveredAt: $discoveredAt, ')
+          ..write('isPromoted: $isPromoted, ')
+          ..write('isDismissed: $isDismissed, ')
+          ..write('potentialUpside: $potentialUpside')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    symbol,
+    companyName,
+    reason,
+    strategy,
+    currentPrice,
+    confidence,
+    discoveredAt,
+    isPromoted,
+    isDismissed,
+    potentialUpside,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is DiscoveryData &&
+          other.id == this.id &&
+          other.symbol == this.symbol &&
+          other.companyName == this.companyName &&
+          other.reason == this.reason &&
+          other.strategy == this.strategy &&
+          other.currentPrice == this.currentPrice &&
+          other.confidence == this.confidence &&
+          other.discoveredAt == this.discoveredAt &&
+          other.isPromoted == this.isPromoted &&
+          other.isDismissed == this.isDismissed &&
+          other.potentialUpside == this.potentialUpside);
+}
+
+class DiscoveriesCompanion extends UpdateCompanion<DiscoveryData> {
+  final Value<int> id;
+  final Value<String> symbol;
+  final Value<String> companyName;
+  final Value<String> reason;
+  final Value<String> strategy;
+  final Value<double> currentPrice;
+  final Value<double> confidence;
+  final Value<DateTime> discoveredAt;
+  final Value<bool> isPromoted;
+  final Value<bool> isDismissed;
+  final Value<double?> potentialUpside;
+  const DiscoveriesCompanion({
+    this.id = const Value.absent(),
+    this.symbol = const Value.absent(),
+    this.companyName = const Value.absent(),
+    this.reason = const Value.absent(),
+    this.strategy = const Value.absent(),
+    this.currentPrice = const Value.absent(),
+    this.confidence = const Value.absent(),
+    this.discoveredAt = const Value.absent(),
+    this.isPromoted = const Value.absent(),
+    this.isDismissed = const Value.absent(),
+    this.potentialUpside = const Value.absent(),
+  });
+  DiscoveriesCompanion.insert({
+    this.id = const Value.absent(),
+    required String symbol,
+    this.companyName = const Value.absent(),
+    required String reason,
+    this.strategy = const Value.absent(),
+    required double currentPrice,
+    required double confidence,
+    this.discoveredAt = const Value.absent(),
+    this.isPromoted = const Value.absent(),
+    this.isDismissed = const Value.absent(),
+    this.potentialUpside = const Value.absent(),
+  }) : symbol = Value(symbol),
+       reason = Value(reason),
+       currentPrice = Value(currentPrice),
+       confidence = Value(confidence);
+  static Insertable<DiscoveryData> custom({
+    Expression<int>? id,
+    Expression<String>? symbol,
+    Expression<String>? companyName,
+    Expression<String>? reason,
+    Expression<String>? strategy,
+    Expression<double>? currentPrice,
+    Expression<double>? confidence,
+    Expression<DateTime>? discoveredAt,
+    Expression<bool>? isPromoted,
+    Expression<bool>? isDismissed,
+    Expression<double>? potentialUpside,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (symbol != null) 'symbol': symbol,
+      if (companyName != null) 'company_name': companyName,
+      if (reason != null) 'reason': reason,
+      if (strategy != null) 'strategy': strategy,
+      if (currentPrice != null) 'current_price': currentPrice,
+      if (confidence != null) 'confidence': confidence,
+      if (discoveredAt != null) 'discovered_at': discoveredAt,
+      if (isPromoted != null) 'is_promoted': isPromoted,
+      if (isDismissed != null) 'is_dismissed': isDismissed,
+      if (potentialUpside != null) 'potential_upside': potentialUpside,
+    });
+  }
+
+  DiscoveriesCompanion copyWith({
+    Value<int>? id,
+    Value<String>? symbol,
+    Value<String>? companyName,
+    Value<String>? reason,
+    Value<String>? strategy,
+    Value<double>? currentPrice,
+    Value<double>? confidence,
+    Value<DateTime>? discoveredAt,
+    Value<bool>? isPromoted,
+    Value<bool>? isDismissed,
+    Value<double?>? potentialUpside,
+  }) {
+    return DiscoveriesCompanion(
+      id: id ?? this.id,
+      symbol: symbol ?? this.symbol,
+      companyName: companyName ?? this.companyName,
+      reason: reason ?? this.reason,
+      strategy: strategy ?? this.strategy,
+      currentPrice: currentPrice ?? this.currentPrice,
+      confidence: confidence ?? this.confidence,
+      discoveredAt: discoveredAt ?? this.discoveredAt,
+      isPromoted: isPromoted ?? this.isPromoted,
+      isDismissed: isDismissed ?? this.isDismissed,
+      potentialUpside: potentialUpside ?? this.potentialUpside,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (symbol.present) {
+      map['symbol'] = Variable<String>(symbol.value);
+    }
+    if (companyName.present) {
+      map['company_name'] = Variable<String>(companyName.value);
+    }
+    if (reason.present) {
+      map['reason'] = Variable<String>(reason.value);
+    }
+    if (strategy.present) {
+      map['strategy'] = Variable<String>(strategy.value);
+    }
+    if (currentPrice.present) {
+      map['current_price'] = Variable<double>(currentPrice.value);
+    }
+    if (confidence.present) {
+      map['confidence'] = Variable<double>(confidence.value);
+    }
+    if (discoveredAt.present) {
+      map['discovered_at'] = Variable<DateTime>(discoveredAt.value);
+    }
+    if (isPromoted.present) {
+      map['is_promoted'] = Variable<bool>(isPromoted.value);
+    }
+    if (isDismissed.present) {
+      map['is_dismissed'] = Variable<bool>(isDismissed.value);
+    }
+    if (potentialUpside.present) {
+      map['potential_upside'] = Variable<double>(potentialUpside.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DiscoveriesCompanion(')
+          ..write('id: $id, ')
+          ..write('symbol: $symbol, ')
+          ..write('companyName: $companyName, ')
+          ..write('reason: $reason, ')
+          ..write('strategy: $strategy, ')
+          ..write('currentPrice: $currentPrice, ')
+          ..write('confidence: $confidence, ')
+          ..write('discoveredAt: $discoveredAt, ')
+          ..write('isPromoted: $isPromoted, ')
+          ..write('isDismissed: $isDismissed, ')
+          ..write('potentialUpside: $potentialUpside')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -8222,6 +8896,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $InsiderTransactionsTable(this);
   late final $InstitutionalHoldersTable institutionalHolders =
       $InstitutionalHoldersTable(this);
+  late final $DiscoveriesTable discoveries = $DiscoveriesTable(this);
   late final Index idxWatchlistSymbol = Index(
     'idx_watchlist_symbol',
     'CREATE INDEX idx_watchlist_symbol ON watchlist_items (symbol)',
@@ -8270,6 +8945,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     'idx_inst_symbol',
     'CREATE INDEX idx_inst_symbol ON institutional_holders (symbol)',
   );
+  late final Index idxDiscSymbol = Index(
+    'idx_disc_symbol',
+    'CREATE INDEX idx_disc_symbol ON discoveries (symbol)',
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -8290,6 +8969,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     earningsEvents,
     insiderTransactions,
     institutionalHolders,
+    discoveries,
     idxWatchlistSymbol,
     idxCacheSymbol,
     idxStageUnique,
@@ -8302,6 +8982,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     idxEarningsSymbol,
     idxInsiderSymbol,
     idxInstSymbol,
+    idxDiscSymbol,
   ];
 }
 
@@ -12464,6 +13145,328 @@ typedef $$InstitutionalHoldersTableProcessedTableManager =
       InstitutionalHolderData,
       PrefetchHooks Function()
     >;
+typedef $$DiscoveriesTableCreateCompanionBuilder =
+    DiscoveriesCompanion Function({
+      Value<int> id,
+      required String symbol,
+      Value<String> companyName,
+      required String reason,
+      Value<String> strategy,
+      required double currentPrice,
+      required double confidence,
+      Value<DateTime> discoveredAt,
+      Value<bool> isPromoted,
+      Value<bool> isDismissed,
+      Value<double?> potentialUpside,
+    });
+typedef $$DiscoveriesTableUpdateCompanionBuilder =
+    DiscoveriesCompanion Function({
+      Value<int> id,
+      Value<String> symbol,
+      Value<String> companyName,
+      Value<String> reason,
+      Value<String> strategy,
+      Value<double> currentPrice,
+      Value<double> confidence,
+      Value<DateTime> discoveredAt,
+      Value<bool> isPromoted,
+      Value<bool> isDismissed,
+      Value<double?> potentialUpside,
+    });
+
+class $$DiscoveriesTableFilterComposer
+    extends Composer<_$AppDatabase, $DiscoveriesTable> {
+  $$DiscoveriesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get symbol => $composableBuilder(
+    column: $table.symbol,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get companyName => $composableBuilder(
+    column: $table.companyName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get reason => $composableBuilder(
+    column: $table.reason,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get strategy => $composableBuilder(
+    column: $table.strategy,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get currentPrice => $composableBuilder(
+    column: $table.currentPrice,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get confidence => $composableBuilder(
+    column: $table.confidence,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get discoveredAt => $composableBuilder(
+    column: $table.discoveredAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isPromoted => $composableBuilder(
+    column: $table.isPromoted,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isDismissed => $composableBuilder(
+    column: $table.isDismissed,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get potentialUpside => $composableBuilder(
+    column: $table.potentialUpside,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$DiscoveriesTableOrderingComposer
+    extends Composer<_$AppDatabase, $DiscoveriesTable> {
+  $$DiscoveriesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get symbol => $composableBuilder(
+    column: $table.symbol,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get companyName => $composableBuilder(
+    column: $table.companyName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get reason => $composableBuilder(
+    column: $table.reason,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get strategy => $composableBuilder(
+    column: $table.strategy,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get currentPrice => $composableBuilder(
+    column: $table.currentPrice,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get confidence => $composableBuilder(
+    column: $table.confidence,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get discoveredAt => $composableBuilder(
+    column: $table.discoveredAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isPromoted => $composableBuilder(
+    column: $table.isPromoted,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isDismissed => $composableBuilder(
+    column: $table.isDismissed,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get potentialUpside => $composableBuilder(
+    column: $table.potentialUpside,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$DiscoveriesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $DiscoveriesTable> {
+  $$DiscoveriesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get symbol =>
+      $composableBuilder(column: $table.symbol, builder: (column) => column);
+
+  GeneratedColumn<String> get companyName => $composableBuilder(
+    column: $table.companyName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get reason =>
+      $composableBuilder(column: $table.reason, builder: (column) => column);
+
+  GeneratedColumn<String> get strategy =>
+      $composableBuilder(column: $table.strategy, builder: (column) => column);
+
+  GeneratedColumn<double> get currentPrice => $composableBuilder(
+    column: $table.currentPrice,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get confidence => $composableBuilder(
+    column: $table.confidence,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get discoveredAt => $composableBuilder(
+    column: $table.discoveredAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get isPromoted => $composableBuilder(
+    column: $table.isPromoted,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get isDismissed => $composableBuilder(
+    column: $table.isDismissed,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get potentialUpside => $composableBuilder(
+    column: $table.potentialUpside,
+    builder: (column) => column,
+  );
+}
+
+class $$DiscoveriesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $DiscoveriesTable,
+          DiscoveryData,
+          $$DiscoveriesTableFilterComposer,
+          $$DiscoveriesTableOrderingComposer,
+          $$DiscoveriesTableAnnotationComposer,
+          $$DiscoveriesTableCreateCompanionBuilder,
+          $$DiscoveriesTableUpdateCompanionBuilder,
+          (
+            DiscoveryData,
+            BaseReferences<_$AppDatabase, $DiscoveriesTable, DiscoveryData>,
+          ),
+          DiscoveryData,
+          PrefetchHooks Function()
+        > {
+  $$DiscoveriesTableTableManager(_$AppDatabase db, $DiscoveriesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$DiscoveriesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$DiscoveriesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$DiscoveriesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> symbol = const Value.absent(),
+                Value<String> companyName = const Value.absent(),
+                Value<String> reason = const Value.absent(),
+                Value<String> strategy = const Value.absent(),
+                Value<double> currentPrice = const Value.absent(),
+                Value<double> confidence = const Value.absent(),
+                Value<DateTime> discoveredAt = const Value.absent(),
+                Value<bool> isPromoted = const Value.absent(),
+                Value<bool> isDismissed = const Value.absent(),
+                Value<double?> potentialUpside = const Value.absent(),
+              }) => DiscoveriesCompanion(
+                id: id,
+                symbol: symbol,
+                companyName: companyName,
+                reason: reason,
+                strategy: strategy,
+                currentPrice: currentPrice,
+                confidence: confidence,
+                discoveredAt: discoveredAt,
+                isPromoted: isPromoted,
+                isDismissed: isDismissed,
+                potentialUpside: potentialUpside,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String symbol,
+                Value<String> companyName = const Value.absent(),
+                required String reason,
+                Value<String> strategy = const Value.absent(),
+                required double currentPrice,
+                required double confidence,
+                Value<DateTime> discoveredAt = const Value.absent(),
+                Value<bool> isPromoted = const Value.absent(),
+                Value<bool> isDismissed = const Value.absent(),
+                Value<double?> potentialUpside = const Value.absent(),
+              }) => DiscoveriesCompanion.insert(
+                id: id,
+                symbol: symbol,
+                companyName: companyName,
+                reason: reason,
+                strategy: strategy,
+                currentPrice: currentPrice,
+                confidence: confidence,
+                discoveredAt: discoveredAt,
+                isPromoted: isPromoted,
+                isDismissed: isDismissed,
+                potentialUpside: potentialUpside,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$DiscoveriesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $DiscoveriesTable,
+      DiscoveryData,
+      $$DiscoveriesTableFilterComposer,
+      $$DiscoveriesTableOrderingComposer,
+      $$DiscoveriesTableAnnotationComposer,
+      $$DiscoveriesTableCreateCompanionBuilder,
+      $$DiscoveriesTableUpdateCompanionBuilder,
+      (
+        DiscoveryData,
+        BaseReferences<_$AppDatabase, $DiscoveriesTable, DiscoveryData>,
+      ),
+      DiscoveryData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -12498,4 +13501,6 @@ class $AppDatabaseManager {
       $$InsiderTransactionsTableTableManager(_db, _db.insiderTransactions);
   $$InstitutionalHoldersTableTableManager get institutionalHolders =>
       $$InstitutionalHoldersTableTableManager(_db, _db.institutionalHolders);
+  $$DiscoveriesTableTableManager get discoveries =>
+      $$DiscoveriesTableTableManager(_db, _db.discoveries);
 }
