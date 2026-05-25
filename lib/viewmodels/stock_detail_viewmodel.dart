@@ -7,6 +7,7 @@ import '../../data/repositories/corporate_action_repository.dart';
 import '../../data/repositories/insider_repository.dart';
 import '../../data/repositories/institutional_repository.dart';
 import '../../data/datasources/remote/yahoo_finance_client.dart';
+import '../../data/datasources/remote/sec_edgar_client.dart';
 import '../../models/chart_data.dart';
 import '../../models/chart_data_point.dart';
 
@@ -207,10 +208,31 @@ class StockDetailViewModel extends StateNotifier<StockDetailState> {
     } catch (_) {}
 
     try {
+      final secClient = SecEdgarClient();
+      final rawInsider = await secClient.getInsiderTransactions(symbol);
+      if (rawInsider.isNotEmpty) {
+        await insiderRepo.clearForSymbol(symbol);
+        final insiderData = rawInsider.map((t) => InsiderTransactionData(
+              id: 0, symbol: symbol.toUpperCase(),
+              insiderName: t['insiderName'] as String,
+              title: t['title'] as String,
+              type: t['type'] as String,
+              shares: (t['shares'] as num).toDouble(),
+              price: (t['price'] as num).toDouble(),
+              totalValue: (t['totalValue'] as num).toDouble(),
+              filingDate: t['filingDate'] as DateTime,
+              transactionDate: t['transactionDate'] as DateTime,
+            )).toList();
+        await insiderRepo.saveAll(insiderData);
+      }
       state = state.copyWith(
         insiderTransactions: await insiderRepo.getBySymbol(symbol),
       );
-    } catch (_) {}
+    } catch (_) {
+      state = state.copyWith(
+        insiderTransactions: await insiderRepo.getBySymbol(symbol),
+      );
+    }
 
     try {
       state = state.copyWith(

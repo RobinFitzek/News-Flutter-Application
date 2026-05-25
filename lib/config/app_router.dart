@@ -22,6 +22,7 @@ import '../views/learning/price_alerts_screen.dart';
 import '../views/learning/scenario_screen.dart';
 import '../views/research/geopolitical_screen.dart';
 import '../views/research/economic_calendar_screen.dart';
+import '../views/learning/weekly_report_screen.dart';
 import '../widgets/app_scaffold.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -150,6 +151,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/research/calendar',
         builder: (context, state) => const EconomicCalendarScreen(),
+      ),
+      GoRoute(
+        path: '/report',
+        builder: (context, state) => const WeeklyReportScreen(),
       ),
     ],
   );
