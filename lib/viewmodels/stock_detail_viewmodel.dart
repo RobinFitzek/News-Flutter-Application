@@ -221,6 +221,26 @@ class StockDetailViewModel extends StateNotifier<StockDetailState> {
     state = state.copyWith(isLoadingDetails: false);
   }
 
+  Future<void> loadChart({String interval = '1d', String range = '1mo'}) async {
+    state = state.copyWith(isLoadingChart: true);
+    try {
+      final rawChart = await yahooClient.getHistoricalData(symbol, interval: interval, range: range);
+      final dataPoints = (rawChart['dataPoints'] as List<dynamic>)
+          .map((dp) => ChartDataPoint(
+                timestamp: DateTime.parse(dp['timestamp'] as String),
+                open: (dp['open'] as num).toDouble(),
+                high: (dp['high'] as num).toDouble(),
+                low: (dp['low'] as num).toDouble(),
+                close: (dp['close'] as num).toDouble(),
+                volume: dp['volume'] as int,
+              ))
+          .toList();
+      state = state.copyWith(chartData: ChartData(symbol: symbol, dataPoints: dataPoints), isLoadingChart: false);
+    } catch (e) {
+      state = state.copyWith(isLoadingChart: false, errorMessage: e.toString());
+    }
+  }
+
   Future<void> refreshQuote() async {
     state = state.copyWith(isLoadingQuote: true, clearError: true);
     try {

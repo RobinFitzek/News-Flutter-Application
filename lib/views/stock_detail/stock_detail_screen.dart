@@ -8,6 +8,7 @@ import 'tabs/financials_tab.dart';
 import 'tabs/earnings_tab.dart';
 import 'tabs/insider_tab.dart';
 import 'tabs/institutions_tab.dart';
+import '../research/corporate_actions_screen.dart';
 
 class StockDetailScreen extends ConsumerStatefulWidget {
   const StockDetailScreen({super.key, required this.symbol});
@@ -25,7 +26,7 @@ class _StockDetailScreenState extends ConsumerState<StockDetailScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 6, vsync: this);
     Future.microtask(() {
       ref
           .read(stockDetailViewModelProvider(widget.symbol).notifier)
@@ -69,6 +70,7 @@ class _StockDetailScreenState extends ConsumerState<StockDetailScreen>
             Tab(text: 'Earnings'),
             Tab(text: 'Insider'),
             Tab(text: 'Institutions'),
+            Tab(text: 'Actions'),
           ],
         ),
       ),
@@ -86,6 +88,9 @@ class _StockDetailScreenState extends ConsumerState<StockDetailScreen>
                   onRefresh: () => ref
                       .read(stockDetailViewModelProvider(widget.symbol).notifier)
                       .loadStock(),
+                  onChartRangeChanged: (range) => ref
+                      .read(stockDetailViewModelProvider(widget.symbol).notifier)
+                      .loadChart(range: range),
                 ),
                 FinancialsTab(
                   ratios: state.financialRatios,
@@ -102,6 +107,9 @@ class _StockDetailScreenState extends ConsumerState<StockDetailScreen>
                 InstitutionsTab(
                   holders: state.institutionalHolders,
                   isLoading: state.isLoadingDetails,
+                ),
+                CorporateActionsScreen(
+                  actions: state.corporateActions,
                 ),
               ],
             ),

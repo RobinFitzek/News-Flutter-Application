@@ -16,6 +16,7 @@ class OverviewTab extends ConsumerWidget {
     required this.gainLossColor,
     required this.symbol,
     this.onRefresh,
+    this.onChartRangeChanged,
   });
 
   final StockCacheData? quote;
@@ -24,6 +25,7 @@ class OverviewTab extends ConsumerWidget {
   final Color Function(double change) gainLossColor;
   final String symbol;
   final VoidCallback? onRefresh;
+  final Function(String range)? onChartRangeChanged;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -179,6 +181,13 @@ class OverviewTab extends ConsumerWidget {
           children: [
             Text('1 Month Chart',
                 style: Theme.of(context).textTheme.titleSmall),
+          const SizedBox(height: 8),
+          Row(children: [
+            _rangeChip(context, '1W', '5d'),
+            _rangeChip(context, '1M', '1mo'),
+            _rangeChip(context, '3M', '3mo'),
+            _rangeChip(context, '6M', '6mo'),
+          ]),
             const SizedBox(height: 16),
             SizedBox(
               height: 200,
@@ -246,6 +255,15 @@ class OverviewTab extends ConsumerWidget {
       ),
     );
   }
+
+  Widget _rangeChip(BuildContext context, String label, String range) => Padding(
+    padding: const EdgeInsets.only(right: 6),
+    child: ActionChip(
+      label: Text(label, style: const TextStyle(fontSize: 11)),
+      onPressed: () => onChartRangeChanged?.call(range),
+      visualDensity: VisualDensity.compact,
+    ),
+  );
 
   Widget _buildKeyStatsCard(BuildContext context) {
     return Card(

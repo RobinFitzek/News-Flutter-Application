@@ -20,6 +20,8 @@ import '../views/research/comparison_screen.dart';
 import '../views/learning/learning_screen.dart';
 import '../views/learning/price_alerts_screen.dart';
 import '../views/learning/scenario_screen.dart';
+import '../views/research/geopolitical_screen.dart';
+import '../views/research/economic_calendar_screen.dart';
 import '../widgets/app_scaffold.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -140,6 +142,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/scenarios',
         builder: (context, state) => const ScenarioScreen(),
+      ),
+      GoRoute(
+        path: '/research/geo',
+        builder: (context, state) => const GeopoliticalScreen(),
+      ),
+      GoRoute(
+        path: '/research/calendar',
+        builder: (context, state) => const EconomicCalendarScreen(),
       ),
     ],
   );
