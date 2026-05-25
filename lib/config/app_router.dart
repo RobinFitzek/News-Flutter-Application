@@ -24,12 +24,15 @@ import '../views/research/geopolitical_screen.dart';
 import '../views/research/economic_calendar_screen.dart';
 import '../views/learning/weekly_report_screen.dart';
 import '../widgets/app_scaffold.dart';
+import '../data/repositories/auth_repository.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
+  final authRepo = ref.watch(authRepositoryProvider);
   return GoRouter(
     initialLocation: '/',
     redirect: (context, state) {
-      return null;
+      if (state.matchedLocation == '/auth/login') return null;
+      return authRepo.isLoggedInSync() ? null : '/auth/login';
     },
     routes: [
       StatefulShellRoute.indexedStack(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/database/app_database.dart';
 import '../../data/repositories/settings_repository.dart';
+import '../../data/repositories/auth_repository.dart';
 import '../../data/repositories/provider_repository.dart';
 import '../../viewmodels/provider_viewmodel.dart';
 import '../../models/stage_assignment.dart';
@@ -17,6 +18,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   final _geminiController = TextEditingController();
   final _perplexityController = TextEditingController();
   String? _themeMode;
+  bool _biometricEnabled = false;
 
   static const Map<String, Color> _typeColors = {
     'gemini': Colors.blue,
@@ -50,11 +52,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final geminiKey = await settingsRepo.getGeminiKey();
     final perplexityKey = await settingsRepo.getPerplexityKey();
     final themeMode = await settingsRepo.getThemeMode();
+    final biometricEnabled = await ref.read(authRepositoryProvider).isBiometricEnabled();
 
     setState(() {
       _geminiController.text = geminiKey ?? '';
       _perplexityController.text = perplexityKey ?? '';
       _themeMode = themeMode ?? 'system';
+      _biometricEnabled = biometricEnabled;
     });
   }
 
@@ -272,6 +276,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 setState(() => _themeMode = value);
                 ref.read(settingsRepositoryProvider).setThemeMode(value);
               }
+            },
+          ),
+          const SizedBox(height: 24),
+          _buildSectionHeader('Security'),
+          const SizedBox(height: 8),
+          SwitchListTile(
+            title: const Text('Biometric Lock'),
+            subtitle: const Text('Require fingerprint/face to open app'),
+            value: _biometricEnabled,
+            onChanged: (v) async {
+              await ref.read(authRepositoryProvider).setBiometricEnabled(v);
+              setState(() => _biometricEnabled = v);
             },
           ),
           const SizedBox(height: 24),
