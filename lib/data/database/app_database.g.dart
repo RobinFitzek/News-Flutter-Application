@@ -2044,6 +2044,1570 @@ class StockCacheCompanion extends UpdateCompanion<StockCacheData> {
   }
 }
 
+class $AiProvidersTable extends AiProviders
+    with TableInfo<$AiProvidersTable, AiProviderData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $AiProvidersTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+    'type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _baseUrlMeta = const VerificationMeta(
+    'baseUrl',
+  );
+  @override
+  late final GeneratedColumn<String> baseUrl = GeneratedColumn<String>(
+    'base_url',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _apiKeyMeta = const VerificationMeta('apiKey');
+  @override
+  late final GeneratedColumn<String> apiKey = GeneratedColumn<String>(
+    'api_key',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _modelMeta = const VerificationMeta('model');
+  @override
+  late final GeneratedColumn<String> model = GeneratedColumn<String>(
+    'model',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _isEnabledMeta = const VerificationMeta(
+    'isEnabled',
+  );
+  @override
+  late final GeneratedColumn<bool> isEnabled = GeneratedColumn<bool>(
+    'is_enabled',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_enabled" IN (0, 1))',
+    ),
+    defaultValue: const Constant(true),
+  );
+  static const VerificationMeta _isConnectedMeta = const VerificationMeta(
+    'isConnected',
+  );
+  @override
+  late final GeneratedColumn<bool> isConnected = GeneratedColumn<bool>(
+    'is_connected',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_connected" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _totalCallsMeta = const VerificationMeta(
+    'totalCalls',
+  );
+  @override
+  late final GeneratedColumn<int> totalCalls = GeneratedColumn<int>(
+    'total_calls',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _totalCostMeta = const VerificationMeta(
+    'totalCost',
+  );
+  @override
+  late final GeneratedColumn<double> totalCost = GeneratedColumn<double>(
+    'total_cost',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0.0),
+  );
+  static const VerificationMeta _lastTestedAtMeta = const VerificationMeta(
+    'lastTestedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> lastTestedAt = GeneratedColumn<DateTime>(
+    'last_tested_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    name,
+    type,
+    baseUrl,
+    apiKey,
+    model,
+    isEnabled,
+    isConnected,
+    totalCalls,
+    totalCost,
+    lastTestedAt,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'ai_providers';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<AiProviderData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+        _typeMeta,
+        type.isAcceptableOrUnknown(data['type']!, _typeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('base_url')) {
+      context.handle(
+        _baseUrlMeta,
+        baseUrl.isAcceptableOrUnknown(data['base_url']!, _baseUrlMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_baseUrlMeta);
+    }
+    if (data.containsKey('api_key')) {
+      context.handle(
+        _apiKeyMeta,
+        apiKey.isAcceptableOrUnknown(data['api_key']!, _apiKeyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_apiKeyMeta);
+    }
+    if (data.containsKey('model')) {
+      context.handle(
+        _modelMeta,
+        model.isAcceptableOrUnknown(data['model']!, _modelMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_modelMeta);
+    }
+    if (data.containsKey('is_enabled')) {
+      context.handle(
+        _isEnabledMeta,
+        isEnabled.isAcceptableOrUnknown(data['is_enabled']!, _isEnabledMeta),
+      );
+    }
+    if (data.containsKey('is_connected')) {
+      context.handle(
+        _isConnectedMeta,
+        isConnected.isAcceptableOrUnknown(
+          data['is_connected']!,
+          _isConnectedMeta,
+        ),
+      );
+    }
+    if (data.containsKey('total_calls')) {
+      context.handle(
+        _totalCallsMeta,
+        totalCalls.isAcceptableOrUnknown(data['total_calls']!, _totalCallsMeta),
+      );
+    }
+    if (data.containsKey('total_cost')) {
+      context.handle(
+        _totalCostMeta,
+        totalCost.isAcceptableOrUnknown(data['total_cost']!, _totalCostMeta),
+      );
+    }
+    if (data.containsKey('last_tested_at')) {
+      context.handle(
+        _lastTestedAtMeta,
+        lastTestedAt.isAcceptableOrUnknown(
+          data['last_tested_at']!,
+          _lastTestedAtMeta,
+        ),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  AiProviderData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return AiProviderData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      type: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}type'],
+      )!,
+      baseUrl: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}base_url'],
+      )!,
+      apiKey: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}api_key'],
+      )!,
+      model: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}model'],
+      )!,
+      isEnabled: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_enabled'],
+      )!,
+      isConnected: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_connected'],
+      )!,
+      totalCalls: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}total_calls'],
+      )!,
+      totalCost: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}total_cost'],
+      )!,
+      lastTestedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}last_tested_at'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $AiProvidersTable createAlias(String alias) {
+    return $AiProvidersTable(attachedDatabase, alias);
+  }
+}
+
+class AiProviderData extends DataClass implements Insertable<AiProviderData> {
+  final int id;
+  final String name;
+  final String type;
+  final String baseUrl;
+  final String apiKey;
+  final String model;
+  final bool isEnabled;
+  final bool isConnected;
+  final int totalCalls;
+  final double totalCost;
+  final DateTime? lastTestedAt;
+  final DateTime createdAt;
+  const AiProviderData({
+    required this.id,
+    required this.name,
+    required this.type,
+    required this.baseUrl,
+    required this.apiKey,
+    required this.model,
+    required this.isEnabled,
+    required this.isConnected,
+    required this.totalCalls,
+    required this.totalCost,
+    this.lastTestedAt,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['name'] = Variable<String>(name);
+    map['type'] = Variable<String>(type);
+    map['base_url'] = Variable<String>(baseUrl);
+    map['api_key'] = Variable<String>(apiKey);
+    map['model'] = Variable<String>(model);
+    map['is_enabled'] = Variable<bool>(isEnabled);
+    map['is_connected'] = Variable<bool>(isConnected);
+    map['total_calls'] = Variable<int>(totalCalls);
+    map['total_cost'] = Variable<double>(totalCost);
+    if (!nullToAbsent || lastTestedAt != null) {
+      map['last_tested_at'] = Variable<DateTime>(lastTestedAt);
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  AiProvidersCompanion toCompanion(bool nullToAbsent) {
+    return AiProvidersCompanion(
+      id: Value(id),
+      name: Value(name),
+      type: Value(type),
+      baseUrl: Value(baseUrl),
+      apiKey: Value(apiKey),
+      model: Value(model),
+      isEnabled: Value(isEnabled),
+      isConnected: Value(isConnected),
+      totalCalls: Value(totalCalls),
+      totalCost: Value(totalCost),
+      lastTestedAt: lastTestedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastTestedAt),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory AiProviderData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return AiProviderData(
+      id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      type: serializer.fromJson<String>(json['type']),
+      baseUrl: serializer.fromJson<String>(json['baseUrl']),
+      apiKey: serializer.fromJson<String>(json['apiKey']),
+      model: serializer.fromJson<String>(json['model']),
+      isEnabled: serializer.fromJson<bool>(json['isEnabled']),
+      isConnected: serializer.fromJson<bool>(json['isConnected']),
+      totalCalls: serializer.fromJson<int>(json['totalCalls']),
+      totalCost: serializer.fromJson<double>(json['totalCost']),
+      lastTestedAt: serializer.fromJson<DateTime?>(json['lastTestedAt']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String>(name),
+      'type': serializer.toJson<String>(type),
+      'baseUrl': serializer.toJson<String>(baseUrl),
+      'apiKey': serializer.toJson<String>(apiKey),
+      'model': serializer.toJson<String>(model),
+      'isEnabled': serializer.toJson<bool>(isEnabled),
+      'isConnected': serializer.toJson<bool>(isConnected),
+      'totalCalls': serializer.toJson<int>(totalCalls),
+      'totalCost': serializer.toJson<double>(totalCost),
+      'lastTestedAt': serializer.toJson<DateTime?>(lastTestedAt),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  AiProviderData copyWith({
+    int? id,
+    String? name,
+    String? type,
+    String? baseUrl,
+    String? apiKey,
+    String? model,
+    bool? isEnabled,
+    bool? isConnected,
+    int? totalCalls,
+    double? totalCost,
+    Value<DateTime?> lastTestedAt = const Value.absent(),
+    DateTime? createdAt,
+  }) => AiProviderData(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    type: type ?? this.type,
+    baseUrl: baseUrl ?? this.baseUrl,
+    apiKey: apiKey ?? this.apiKey,
+    model: model ?? this.model,
+    isEnabled: isEnabled ?? this.isEnabled,
+    isConnected: isConnected ?? this.isConnected,
+    totalCalls: totalCalls ?? this.totalCalls,
+    totalCost: totalCost ?? this.totalCost,
+    lastTestedAt: lastTestedAt.present ? lastTestedAt.value : this.lastTestedAt,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  AiProviderData copyWithCompanion(AiProvidersCompanion data) {
+    return AiProviderData(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      type: data.type.present ? data.type.value : this.type,
+      baseUrl: data.baseUrl.present ? data.baseUrl.value : this.baseUrl,
+      apiKey: data.apiKey.present ? data.apiKey.value : this.apiKey,
+      model: data.model.present ? data.model.value : this.model,
+      isEnabled: data.isEnabled.present ? data.isEnabled.value : this.isEnabled,
+      isConnected: data.isConnected.present
+          ? data.isConnected.value
+          : this.isConnected,
+      totalCalls: data.totalCalls.present
+          ? data.totalCalls.value
+          : this.totalCalls,
+      totalCost: data.totalCost.present ? data.totalCost.value : this.totalCost,
+      lastTestedAt: data.lastTestedAt.present
+          ? data.lastTestedAt.value
+          : this.lastTestedAt,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AiProviderData(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('type: $type, ')
+          ..write('baseUrl: $baseUrl, ')
+          ..write('apiKey: $apiKey, ')
+          ..write('model: $model, ')
+          ..write('isEnabled: $isEnabled, ')
+          ..write('isConnected: $isConnected, ')
+          ..write('totalCalls: $totalCalls, ')
+          ..write('totalCost: $totalCost, ')
+          ..write('lastTestedAt: $lastTestedAt, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    name,
+    type,
+    baseUrl,
+    apiKey,
+    model,
+    isEnabled,
+    isConnected,
+    totalCalls,
+    totalCost,
+    lastTestedAt,
+    createdAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is AiProviderData &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.type == this.type &&
+          other.baseUrl == this.baseUrl &&
+          other.apiKey == this.apiKey &&
+          other.model == this.model &&
+          other.isEnabled == this.isEnabled &&
+          other.isConnected == this.isConnected &&
+          other.totalCalls == this.totalCalls &&
+          other.totalCost == this.totalCost &&
+          other.lastTestedAt == this.lastTestedAt &&
+          other.createdAt == this.createdAt);
+}
+
+class AiProvidersCompanion extends UpdateCompanion<AiProviderData> {
+  final Value<int> id;
+  final Value<String> name;
+  final Value<String> type;
+  final Value<String> baseUrl;
+  final Value<String> apiKey;
+  final Value<String> model;
+  final Value<bool> isEnabled;
+  final Value<bool> isConnected;
+  final Value<int> totalCalls;
+  final Value<double> totalCost;
+  final Value<DateTime?> lastTestedAt;
+  final Value<DateTime> createdAt;
+  const AiProvidersCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.type = const Value.absent(),
+    this.baseUrl = const Value.absent(),
+    this.apiKey = const Value.absent(),
+    this.model = const Value.absent(),
+    this.isEnabled = const Value.absent(),
+    this.isConnected = const Value.absent(),
+    this.totalCalls = const Value.absent(),
+    this.totalCost = const Value.absent(),
+    this.lastTestedAt = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  });
+  AiProvidersCompanion.insert({
+    this.id = const Value.absent(),
+    required String name,
+    required String type,
+    required String baseUrl,
+    required String apiKey,
+    required String model,
+    this.isEnabled = const Value.absent(),
+    this.isConnected = const Value.absent(),
+    this.totalCalls = const Value.absent(),
+    this.totalCost = const Value.absent(),
+    this.lastTestedAt = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  }) : name = Value(name),
+       type = Value(type),
+       baseUrl = Value(baseUrl),
+       apiKey = Value(apiKey),
+       model = Value(model);
+  static Insertable<AiProviderData> custom({
+    Expression<int>? id,
+    Expression<String>? name,
+    Expression<String>? type,
+    Expression<String>? baseUrl,
+    Expression<String>? apiKey,
+    Expression<String>? model,
+    Expression<bool>? isEnabled,
+    Expression<bool>? isConnected,
+    Expression<int>? totalCalls,
+    Expression<double>? totalCost,
+    Expression<DateTime>? lastTestedAt,
+    Expression<DateTime>? createdAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (type != null) 'type': type,
+      if (baseUrl != null) 'base_url': baseUrl,
+      if (apiKey != null) 'api_key': apiKey,
+      if (model != null) 'model': model,
+      if (isEnabled != null) 'is_enabled': isEnabled,
+      if (isConnected != null) 'is_connected': isConnected,
+      if (totalCalls != null) 'total_calls': totalCalls,
+      if (totalCost != null) 'total_cost': totalCost,
+      if (lastTestedAt != null) 'last_tested_at': lastTestedAt,
+      if (createdAt != null) 'created_at': createdAt,
+    });
+  }
+
+  AiProvidersCompanion copyWith({
+    Value<int>? id,
+    Value<String>? name,
+    Value<String>? type,
+    Value<String>? baseUrl,
+    Value<String>? apiKey,
+    Value<String>? model,
+    Value<bool>? isEnabled,
+    Value<bool>? isConnected,
+    Value<int>? totalCalls,
+    Value<double>? totalCost,
+    Value<DateTime?>? lastTestedAt,
+    Value<DateTime>? createdAt,
+  }) {
+    return AiProvidersCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      type: type ?? this.type,
+      baseUrl: baseUrl ?? this.baseUrl,
+      apiKey: apiKey ?? this.apiKey,
+      model: model ?? this.model,
+      isEnabled: isEnabled ?? this.isEnabled,
+      isConnected: isConnected ?? this.isConnected,
+      totalCalls: totalCalls ?? this.totalCalls,
+      totalCost: totalCost ?? this.totalCost,
+      lastTestedAt: lastTestedAt ?? this.lastTestedAt,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    if (baseUrl.present) {
+      map['base_url'] = Variable<String>(baseUrl.value);
+    }
+    if (apiKey.present) {
+      map['api_key'] = Variable<String>(apiKey.value);
+    }
+    if (model.present) {
+      map['model'] = Variable<String>(model.value);
+    }
+    if (isEnabled.present) {
+      map['is_enabled'] = Variable<bool>(isEnabled.value);
+    }
+    if (isConnected.present) {
+      map['is_connected'] = Variable<bool>(isConnected.value);
+    }
+    if (totalCalls.present) {
+      map['total_calls'] = Variable<int>(totalCalls.value);
+    }
+    if (totalCost.present) {
+      map['total_cost'] = Variable<double>(totalCost.value);
+    }
+    if (lastTestedAt.present) {
+      map['last_tested_at'] = Variable<DateTime>(lastTestedAt.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AiProvidersCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('type: $type, ')
+          ..write('baseUrl: $baseUrl, ')
+          ..write('apiKey: $apiKey, ')
+          ..write('model: $model, ')
+          ..write('isEnabled: $isEnabled, ')
+          ..write('isConnected: $isConnected, ')
+          ..write('totalCalls: $totalCalls, ')
+          ..write('totalCost: $totalCost, ')
+          ..write('lastTestedAt: $lastTestedAt, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $StageAssignmentsTable extends StageAssignments
+    with TableInfo<$StageAssignmentsTable, StageAssignmentData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $StageAssignmentsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _stageMeta = const VerificationMeta('stage');
+  @override
+  late final GeneratedColumn<String> stage = GeneratedColumn<String>(
+    'stage',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _providerIdMeta = const VerificationMeta(
+    'providerId',
+  );
+  @override
+  late final GeneratedColumn<int> providerId = GeneratedColumn<int>(
+    'provider_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, stage, providerId];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'stage_assignments';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<StageAssignmentData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('stage')) {
+      context.handle(
+        _stageMeta,
+        stage.isAcceptableOrUnknown(data['stage']!, _stageMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_stageMeta);
+    }
+    if (data.containsKey('provider_id')) {
+      context.handle(
+        _providerIdMeta,
+        providerId.isAcceptableOrUnknown(data['provider_id']!, _providerIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_providerIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  StageAssignmentData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return StageAssignmentData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      stage: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}stage'],
+      )!,
+      providerId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}provider_id'],
+      )!,
+    );
+  }
+
+  @override
+  $StageAssignmentsTable createAlias(String alias) {
+    return $StageAssignmentsTable(attachedDatabase, alias);
+  }
+}
+
+class StageAssignmentData extends DataClass
+    implements Insertable<StageAssignmentData> {
+  final int id;
+  final String stage;
+  final int providerId;
+  const StageAssignmentData({
+    required this.id,
+    required this.stage,
+    required this.providerId,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['stage'] = Variable<String>(stage);
+    map['provider_id'] = Variable<int>(providerId);
+    return map;
+  }
+
+  StageAssignmentsCompanion toCompanion(bool nullToAbsent) {
+    return StageAssignmentsCompanion(
+      id: Value(id),
+      stage: Value(stage),
+      providerId: Value(providerId),
+    );
+  }
+
+  factory StageAssignmentData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return StageAssignmentData(
+      id: serializer.fromJson<int>(json['id']),
+      stage: serializer.fromJson<String>(json['stage']),
+      providerId: serializer.fromJson<int>(json['providerId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'stage': serializer.toJson<String>(stage),
+      'providerId': serializer.toJson<int>(providerId),
+    };
+  }
+
+  StageAssignmentData copyWith({int? id, String? stage, int? providerId}) =>
+      StageAssignmentData(
+        id: id ?? this.id,
+        stage: stage ?? this.stage,
+        providerId: providerId ?? this.providerId,
+      );
+  StageAssignmentData copyWithCompanion(StageAssignmentsCompanion data) {
+    return StageAssignmentData(
+      id: data.id.present ? data.id.value : this.id,
+      stage: data.stage.present ? data.stage.value : this.stage,
+      providerId: data.providerId.present
+          ? data.providerId.value
+          : this.providerId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('StageAssignmentData(')
+          ..write('id: $id, ')
+          ..write('stage: $stage, ')
+          ..write('providerId: $providerId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, stage, providerId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is StageAssignmentData &&
+          other.id == this.id &&
+          other.stage == this.stage &&
+          other.providerId == this.providerId);
+}
+
+class StageAssignmentsCompanion extends UpdateCompanion<StageAssignmentData> {
+  final Value<int> id;
+  final Value<String> stage;
+  final Value<int> providerId;
+  const StageAssignmentsCompanion({
+    this.id = const Value.absent(),
+    this.stage = const Value.absent(),
+    this.providerId = const Value.absent(),
+  });
+  StageAssignmentsCompanion.insert({
+    this.id = const Value.absent(),
+    required String stage,
+    required int providerId,
+  }) : stage = Value(stage),
+       providerId = Value(providerId);
+  static Insertable<StageAssignmentData> custom({
+    Expression<int>? id,
+    Expression<String>? stage,
+    Expression<int>? providerId,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (stage != null) 'stage': stage,
+      if (providerId != null) 'provider_id': providerId,
+    });
+  }
+
+  StageAssignmentsCompanion copyWith({
+    Value<int>? id,
+    Value<String>? stage,
+    Value<int>? providerId,
+  }) {
+    return StageAssignmentsCompanion(
+      id: id ?? this.id,
+      stage: stage ?? this.stage,
+      providerId: providerId ?? this.providerId,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (stage.present) {
+      map['stage'] = Variable<String>(stage.value);
+    }
+    if (providerId.present) {
+      map['provider_id'] = Variable<int>(providerId.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('StageAssignmentsCompanion(')
+          ..write('id: $id, ')
+          ..write('stage: $stage, ')
+          ..write('providerId: $providerId')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $AnalysisResultsTable extends AnalysisResults
+    with TableInfo<$AnalysisResultsTable, AnalysisResultData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $AnalysisResultsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _symbolMeta = const VerificationMeta('symbol');
+  @override
+  late final GeneratedColumn<String> symbol = GeneratedColumn<String>(
+    'symbol',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 1,
+      maxTextLength: 10,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _predictedPriceMeta = const VerificationMeta(
+    'predictedPrice',
+  );
+  @override
+  late final GeneratedColumn<double> predictedPrice = GeneratedColumn<double>(
+    'predicted_price',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _confidenceMeta = const VerificationMeta(
+    'confidence',
+  );
+  @override
+  late final GeneratedColumn<double> confidence = GeneratedColumn<double>(
+    'confidence',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _recommendationMeta = const VerificationMeta(
+    'recommendation',
+  );
+  @override
+  late final GeneratedColumn<String> recommendation = GeneratedColumn<String>(
+    'recommendation',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _reasoningMeta = const VerificationMeta(
+    'reasoning',
+  );
+  @override
+  late final GeneratedColumn<String> reasoning = GeneratedColumn<String>(
+    'reasoning',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _newsSummaryMeta = const VerificationMeta(
+    'newsSummary',
+  );
+  @override
+  late final GeneratedColumn<String> newsSummary = GeneratedColumn<String>(
+    'news_summary',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _timeframeMeta = const VerificationMeta(
+    'timeframe',
+  );
+  @override
+  late final GeneratedColumn<String> timeframe = GeneratedColumn<String>(
+    'timeframe',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('daily'),
+  );
+  static const VerificationMeta _currentPriceMeta = const VerificationMeta(
+    'currentPrice',
+  );
+  @override
+  late final GeneratedColumn<double> currentPrice = GeneratedColumn<double>(
+    'current_price',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    symbol,
+    predictedPrice,
+    confidence,
+    recommendation,
+    reasoning,
+    newsSummary,
+    timeframe,
+    currentPrice,
+    createdAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'analysis_results';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<AnalysisResultData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('symbol')) {
+      context.handle(
+        _symbolMeta,
+        symbol.isAcceptableOrUnknown(data['symbol']!, _symbolMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_symbolMeta);
+    }
+    if (data.containsKey('predicted_price')) {
+      context.handle(
+        _predictedPriceMeta,
+        predictedPrice.isAcceptableOrUnknown(
+          data['predicted_price']!,
+          _predictedPriceMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_predictedPriceMeta);
+    }
+    if (data.containsKey('confidence')) {
+      context.handle(
+        _confidenceMeta,
+        confidence.isAcceptableOrUnknown(data['confidence']!, _confidenceMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_confidenceMeta);
+    }
+    if (data.containsKey('recommendation')) {
+      context.handle(
+        _recommendationMeta,
+        recommendation.isAcceptableOrUnknown(
+          data['recommendation']!,
+          _recommendationMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_recommendationMeta);
+    }
+    if (data.containsKey('reasoning')) {
+      context.handle(
+        _reasoningMeta,
+        reasoning.isAcceptableOrUnknown(data['reasoning']!, _reasoningMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_reasoningMeta);
+    }
+    if (data.containsKey('news_summary')) {
+      context.handle(
+        _newsSummaryMeta,
+        newsSummary.isAcceptableOrUnknown(
+          data['news_summary']!,
+          _newsSummaryMeta,
+        ),
+      );
+    }
+    if (data.containsKey('timeframe')) {
+      context.handle(
+        _timeframeMeta,
+        timeframe.isAcceptableOrUnknown(data['timeframe']!, _timeframeMeta),
+      );
+    }
+    if (data.containsKey('current_price')) {
+      context.handle(
+        _currentPriceMeta,
+        currentPrice.isAcceptableOrUnknown(
+          data['current_price']!,
+          _currentPriceMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_currentPriceMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  AnalysisResultData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return AnalysisResultData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      symbol: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}symbol'],
+      )!,
+      predictedPrice: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}predicted_price'],
+      )!,
+      confidence: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}confidence'],
+      )!,
+      recommendation: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}recommendation'],
+      )!,
+      reasoning: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}reasoning'],
+      )!,
+      newsSummary: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}news_summary'],
+      )!,
+      timeframe: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}timeframe'],
+      )!,
+      currentPrice: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}current_price'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $AnalysisResultsTable createAlias(String alias) {
+    return $AnalysisResultsTable(attachedDatabase, alias);
+  }
+}
+
+class AnalysisResultData extends DataClass
+    implements Insertable<AnalysisResultData> {
+  final int id;
+  final String symbol;
+  final double predictedPrice;
+  final double confidence;
+  final String recommendation;
+  final String reasoning;
+  final String newsSummary;
+  final String timeframe;
+  final double currentPrice;
+  final DateTime createdAt;
+  const AnalysisResultData({
+    required this.id,
+    required this.symbol,
+    required this.predictedPrice,
+    required this.confidence,
+    required this.recommendation,
+    required this.reasoning,
+    required this.newsSummary,
+    required this.timeframe,
+    required this.currentPrice,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['symbol'] = Variable<String>(symbol);
+    map['predicted_price'] = Variable<double>(predictedPrice);
+    map['confidence'] = Variable<double>(confidence);
+    map['recommendation'] = Variable<String>(recommendation);
+    map['reasoning'] = Variable<String>(reasoning);
+    map['news_summary'] = Variable<String>(newsSummary);
+    map['timeframe'] = Variable<String>(timeframe);
+    map['current_price'] = Variable<double>(currentPrice);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  AnalysisResultsCompanion toCompanion(bool nullToAbsent) {
+    return AnalysisResultsCompanion(
+      id: Value(id),
+      symbol: Value(symbol),
+      predictedPrice: Value(predictedPrice),
+      confidence: Value(confidence),
+      recommendation: Value(recommendation),
+      reasoning: Value(reasoning),
+      newsSummary: Value(newsSummary),
+      timeframe: Value(timeframe),
+      currentPrice: Value(currentPrice),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory AnalysisResultData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return AnalysisResultData(
+      id: serializer.fromJson<int>(json['id']),
+      symbol: serializer.fromJson<String>(json['symbol']),
+      predictedPrice: serializer.fromJson<double>(json['predictedPrice']),
+      confidence: serializer.fromJson<double>(json['confidence']),
+      recommendation: serializer.fromJson<String>(json['recommendation']),
+      reasoning: serializer.fromJson<String>(json['reasoning']),
+      newsSummary: serializer.fromJson<String>(json['newsSummary']),
+      timeframe: serializer.fromJson<String>(json['timeframe']),
+      currentPrice: serializer.fromJson<double>(json['currentPrice']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'symbol': serializer.toJson<String>(symbol),
+      'predictedPrice': serializer.toJson<double>(predictedPrice),
+      'confidence': serializer.toJson<double>(confidence),
+      'recommendation': serializer.toJson<String>(recommendation),
+      'reasoning': serializer.toJson<String>(reasoning),
+      'newsSummary': serializer.toJson<String>(newsSummary),
+      'timeframe': serializer.toJson<String>(timeframe),
+      'currentPrice': serializer.toJson<double>(currentPrice),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  AnalysisResultData copyWith({
+    int? id,
+    String? symbol,
+    double? predictedPrice,
+    double? confidence,
+    String? recommendation,
+    String? reasoning,
+    String? newsSummary,
+    String? timeframe,
+    double? currentPrice,
+    DateTime? createdAt,
+  }) => AnalysisResultData(
+    id: id ?? this.id,
+    symbol: symbol ?? this.symbol,
+    predictedPrice: predictedPrice ?? this.predictedPrice,
+    confidence: confidence ?? this.confidence,
+    recommendation: recommendation ?? this.recommendation,
+    reasoning: reasoning ?? this.reasoning,
+    newsSummary: newsSummary ?? this.newsSummary,
+    timeframe: timeframe ?? this.timeframe,
+    currentPrice: currentPrice ?? this.currentPrice,
+    createdAt: createdAt ?? this.createdAt,
+  );
+  AnalysisResultData copyWithCompanion(AnalysisResultsCompanion data) {
+    return AnalysisResultData(
+      id: data.id.present ? data.id.value : this.id,
+      symbol: data.symbol.present ? data.symbol.value : this.symbol,
+      predictedPrice: data.predictedPrice.present
+          ? data.predictedPrice.value
+          : this.predictedPrice,
+      confidence: data.confidence.present
+          ? data.confidence.value
+          : this.confidence,
+      recommendation: data.recommendation.present
+          ? data.recommendation.value
+          : this.recommendation,
+      reasoning: data.reasoning.present ? data.reasoning.value : this.reasoning,
+      newsSummary: data.newsSummary.present
+          ? data.newsSummary.value
+          : this.newsSummary,
+      timeframe: data.timeframe.present ? data.timeframe.value : this.timeframe,
+      currentPrice: data.currentPrice.present
+          ? data.currentPrice.value
+          : this.currentPrice,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AnalysisResultData(')
+          ..write('id: $id, ')
+          ..write('symbol: $symbol, ')
+          ..write('predictedPrice: $predictedPrice, ')
+          ..write('confidence: $confidence, ')
+          ..write('recommendation: $recommendation, ')
+          ..write('reasoning: $reasoning, ')
+          ..write('newsSummary: $newsSummary, ')
+          ..write('timeframe: $timeframe, ')
+          ..write('currentPrice: $currentPrice, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    symbol,
+    predictedPrice,
+    confidence,
+    recommendation,
+    reasoning,
+    newsSummary,
+    timeframe,
+    currentPrice,
+    createdAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is AnalysisResultData &&
+          other.id == this.id &&
+          other.symbol == this.symbol &&
+          other.predictedPrice == this.predictedPrice &&
+          other.confidence == this.confidence &&
+          other.recommendation == this.recommendation &&
+          other.reasoning == this.reasoning &&
+          other.newsSummary == this.newsSummary &&
+          other.timeframe == this.timeframe &&
+          other.currentPrice == this.currentPrice &&
+          other.createdAt == this.createdAt);
+}
+
+class AnalysisResultsCompanion extends UpdateCompanion<AnalysisResultData> {
+  final Value<int> id;
+  final Value<String> symbol;
+  final Value<double> predictedPrice;
+  final Value<double> confidence;
+  final Value<String> recommendation;
+  final Value<String> reasoning;
+  final Value<String> newsSummary;
+  final Value<String> timeframe;
+  final Value<double> currentPrice;
+  final Value<DateTime> createdAt;
+  const AnalysisResultsCompanion({
+    this.id = const Value.absent(),
+    this.symbol = const Value.absent(),
+    this.predictedPrice = const Value.absent(),
+    this.confidence = const Value.absent(),
+    this.recommendation = const Value.absent(),
+    this.reasoning = const Value.absent(),
+    this.newsSummary = const Value.absent(),
+    this.timeframe = const Value.absent(),
+    this.currentPrice = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  });
+  AnalysisResultsCompanion.insert({
+    this.id = const Value.absent(),
+    required String symbol,
+    required double predictedPrice,
+    required double confidence,
+    required String recommendation,
+    required String reasoning,
+    this.newsSummary = const Value.absent(),
+    this.timeframe = const Value.absent(),
+    required double currentPrice,
+    this.createdAt = const Value.absent(),
+  }) : symbol = Value(symbol),
+       predictedPrice = Value(predictedPrice),
+       confidence = Value(confidence),
+       recommendation = Value(recommendation),
+       reasoning = Value(reasoning),
+       currentPrice = Value(currentPrice);
+  static Insertable<AnalysisResultData> custom({
+    Expression<int>? id,
+    Expression<String>? symbol,
+    Expression<double>? predictedPrice,
+    Expression<double>? confidence,
+    Expression<String>? recommendation,
+    Expression<String>? reasoning,
+    Expression<String>? newsSummary,
+    Expression<String>? timeframe,
+    Expression<double>? currentPrice,
+    Expression<DateTime>? createdAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (symbol != null) 'symbol': symbol,
+      if (predictedPrice != null) 'predicted_price': predictedPrice,
+      if (confidence != null) 'confidence': confidence,
+      if (recommendation != null) 'recommendation': recommendation,
+      if (reasoning != null) 'reasoning': reasoning,
+      if (newsSummary != null) 'news_summary': newsSummary,
+      if (timeframe != null) 'timeframe': timeframe,
+      if (currentPrice != null) 'current_price': currentPrice,
+      if (createdAt != null) 'created_at': createdAt,
+    });
+  }
+
+  AnalysisResultsCompanion copyWith({
+    Value<int>? id,
+    Value<String>? symbol,
+    Value<double>? predictedPrice,
+    Value<double>? confidence,
+    Value<String>? recommendation,
+    Value<String>? reasoning,
+    Value<String>? newsSummary,
+    Value<String>? timeframe,
+    Value<double>? currentPrice,
+    Value<DateTime>? createdAt,
+  }) {
+    return AnalysisResultsCompanion(
+      id: id ?? this.id,
+      symbol: symbol ?? this.symbol,
+      predictedPrice: predictedPrice ?? this.predictedPrice,
+      confidence: confidence ?? this.confidence,
+      recommendation: recommendation ?? this.recommendation,
+      reasoning: reasoning ?? this.reasoning,
+      newsSummary: newsSummary ?? this.newsSummary,
+      timeframe: timeframe ?? this.timeframe,
+      currentPrice: currentPrice ?? this.currentPrice,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (symbol.present) {
+      map['symbol'] = Variable<String>(symbol.value);
+    }
+    if (predictedPrice.present) {
+      map['predicted_price'] = Variable<double>(predictedPrice.value);
+    }
+    if (confidence.present) {
+      map['confidence'] = Variable<double>(confidence.value);
+    }
+    if (recommendation.present) {
+      map['recommendation'] = Variable<String>(recommendation.value);
+    }
+    if (reasoning.present) {
+      map['reasoning'] = Variable<String>(reasoning.value);
+    }
+    if (newsSummary.present) {
+      map['news_summary'] = Variable<String>(newsSummary.value);
+    }
+    if (timeframe.present) {
+      map['timeframe'] = Variable<String>(timeframe.value);
+    }
+    if (currentPrice.present) {
+      map['current_price'] = Variable<double>(currentPrice.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AnalysisResultsCompanion(')
+          ..write('id: $id, ')
+          ..write('symbol: $symbol, ')
+          ..write('predictedPrice: $predictedPrice, ')
+          ..write('confidence: $confidence, ')
+          ..write('recommendation: $recommendation, ')
+          ..write('reasoning: $reasoning, ')
+          ..write('newsSummary: $newsSummary, ')
+          ..write('timeframe: $timeframe, ')
+          ..write('currentPrice: $currentPrice, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -2051,6 +3615,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $ApiKeysTable apiKeys = $ApiKeysTable(this);
   late final $WatchlistItemsTable watchlistItems = $WatchlistItemsTable(this);
   late final $StockCacheTable stockCache = $StockCacheTable(this);
+  late final $AiProvidersTable aiProviders = $AiProvidersTable(this);
+  late final $StageAssignmentsTable stageAssignments = $StageAssignmentsTable(
+    this,
+  );
+  late final $AnalysisResultsTable analysisResults = $AnalysisResultsTable(
+    this,
+  );
   late final Index idxWatchlistSymbol = Index(
     'idx_watchlist_symbol',
     'CREATE INDEX idx_watchlist_symbol ON watchlist_items (symbol)',
@@ -2058,6 +3629,18 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final Index idxCacheSymbol = Index(
     'idx_cache_symbol',
     'CREATE UNIQUE INDEX idx_cache_symbol ON stock_cache (symbol)',
+  );
+  late final Index idxStageUnique = Index(
+    'idx_stage_unique',
+    'CREATE UNIQUE INDEX idx_stage_unique ON stage_assignments (stage)',
+  );
+  late final Index idxAnalysisSymbol = Index(
+    'idx_analysis_symbol',
+    'CREATE INDEX idx_analysis_symbol ON analysis_results (symbol)',
+  );
+  late final Index idxAnalysisCreated = Index(
+    'idx_analysis_created',
+    'CREATE INDEX idx_analysis_created ON analysis_results (created_at)',
   );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
@@ -2068,8 +3651,14 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     apiKeys,
     watchlistItems,
     stockCache,
+    aiProviders,
+    stageAssignments,
+    analysisResults,
     idxWatchlistSymbol,
     idxCacheSymbol,
+    idxStageUnique,
+    idxAnalysisSymbol,
+    idxAnalysisCreated,
   ];
 }
 
@@ -3097,6 +4686,816 @@ typedef $$StockCacheTableProcessedTableManager =
       StockCacheData,
       PrefetchHooks Function()
     >;
+typedef $$AiProvidersTableCreateCompanionBuilder =
+    AiProvidersCompanion Function({
+      Value<int> id,
+      required String name,
+      required String type,
+      required String baseUrl,
+      required String apiKey,
+      required String model,
+      Value<bool> isEnabled,
+      Value<bool> isConnected,
+      Value<int> totalCalls,
+      Value<double> totalCost,
+      Value<DateTime?> lastTestedAt,
+      Value<DateTime> createdAt,
+    });
+typedef $$AiProvidersTableUpdateCompanionBuilder =
+    AiProvidersCompanion Function({
+      Value<int> id,
+      Value<String> name,
+      Value<String> type,
+      Value<String> baseUrl,
+      Value<String> apiKey,
+      Value<String> model,
+      Value<bool> isEnabled,
+      Value<bool> isConnected,
+      Value<int> totalCalls,
+      Value<double> totalCost,
+      Value<DateTime?> lastTestedAt,
+      Value<DateTime> createdAt,
+    });
+
+class $$AiProvidersTableFilterComposer
+    extends Composer<_$AppDatabase, $AiProvidersTable> {
+  $$AiProvidersTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get baseUrl => $composableBuilder(
+    column: $table.baseUrl,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get apiKey => $composableBuilder(
+    column: $table.apiKey,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get model => $composableBuilder(
+    column: $table.model,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isEnabled => $composableBuilder(
+    column: $table.isEnabled,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isConnected => $composableBuilder(
+    column: $table.isConnected,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get totalCalls => $composableBuilder(
+    column: $table.totalCalls,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get totalCost => $composableBuilder(
+    column: $table.totalCost,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get lastTestedAt => $composableBuilder(
+    column: $table.lastTestedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$AiProvidersTableOrderingComposer
+    extends Composer<_$AppDatabase, $AiProvidersTable> {
+  $$AiProvidersTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get baseUrl => $composableBuilder(
+    column: $table.baseUrl,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get apiKey => $composableBuilder(
+    column: $table.apiKey,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get model => $composableBuilder(
+    column: $table.model,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isEnabled => $composableBuilder(
+    column: $table.isEnabled,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isConnected => $composableBuilder(
+    column: $table.isConnected,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get totalCalls => $composableBuilder(
+    column: $table.totalCalls,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get totalCost => $composableBuilder(
+    column: $table.totalCost,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get lastTestedAt => $composableBuilder(
+    column: $table.lastTestedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$AiProvidersTableAnnotationComposer
+    extends Composer<_$AppDatabase, $AiProvidersTable> {
+  $$AiProvidersTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<String> get baseUrl =>
+      $composableBuilder(column: $table.baseUrl, builder: (column) => column);
+
+  GeneratedColumn<String> get apiKey =>
+      $composableBuilder(column: $table.apiKey, builder: (column) => column);
+
+  GeneratedColumn<String> get model =>
+      $composableBuilder(column: $table.model, builder: (column) => column);
+
+  GeneratedColumn<bool> get isEnabled =>
+      $composableBuilder(column: $table.isEnabled, builder: (column) => column);
+
+  GeneratedColumn<bool> get isConnected => $composableBuilder(
+    column: $table.isConnected,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get totalCalls => $composableBuilder(
+    column: $table.totalCalls,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get totalCost =>
+      $composableBuilder(column: $table.totalCost, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get lastTestedAt => $composableBuilder(
+    column: $table.lastTestedAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$AiProvidersTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $AiProvidersTable,
+          AiProviderData,
+          $$AiProvidersTableFilterComposer,
+          $$AiProvidersTableOrderingComposer,
+          $$AiProvidersTableAnnotationComposer,
+          $$AiProvidersTableCreateCompanionBuilder,
+          $$AiProvidersTableUpdateCompanionBuilder,
+          (
+            AiProviderData,
+            BaseReferences<_$AppDatabase, $AiProvidersTable, AiProviderData>,
+          ),
+          AiProviderData,
+          PrefetchHooks Function()
+        > {
+  $$AiProvidersTableTableManager(_$AppDatabase db, $AiProvidersTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$AiProvidersTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$AiProvidersTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AiProvidersTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String> type = const Value.absent(),
+                Value<String> baseUrl = const Value.absent(),
+                Value<String> apiKey = const Value.absent(),
+                Value<String> model = const Value.absent(),
+                Value<bool> isEnabled = const Value.absent(),
+                Value<bool> isConnected = const Value.absent(),
+                Value<int> totalCalls = const Value.absent(),
+                Value<double> totalCost = const Value.absent(),
+                Value<DateTime?> lastTestedAt = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+              }) => AiProvidersCompanion(
+                id: id,
+                name: name,
+                type: type,
+                baseUrl: baseUrl,
+                apiKey: apiKey,
+                model: model,
+                isEnabled: isEnabled,
+                isConnected: isConnected,
+                totalCalls: totalCalls,
+                totalCost: totalCost,
+                lastTestedAt: lastTestedAt,
+                createdAt: createdAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String name,
+                required String type,
+                required String baseUrl,
+                required String apiKey,
+                required String model,
+                Value<bool> isEnabled = const Value.absent(),
+                Value<bool> isConnected = const Value.absent(),
+                Value<int> totalCalls = const Value.absent(),
+                Value<double> totalCost = const Value.absent(),
+                Value<DateTime?> lastTestedAt = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+              }) => AiProvidersCompanion.insert(
+                id: id,
+                name: name,
+                type: type,
+                baseUrl: baseUrl,
+                apiKey: apiKey,
+                model: model,
+                isEnabled: isEnabled,
+                isConnected: isConnected,
+                totalCalls: totalCalls,
+                totalCost: totalCost,
+                lastTestedAt: lastTestedAt,
+                createdAt: createdAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$AiProvidersTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $AiProvidersTable,
+      AiProviderData,
+      $$AiProvidersTableFilterComposer,
+      $$AiProvidersTableOrderingComposer,
+      $$AiProvidersTableAnnotationComposer,
+      $$AiProvidersTableCreateCompanionBuilder,
+      $$AiProvidersTableUpdateCompanionBuilder,
+      (
+        AiProviderData,
+        BaseReferences<_$AppDatabase, $AiProvidersTable, AiProviderData>,
+      ),
+      AiProviderData,
+      PrefetchHooks Function()
+    >;
+typedef $$StageAssignmentsTableCreateCompanionBuilder =
+    StageAssignmentsCompanion Function({
+      Value<int> id,
+      required String stage,
+      required int providerId,
+    });
+typedef $$StageAssignmentsTableUpdateCompanionBuilder =
+    StageAssignmentsCompanion Function({
+      Value<int> id,
+      Value<String> stage,
+      Value<int> providerId,
+    });
+
+class $$StageAssignmentsTableFilterComposer
+    extends Composer<_$AppDatabase, $StageAssignmentsTable> {
+  $$StageAssignmentsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get stage => $composableBuilder(
+    column: $table.stage,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get providerId => $composableBuilder(
+    column: $table.providerId,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$StageAssignmentsTableOrderingComposer
+    extends Composer<_$AppDatabase, $StageAssignmentsTable> {
+  $$StageAssignmentsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get stage => $composableBuilder(
+    column: $table.stage,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get providerId => $composableBuilder(
+    column: $table.providerId,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$StageAssignmentsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $StageAssignmentsTable> {
+  $$StageAssignmentsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get stage =>
+      $composableBuilder(column: $table.stage, builder: (column) => column);
+
+  GeneratedColumn<int> get providerId => $composableBuilder(
+    column: $table.providerId,
+    builder: (column) => column,
+  );
+}
+
+class $$StageAssignmentsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $StageAssignmentsTable,
+          StageAssignmentData,
+          $$StageAssignmentsTableFilterComposer,
+          $$StageAssignmentsTableOrderingComposer,
+          $$StageAssignmentsTableAnnotationComposer,
+          $$StageAssignmentsTableCreateCompanionBuilder,
+          $$StageAssignmentsTableUpdateCompanionBuilder,
+          (
+            StageAssignmentData,
+            BaseReferences<
+              _$AppDatabase,
+              $StageAssignmentsTable,
+              StageAssignmentData
+            >,
+          ),
+          StageAssignmentData,
+          PrefetchHooks Function()
+        > {
+  $$StageAssignmentsTableTableManager(
+    _$AppDatabase db,
+    $StageAssignmentsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$StageAssignmentsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$StageAssignmentsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$StageAssignmentsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> stage = const Value.absent(),
+                Value<int> providerId = const Value.absent(),
+              }) => StageAssignmentsCompanion(
+                id: id,
+                stage: stage,
+                providerId: providerId,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String stage,
+                required int providerId,
+              }) => StageAssignmentsCompanion.insert(
+                id: id,
+                stage: stage,
+                providerId: providerId,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$StageAssignmentsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $StageAssignmentsTable,
+      StageAssignmentData,
+      $$StageAssignmentsTableFilterComposer,
+      $$StageAssignmentsTableOrderingComposer,
+      $$StageAssignmentsTableAnnotationComposer,
+      $$StageAssignmentsTableCreateCompanionBuilder,
+      $$StageAssignmentsTableUpdateCompanionBuilder,
+      (
+        StageAssignmentData,
+        BaseReferences<
+          _$AppDatabase,
+          $StageAssignmentsTable,
+          StageAssignmentData
+        >,
+      ),
+      StageAssignmentData,
+      PrefetchHooks Function()
+    >;
+typedef $$AnalysisResultsTableCreateCompanionBuilder =
+    AnalysisResultsCompanion Function({
+      Value<int> id,
+      required String symbol,
+      required double predictedPrice,
+      required double confidence,
+      required String recommendation,
+      required String reasoning,
+      Value<String> newsSummary,
+      Value<String> timeframe,
+      required double currentPrice,
+      Value<DateTime> createdAt,
+    });
+typedef $$AnalysisResultsTableUpdateCompanionBuilder =
+    AnalysisResultsCompanion Function({
+      Value<int> id,
+      Value<String> symbol,
+      Value<double> predictedPrice,
+      Value<double> confidence,
+      Value<String> recommendation,
+      Value<String> reasoning,
+      Value<String> newsSummary,
+      Value<String> timeframe,
+      Value<double> currentPrice,
+      Value<DateTime> createdAt,
+    });
+
+class $$AnalysisResultsTableFilterComposer
+    extends Composer<_$AppDatabase, $AnalysisResultsTable> {
+  $$AnalysisResultsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get symbol => $composableBuilder(
+    column: $table.symbol,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get predictedPrice => $composableBuilder(
+    column: $table.predictedPrice,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get confidence => $composableBuilder(
+    column: $table.confidence,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get recommendation => $composableBuilder(
+    column: $table.recommendation,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get reasoning => $composableBuilder(
+    column: $table.reasoning,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get newsSummary => $composableBuilder(
+    column: $table.newsSummary,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get timeframe => $composableBuilder(
+    column: $table.timeframe,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get currentPrice => $composableBuilder(
+    column: $table.currentPrice,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$AnalysisResultsTableOrderingComposer
+    extends Composer<_$AppDatabase, $AnalysisResultsTable> {
+  $$AnalysisResultsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get symbol => $composableBuilder(
+    column: $table.symbol,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get predictedPrice => $composableBuilder(
+    column: $table.predictedPrice,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get confidence => $composableBuilder(
+    column: $table.confidence,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get recommendation => $composableBuilder(
+    column: $table.recommendation,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get reasoning => $composableBuilder(
+    column: $table.reasoning,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get newsSummary => $composableBuilder(
+    column: $table.newsSummary,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get timeframe => $composableBuilder(
+    column: $table.timeframe,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get currentPrice => $composableBuilder(
+    column: $table.currentPrice,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$AnalysisResultsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $AnalysisResultsTable> {
+  $$AnalysisResultsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get symbol =>
+      $composableBuilder(column: $table.symbol, builder: (column) => column);
+
+  GeneratedColumn<double> get predictedPrice => $composableBuilder(
+    column: $table.predictedPrice,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get confidence => $composableBuilder(
+    column: $table.confidence,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get recommendation => $composableBuilder(
+    column: $table.recommendation,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get reasoning =>
+      $composableBuilder(column: $table.reasoning, builder: (column) => column);
+
+  GeneratedColumn<String> get newsSummary => $composableBuilder(
+    column: $table.newsSummary,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get timeframe =>
+      $composableBuilder(column: $table.timeframe, builder: (column) => column);
+
+  GeneratedColumn<double> get currentPrice => $composableBuilder(
+    column: $table.currentPrice,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$AnalysisResultsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $AnalysisResultsTable,
+          AnalysisResultData,
+          $$AnalysisResultsTableFilterComposer,
+          $$AnalysisResultsTableOrderingComposer,
+          $$AnalysisResultsTableAnnotationComposer,
+          $$AnalysisResultsTableCreateCompanionBuilder,
+          $$AnalysisResultsTableUpdateCompanionBuilder,
+          (
+            AnalysisResultData,
+            BaseReferences<
+              _$AppDatabase,
+              $AnalysisResultsTable,
+              AnalysisResultData
+            >,
+          ),
+          AnalysisResultData,
+          PrefetchHooks Function()
+        > {
+  $$AnalysisResultsTableTableManager(
+    _$AppDatabase db,
+    $AnalysisResultsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$AnalysisResultsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$AnalysisResultsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AnalysisResultsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> symbol = const Value.absent(),
+                Value<double> predictedPrice = const Value.absent(),
+                Value<double> confidence = const Value.absent(),
+                Value<String> recommendation = const Value.absent(),
+                Value<String> reasoning = const Value.absent(),
+                Value<String> newsSummary = const Value.absent(),
+                Value<String> timeframe = const Value.absent(),
+                Value<double> currentPrice = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+              }) => AnalysisResultsCompanion(
+                id: id,
+                symbol: symbol,
+                predictedPrice: predictedPrice,
+                confidence: confidence,
+                recommendation: recommendation,
+                reasoning: reasoning,
+                newsSummary: newsSummary,
+                timeframe: timeframe,
+                currentPrice: currentPrice,
+                createdAt: createdAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String symbol,
+                required double predictedPrice,
+                required double confidence,
+                required String recommendation,
+                required String reasoning,
+                Value<String> newsSummary = const Value.absent(),
+                Value<String> timeframe = const Value.absent(),
+                required double currentPrice,
+                Value<DateTime> createdAt = const Value.absent(),
+              }) => AnalysisResultsCompanion.insert(
+                id: id,
+                symbol: symbol,
+                predictedPrice: predictedPrice,
+                confidence: confidence,
+                recommendation: recommendation,
+                reasoning: reasoning,
+                newsSummary: newsSummary,
+                timeframe: timeframe,
+                currentPrice: currentPrice,
+                createdAt: createdAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$AnalysisResultsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $AnalysisResultsTable,
+      AnalysisResultData,
+      $$AnalysisResultsTableFilterComposer,
+      $$AnalysisResultsTableOrderingComposer,
+      $$AnalysisResultsTableAnnotationComposer,
+      $$AnalysisResultsTableCreateCompanionBuilder,
+      $$AnalysisResultsTableUpdateCompanionBuilder,
+      (
+        AnalysisResultData,
+        BaseReferences<
+          _$AppDatabase,
+          $AnalysisResultsTable,
+          AnalysisResultData
+        >,
+      ),
+      AnalysisResultData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -3109,4 +5508,10 @@ class $AppDatabaseManager {
       $$WatchlistItemsTableTableManager(_db, _db.watchlistItems);
   $$StockCacheTableTableManager get stockCache =>
       $$StockCacheTableTableManager(_db, _db.stockCache);
+  $$AiProvidersTableTableManager get aiProviders =>
+      $$AiProvidersTableTableManager(_db, _db.aiProviders);
+  $$StageAssignmentsTableTableManager get stageAssignments =>
+      $$StageAssignmentsTableTableManager(_db, _db.stageAssignments);
+  $$AnalysisResultsTableTableManager get analysisResults =>
+      $$AnalysisResultsTableTableManager(_db, _db.analysisResults);
 }

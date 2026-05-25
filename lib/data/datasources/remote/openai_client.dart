@@ -2,13 +2,14 @@ import 'package:dio/dio.dart';
 import '../../../config/constants.dart';
 import 'ai_client_interface.dart';
 
-class PerplexityClient implements AiClientInterface {
-  PerplexityClient({
+class OpenAiClient implements AiClientInterface {
+  OpenAiClient({
     required String apiKey,
-    String model = 'sonar-pro',
-  })  : model = model,
+    String model = 'gpt-4o',
+    String baseUrl = AppConstants.openaiBaseUrl,
+  })  : _model = model,
         _dio = Dio(BaseOptions(
-          baseUrl: AppConstants.perplexityBaseUrl,
+          baseUrl: baseUrl,
           connectTimeout: const Duration(seconds: 15),
           receiveTimeout: const Duration(seconds: 60),
           headers: {
@@ -17,24 +18,16 @@ class PerplexityClient implements AiClientInterface {
           },
         ));
 
-  final String model;
+  final String _model;
   final Dio _dio;
 
   @override
-  String get providerType => 'perplexity';
+  String get providerType => 'openai';
 
   @override
   Future<bool> testConnection() async {
     try {
-      final response = await _dio.post(
-        '/chat/completions',
-        data: {
-          'model': model,
-          'messages': [
-            {'role': 'user', 'content': 'ping'}
-          ],
-        },
-      );
+      final response = await _dio.get('/models');
       return response.statusCode == 200;
     } on DioException {
       return false;
@@ -47,7 +40,7 @@ class PerplexityClient implements AiClientInterface {
       final response = await _dio.post(
         '/chat/completions',
         data: {
-          'model': model,
+          'model': _model,
           'messages': [
             {'role': 'user', 'content': prompt}
           ],
@@ -56,7 +49,7 @@ class PerplexityClient implements AiClientInterface {
       return response.data['choices'][0]['message']['content'] as String;
     } on DioException catch (e) {
       throw Exception(
-        'Perplexity error: ${e.message ?? e.response?.statusCode}',
+        'OpenAI error: ${e.message ?? e.response?.statusCode}',
       );
     }
   }

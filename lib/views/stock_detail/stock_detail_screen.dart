@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
+import 'package:go_router/go_router.dart';
 import '../../viewmodels/stock_detail_viewmodel.dart';
 import '../../data/repositories/watchlist_repository.dart';
 import '../../widgets/shimmer_loading.dart';
@@ -405,7 +406,7 @@ class _ActionsRow extends ConsumerWidget {
         const SizedBox(width: 12),
         Expanded(
           child: OutlinedButton.icon(
-            onPressed: null,
+            onPressed: () => GoRouter.of(context).push('/analyze?symbol=$symbol'),
             icon: const Icon(Icons.analytics),
             label: const Text('Analyze'),
           ),

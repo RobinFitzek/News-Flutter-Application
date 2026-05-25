@@ -72,6 +72,50 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                             )),
                       ],
                       const SizedBox(height: 16),
+                      if (state.recentAnalyses.isNotEmpty) ...[
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _SectionHeader(title: 'Recent Analyses'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                final shell = StatefulNavigationShell.of(context);
+                                shell.goBranch(2);
+                              },
+                              child: const Text('View All'),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        ...state.recentAnalyses.map((a) => _RecentAnalysisTile(analysis: a)),
+                      ] else ...[
+                        _SectionHeader(title: 'Recent Analyses'),
+                        const SizedBox(height: 8),
+                        Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Center(
+                              child: Column(
+                                children: [
+                                  Text('No analyses yet',
+                                      style: Theme.of(context).textTheme.bodyMedium),
+                                  const SizedBox(height: 8),
+                                  TextButton.icon(
+                                    onPressed: () {
+                                      final shell = StatefulNavigationShell.of(context);
+                                      shell.goBranch(2);
+                                    },
+                                    icon: const Icon(Icons.analytics),
+                                    label: const Text('Analyze your first stock'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                      const SizedBox(height: 16),
                       _QuickActionsRow(),
                     ],
                   ),
@@ -256,6 +300,64 @@ class _QuickActionsRow extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _RecentAnalysisTile extends StatelessWidget {
+  const _RecentAnalysisTile({required this.analysis});
+
+  final dynamic analysis;
+
+  Color _recommendationColor(String rec) {
+    switch (rec) {
+      case 'BUY':
+        return Colors.green;
+      case 'SELL':
+        return Colors.red;
+      default:
+        return Colors.amber;
+    }
+  }
+
+  String _relativeDate(DateTime? dt) {
+    if (dt == null) return '';
+    final diff = DateTime.now().difference(dt);
+    if (diff.inMinutes < 60) return '${diff.inMinutes}m ago';
+    if (diff.inHours < 24) return '${diff.inHours}h ago';
+    if (diff.inDays < 7) return '${diff.inDays}d ago';
+    return '${diff.inDays ~/ 7}w ago';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 8),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: _recommendationColor(analysis.recommendation),
+          child: Text(
+            analysis.symbol,
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
+            ),
+          ),
+        ),
+        title: Text(analysis.symbol),
+        subtitle: Text(
+          '\$${(analysis.predictedPrice as double).toStringAsFixed(2)} • ${analysis.recommendation}',
+        ),
+        trailing: Text(
+          _relativeDate(analysis.createdAt),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+            fontSize: 12,
+          ),
+        ),
+        onTap: () => GoRouter.of(context).push('/analysis/${analysis.id}'),
+      ),
     );
   }
 }

@@ -42,7 +42,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: '/analyze',
-                builder: (context, state) => const AnalyzeScreen(),
+                builder: (context, state) {
+                  final symbol = state.uri.queryParameters['symbol'];
+                  return AnalyzeScreen(initialSymbol: symbol);
+                },
               ),
             ],
           ),

@@ -1,40 +1,33 @@
 import 'package:dio/dio.dart';
-import '../../../config/constants.dart';
 import 'ai_client_interface.dart';
 
-class PerplexityClient implements AiClientInterface {
-  PerplexityClient({
-    required String apiKey,
-    String model = 'sonar-pro',
-  })  : model = model,
+class CustomProviderClient implements AiClientInterface {
+  CustomProviderClient({
+    required this.baseUrl,
+    String apiKey = '',
+    String model = 'gpt-3.5-turbo',
+  })  : _model = model,
         _dio = Dio(BaseOptions(
-          baseUrl: AppConstants.perplexityBaseUrl,
+          baseUrl: baseUrl,
           connectTimeout: const Duration(seconds: 15),
           receiveTimeout: const Duration(seconds: 60),
           headers: {
-            'Authorization': 'Bearer $apiKey',
+            if (apiKey.isNotEmpty) 'Authorization': 'Bearer $apiKey',
             'Content-Type': 'application/json',
           },
         ));
 
-  final String model;
+  final String baseUrl;
+  final String _model;
   final Dio _dio;
 
   @override
-  String get providerType => 'perplexity';
+  String get providerType => 'custom';
 
   @override
   Future<bool> testConnection() async {
     try {
-      final response = await _dio.post(
-        '/chat/completions',
-        data: {
-          'model': model,
-          'messages': [
-            {'role': 'user', 'content': 'ping'}
-          ],
-        },
-      );
+      final response = await _dio.get('/models');
       return response.statusCode == 200;
     } on DioException {
       return false;
@@ -47,7 +40,7 @@ class PerplexityClient implements AiClientInterface {
       final response = await _dio.post(
         '/chat/completions',
         data: {
-          'model': model,
+          'model': _model,
           'messages': [
             {'role': 'user', 'content': prompt}
           ],
@@ -56,7 +49,7 @@ class PerplexityClient implements AiClientInterface {
       return response.data['choices'][0]['message']['content'] as String;
     } on DioException catch (e) {
       throw Exception(
-        'Perplexity error: ${e.message ?? e.response?.statusCode}',
+        'Custom provider error: ${e.message ?? e.response?.statusCode}',
       );
     }
   }

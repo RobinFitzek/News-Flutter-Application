@@ -60,22 +60,121 @@ class StockCache extends Table {
   DateTimeColumn get cachedAt => dateTime().withDefault(currentDateAndTime)();
 }
 
-@DriftDatabase(tables: [UserSettings, ApiKeys, WatchlistItems, StockCache])
+@DataClassName('AiProviderData')
+class AiProviders extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get name => text()();
+  TextColumn get type => text()();
+  TextColumn get baseUrl => text()();
+  TextColumn get apiKey => text()();
+  TextColumn get model => text()();
+  BoolColumn get isEnabled => boolean().withDefault(const Constant(true))();
+  BoolColumn get isConnected => boolean().withDefault(const Constant(false))();
+  IntColumn get totalCalls => integer().withDefault(const Constant(0))();
+  RealColumn get totalCost => real().withDefault(const Constant(0.0))();
+  DateTimeColumn get lastTestedAt => dateTime().nullable()();
+  DateTimeColumn get createdAt =>
+      dateTime().withDefault(currentDateAndTime)();
+}
+
+@TableIndex(name: 'idx_stage_unique', columns: {#stage}, unique: true)
+@DataClassName('StageAssignmentData')
+class StageAssignments extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get stage => text()();
+  IntColumn get providerId => integer()();
+}
+
+@TableIndex(name: 'idx_analysis_symbol', columns: {#symbol})
+@TableIndex(name: 'idx_analysis_created', columns: {#createdAt})
+@DataClassName('AnalysisResultData')
+class AnalysisResults extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get symbol => text().withLength(min: 1, max: 10)();
+  RealColumn get predictedPrice => real()();
+  RealColumn get confidence => real()();
+  TextColumn get recommendation => text()();
+  TextColumn get reasoning => text()();
+  TextColumn get newsSummary => text().withDefault(const Constant(''))();
+  TextColumn get timeframe => text().withDefault(const Constant('daily'))();
+  RealColumn get currentPrice => real()();
+  DateTimeColumn get createdAt =>
+      dateTime().withDefault(currentDateAndTime)();
+}
+
+@DriftDatabase(tables: [
+  UserSettings,
+  ApiKeys,
+  WatchlistItems,
+  StockCache,
+  AiProviders,
+  StageAssignments,
+  AnalysisResults,
+])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
         onCreate: (Migrator m) async {
           await m.createAll();
+
+          await into(aiProviders).insert(
+            AiProvidersCompanion(
+              name: const Value('Google Gemini'),
+              type: const Value('gemini'),
+              baseUrl: const Value(
+                'https://generativelanguage.googleapis.com/v1beta',
+              ),
+              apiKey: const Value(''),
+              model: const Value('gemini-2.0-flash'),
+            ),
+          );
+
+          await into(aiProviders).insert(
+            AiProvidersCompanion(
+              name: const Value('Perplexity'),
+              type: const Value('perplexity'),
+              baseUrl: const Value('https://api.perplexity.ai'),
+              apiKey: const Value(''),
+              model: const Value('sonar-pro'),
+            ),
+          );
         },
         onUpgrade: (Migrator m, int from, int to) async {
           if (from < 2) {
             await m.createTable(watchlistItems);
             await m.createTable(stockCache);
+          }
+          if (from < 3) {
+            await m.createTable(aiProviders);
+            await m.createTable(stageAssignments);
+            await m.createTable(analysisResults);
+
+            await into(aiProviders).insert(
+              AiProvidersCompanion(
+                name: const Value('Google Gemini'),
+                type: const Value('gemini'),
+                baseUrl: const Value(
+                  'https://generativelanguage.googleapis.com/v1beta',
+                ),
+                apiKey: const Value(''),
+                model: const Value('gemini-2.0-flash'),
+              ),
+            );
+
+            await into(aiProviders).insert(
+              AiProvidersCompanion(
+                name: const Value('Perplexity'),
+                type: const Value('perplexity'),
+                baseUrl: const Value('https://api.perplexity.ai'),
+                apiKey: const Value(''),
+                model: const Value('sonar-pro'),
+              ),
+            );
           }
         },
       );
