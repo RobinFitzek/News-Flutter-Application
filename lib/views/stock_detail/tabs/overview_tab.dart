@@ -55,6 +55,8 @@ class OverviewTab extends ConsumerWidget {
             const SizedBox(height: 16),
             _buildKeyStatsCard(context),
             const SizedBox(height: 16),
+            _buildStockNotes(context, ref),
+            const SizedBox(height: 16),
             _buildActionsRow(context, ref),
           ],
         ),
@@ -290,6 +292,22 @@ class OverviewTab extends ConsumerWidget {
     );
   }
 
+  Widget _buildStockNotes(BuildContext context, WidgetRef ref) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Notes', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
+            _NoteField(symbol: symbol),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildActionsRow(BuildContext context, WidgetRef ref) {
     return Row(
       children: [
@@ -329,6 +347,51 @@ class OverviewTab extends ConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _NoteField extends ConsumerStatefulWidget {
+  const _NoteField({required this.symbol});
+  final String symbol;
+
+  @override
+  ConsumerState<_NoteField> createState() => _NoteFieldState();
+}
+
+class _NoteFieldState extends ConsumerState<_NoteField> {
+  final _ctrl = TextEditingController();
+  bool _loaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() async {
+      final repo = ref.read(watchlistRepositoryProvider);
+      final item = await repo.getBySymbol(widget.symbol);
+      if (mounted) {
+        _ctrl.text = item?.note ?? '';
+        setState(() => _loaded = true);
+      }
+    });
+  }
+
+  @override
+  void dispose() { _ctrl.dispose(); super.dispose(); }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: _ctrl,
+      maxLines: 3,
+      decoration: const InputDecoration(hintText: 'Add your notes about this stock...', border: OutlineInputBorder()),
+      onChanged: (val) async {
+        final repo = ref.read(watchlistRepositoryProvider);
+        final item = await repo.getBySymbol(widget.symbol);
+        if (item != null) {
+          await repo.updateNote(item.id, val.isNotEmpty ? val : null);
+        }
+      },
     );
   }
 }

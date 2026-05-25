@@ -279,6 +279,13 @@ class JournalEntries extends Table {
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
 }
 
+@DataClassName('WatchlistGroupData')
+class WatchlistGroups extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get name => text()();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+}
+
 @DriftDatabase(tables: [
   UserSettings,
   ApiKeys,
@@ -298,12 +305,13 @@ class JournalEntries extends Table {
   Discoveries,
   BacktestResults,
   JournalEntries,
+  WatchlistGroups,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 7;
+  int get schemaVersion => 8;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -383,6 +391,9 @@ class AppDatabase extends _$AppDatabase {
           if (from < 7) {
             await m.createTable(backtestResults);
             await m.createTable(journalEntries);
+          }
+          if (from < 8) {
+            await m.createTable(watchlistGroups);
           }
         },
       );

@@ -118,6 +118,26 @@ class WatchlistViewModel extends StateNotifier<WatchlistState> {
     }
   }
 
+  Future<void> updateNote(int id, String? note) async {
+    try {
+      await watchlistRepo.updateNote(id, note);
+      final items = await watchlistRepo.getAll();
+      state = state.copyWith(items: items);
+    } catch (e) {
+      state = state.copyWith(errorMessage: e.toString());
+    }
+  }
+
+  Future<void> updateGroup(int id, String? groupName) async {
+    try {
+      await watchlistRepo.updateGroup(id, groupName);
+      final items = await watchlistRepo.getAll();
+      state = state.copyWith(items: items);
+    } catch (e) {
+      state = state.copyWith(errorMessage: e.toString());
+    }
+  }
+
   Future<void> refreshAllQuotes() async {
     state = state.copyWith(isLoading: true, errorMessage: null);
     try {

@@ -10726,6 +10726,254 @@ class JournalEntriesCompanion extends UpdateCompanion<JournalEntryData> {
   }
 }
 
+class $WatchlistGroupsTable extends WatchlistGroups
+    with TableInfo<$WatchlistGroupsTable, WatchlistGroupData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $WatchlistGroupsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, name, createdAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'watchlist_groups';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<WatchlistGroupData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  WatchlistGroupData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return WatchlistGroupData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+    );
+  }
+
+  @override
+  $WatchlistGroupsTable createAlias(String alias) {
+    return $WatchlistGroupsTable(attachedDatabase, alias);
+  }
+}
+
+class WatchlistGroupData extends DataClass
+    implements Insertable<WatchlistGroupData> {
+  final int id;
+  final String name;
+  final DateTime createdAt;
+  const WatchlistGroupData({
+    required this.id,
+    required this.name,
+    required this.createdAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['name'] = Variable<String>(name);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  WatchlistGroupsCompanion toCompanion(bool nullToAbsent) {
+    return WatchlistGroupsCompanion(
+      id: Value(id),
+      name: Value(name),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory WatchlistGroupData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return WatchlistGroupData(
+      id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String>(name),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  WatchlistGroupData copyWith({int? id, String? name, DateTime? createdAt}) =>
+      WatchlistGroupData(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        createdAt: createdAt ?? this.createdAt,
+      );
+  WatchlistGroupData copyWithCompanion(WatchlistGroupsCompanion data) {
+    return WatchlistGroupData(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WatchlistGroupData(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, name, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is WatchlistGroupData &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.createdAt == this.createdAt);
+}
+
+class WatchlistGroupsCompanion extends UpdateCompanion<WatchlistGroupData> {
+  final Value<int> id;
+  final Value<String> name;
+  final Value<DateTime> createdAt;
+  const WatchlistGroupsCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  });
+  WatchlistGroupsCompanion.insert({
+    this.id = const Value.absent(),
+    required String name,
+    this.createdAt = const Value.absent(),
+  }) : name = Value(name);
+  static Insertable<WatchlistGroupData> custom({
+    Expression<int>? id,
+    Expression<String>? name,
+    Expression<DateTime>? createdAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (createdAt != null) 'created_at': createdAt,
+    });
+  }
+
+  WatchlistGroupsCompanion copyWith({
+    Value<int>? id,
+    Value<String>? name,
+    Value<DateTime>? createdAt,
+  }) {
+    return WatchlistGroupsCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WatchlistGroupsCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -10760,6 +11008,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     this,
   );
   late final $JournalEntriesTable journalEntries = $JournalEntriesTable(this);
+  late final $WatchlistGroupsTable watchlistGroups = $WatchlistGroupsTable(
+    this,
+  );
   late final Index idxWatchlistSymbol = Index(
     'idx_watchlist_symbol',
     'CREATE INDEX idx_watchlist_symbol ON watchlist_items (symbol)',
@@ -10839,6 +11090,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     discoveries,
     backtestResults,
     journalEntries,
+    watchlistGroups,
     idxWatchlistSymbol,
     idxCacheSymbol,
     idxStageUnique,
@@ -16200,6 +16452,172 @@ typedef $$JournalEntriesTableProcessedTableManager =
       JournalEntryData,
       PrefetchHooks Function()
     >;
+typedef $$WatchlistGroupsTableCreateCompanionBuilder =
+    WatchlistGroupsCompanion Function({
+      Value<int> id,
+      required String name,
+      Value<DateTime> createdAt,
+    });
+typedef $$WatchlistGroupsTableUpdateCompanionBuilder =
+    WatchlistGroupsCompanion Function({
+      Value<int> id,
+      Value<String> name,
+      Value<DateTime> createdAt,
+    });
+
+class $$WatchlistGroupsTableFilterComposer
+    extends Composer<_$AppDatabase, $WatchlistGroupsTable> {
+  $$WatchlistGroupsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$WatchlistGroupsTableOrderingComposer
+    extends Composer<_$AppDatabase, $WatchlistGroupsTable> {
+  $$WatchlistGroupsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$WatchlistGroupsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $WatchlistGroupsTable> {
+  $$WatchlistGroupsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+}
+
+class $$WatchlistGroupsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $WatchlistGroupsTable,
+          WatchlistGroupData,
+          $$WatchlistGroupsTableFilterComposer,
+          $$WatchlistGroupsTableOrderingComposer,
+          $$WatchlistGroupsTableAnnotationComposer,
+          $$WatchlistGroupsTableCreateCompanionBuilder,
+          $$WatchlistGroupsTableUpdateCompanionBuilder,
+          (
+            WatchlistGroupData,
+            BaseReferences<
+              _$AppDatabase,
+              $WatchlistGroupsTable,
+              WatchlistGroupData
+            >,
+          ),
+          WatchlistGroupData,
+          PrefetchHooks Function()
+        > {
+  $$WatchlistGroupsTableTableManager(
+    _$AppDatabase db,
+    $WatchlistGroupsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$WatchlistGroupsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$WatchlistGroupsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$WatchlistGroupsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+              }) => WatchlistGroupsCompanion(
+                id: id,
+                name: name,
+                createdAt: createdAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String name,
+                Value<DateTime> createdAt = const Value.absent(),
+              }) => WatchlistGroupsCompanion.insert(
+                id: id,
+                name: name,
+                createdAt: createdAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$WatchlistGroupsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $WatchlistGroupsTable,
+      WatchlistGroupData,
+      $$WatchlistGroupsTableFilterComposer,
+      $$WatchlistGroupsTableOrderingComposer,
+      $$WatchlistGroupsTableAnnotationComposer,
+      $$WatchlistGroupsTableCreateCompanionBuilder,
+      $$WatchlistGroupsTableUpdateCompanionBuilder,
+      (
+        WatchlistGroupData,
+        BaseReferences<
+          _$AppDatabase,
+          $WatchlistGroupsTable,
+          WatchlistGroupData
+        >,
+      ),
+      WatchlistGroupData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -16240,4 +16658,6 @@ class $AppDatabaseManager {
       $$BacktestResultsTableTableManager(_db, _db.backtestResults);
   $$JournalEntriesTableTableManager get journalEntries =>
       $$JournalEntriesTableTableManager(_db, _db.journalEntries);
+  $$WatchlistGroupsTableTableManager get watchlistGroups =>
+      $$WatchlistGroupsTableTableManager(_db, _db.watchlistGroups);
 }
