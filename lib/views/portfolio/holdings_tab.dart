@@ -4,6 +4,7 @@ import 'package:drift/drift.dart' hide Column;
 import '../../data/database/app_database.dart';
 import '../../viewmodels/portfolio_viewmodel.dart';
 import '../../config/theme.dart';
+import 'risk_card.dart';
 
 class HoldingsTab extends ConsumerStatefulWidget {
   const HoldingsTab({super.key});
@@ -230,6 +231,8 @@ class _HoldingsTabState extends ConsumerState<HoldingsTab> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 16),
+                PortfolioRiskCard(positions: state.positions),
                 const SizedBox(height: 16),
               ],
               if (state.positions.isEmpty)
