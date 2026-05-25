@@ -3608,6 +3608,1640 @@ class AnalysisResultsCompanion extends UpdateCompanion<AnalysisResultData> {
   }
 }
 
+class $PortfolioPositionsTable extends PortfolioPositions
+    with TableInfo<$PortfolioPositionsTable, PositionData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $PortfolioPositionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _symbolMeta = const VerificationMeta('symbol');
+  @override
+  late final GeneratedColumn<String> symbol = GeneratedColumn<String>(
+    'symbol',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 1,
+      maxTextLength: 10,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _companyNameMeta = const VerificationMeta(
+    'companyName',
+  );
+  @override
+  late final GeneratedColumn<String> companyName = GeneratedColumn<String>(
+    'company_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _sharesMeta = const VerificationMeta('shares');
+  @override
+  late final GeneratedColumn<double> shares = GeneratedColumn<double>(
+    'shares',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _avgCostBasisMeta = const VerificationMeta(
+    'avgCostBasis',
+  );
+  @override
+  late final GeneratedColumn<double> avgCostBasis = GeneratedColumn<double>(
+    'avg_cost_basis',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _currentPriceMeta = const VerificationMeta(
+    'currentPrice',
+  );
+  @override
+  late final GeneratedColumn<double> currentPrice = GeneratedColumn<double>(
+    'current_price',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0.0),
+  );
+  static const VerificationMeta _acquiredAtMeta = const VerificationMeta(
+    'acquiredAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> acquiredAt = GeneratedColumn<DateTime>(
+    'acquired_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _currencyMeta = const VerificationMeta(
+    'currency',
+  );
+  @override
+  late final GeneratedColumn<String> currency = GeneratedColumn<String>(
+    'currency',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('USD'),
+  );
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+    'note',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    symbol,
+    companyName,
+    shares,
+    avgCostBasis,
+    currentPrice,
+    acquiredAt,
+    currency,
+    note,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'portfolio_positions';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<PositionData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('symbol')) {
+      context.handle(
+        _symbolMeta,
+        symbol.isAcceptableOrUnknown(data['symbol']!, _symbolMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_symbolMeta);
+    }
+    if (data.containsKey('company_name')) {
+      context.handle(
+        _companyNameMeta,
+        companyName.isAcceptableOrUnknown(
+          data['company_name']!,
+          _companyNameMeta,
+        ),
+      );
+    }
+    if (data.containsKey('shares')) {
+      context.handle(
+        _sharesMeta,
+        shares.isAcceptableOrUnknown(data['shares']!, _sharesMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sharesMeta);
+    }
+    if (data.containsKey('avg_cost_basis')) {
+      context.handle(
+        _avgCostBasisMeta,
+        avgCostBasis.isAcceptableOrUnknown(
+          data['avg_cost_basis']!,
+          _avgCostBasisMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_avgCostBasisMeta);
+    }
+    if (data.containsKey('current_price')) {
+      context.handle(
+        _currentPriceMeta,
+        currentPrice.isAcceptableOrUnknown(
+          data['current_price']!,
+          _currentPriceMeta,
+        ),
+      );
+    }
+    if (data.containsKey('acquired_at')) {
+      context.handle(
+        _acquiredAtMeta,
+        acquiredAt.isAcceptableOrUnknown(data['acquired_at']!, _acquiredAtMeta),
+      );
+    }
+    if (data.containsKey('currency')) {
+      context.handle(
+        _currencyMeta,
+        currency.isAcceptableOrUnknown(data['currency']!, _currencyMeta),
+      );
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+        _noteMeta,
+        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  PositionData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return PositionData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      symbol: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}symbol'],
+      )!,
+      companyName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}company_name'],
+      )!,
+      shares: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}shares'],
+      )!,
+      avgCostBasis: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}avg_cost_basis'],
+      )!,
+      currentPrice: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}current_price'],
+      )!,
+      acquiredAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}acquired_at'],
+      )!,
+      currency: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}currency'],
+      )!,
+      note: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note'],
+      ),
+    );
+  }
+
+  @override
+  $PortfolioPositionsTable createAlias(String alias) {
+    return $PortfolioPositionsTable(attachedDatabase, alias);
+  }
+}
+
+class PositionData extends DataClass implements Insertable<PositionData> {
+  final int id;
+  final String symbol;
+  final String companyName;
+  final double shares;
+  final double avgCostBasis;
+  final double currentPrice;
+  final DateTime acquiredAt;
+  final String currency;
+  final String? note;
+  const PositionData({
+    required this.id,
+    required this.symbol,
+    required this.companyName,
+    required this.shares,
+    required this.avgCostBasis,
+    required this.currentPrice,
+    required this.acquiredAt,
+    required this.currency,
+    this.note,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['symbol'] = Variable<String>(symbol);
+    map['company_name'] = Variable<String>(companyName);
+    map['shares'] = Variable<double>(shares);
+    map['avg_cost_basis'] = Variable<double>(avgCostBasis);
+    map['current_price'] = Variable<double>(currentPrice);
+    map['acquired_at'] = Variable<DateTime>(acquiredAt);
+    map['currency'] = Variable<String>(currency);
+    if (!nullToAbsent || note != null) {
+      map['note'] = Variable<String>(note);
+    }
+    return map;
+  }
+
+  PortfolioPositionsCompanion toCompanion(bool nullToAbsent) {
+    return PortfolioPositionsCompanion(
+      id: Value(id),
+      symbol: Value(symbol),
+      companyName: Value(companyName),
+      shares: Value(shares),
+      avgCostBasis: Value(avgCostBasis),
+      currentPrice: Value(currentPrice),
+      acquiredAt: Value(acquiredAt),
+      currency: Value(currency),
+      note: note == null && nullToAbsent ? const Value.absent() : Value(note),
+    );
+  }
+
+  factory PositionData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return PositionData(
+      id: serializer.fromJson<int>(json['id']),
+      symbol: serializer.fromJson<String>(json['symbol']),
+      companyName: serializer.fromJson<String>(json['companyName']),
+      shares: serializer.fromJson<double>(json['shares']),
+      avgCostBasis: serializer.fromJson<double>(json['avgCostBasis']),
+      currentPrice: serializer.fromJson<double>(json['currentPrice']),
+      acquiredAt: serializer.fromJson<DateTime>(json['acquiredAt']),
+      currency: serializer.fromJson<String>(json['currency']),
+      note: serializer.fromJson<String?>(json['note']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'symbol': serializer.toJson<String>(symbol),
+      'companyName': serializer.toJson<String>(companyName),
+      'shares': serializer.toJson<double>(shares),
+      'avgCostBasis': serializer.toJson<double>(avgCostBasis),
+      'currentPrice': serializer.toJson<double>(currentPrice),
+      'acquiredAt': serializer.toJson<DateTime>(acquiredAt),
+      'currency': serializer.toJson<String>(currency),
+      'note': serializer.toJson<String?>(note),
+    };
+  }
+
+  PositionData copyWith({
+    int? id,
+    String? symbol,
+    String? companyName,
+    double? shares,
+    double? avgCostBasis,
+    double? currentPrice,
+    DateTime? acquiredAt,
+    String? currency,
+    Value<String?> note = const Value.absent(),
+  }) => PositionData(
+    id: id ?? this.id,
+    symbol: symbol ?? this.symbol,
+    companyName: companyName ?? this.companyName,
+    shares: shares ?? this.shares,
+    avgCostBasis: avgCostBasis ?? this.avgCostBasis,
+    currentPrice: currentPrice ?? this.currentPrice,
+    acquiredAt: acquiredAt ?? this.acquiredAt,
+    currency: currency ?? this.currency,
+    note: note.present ? note.value : this.note,
+  );
+  PositionData copyWithCompanion(PortfolioPositionsCompanion data) {
+    return PositionData(
+      id: data.id.present ? data.id.value : this.id,
+      symbol: data.symbol.present ? data.symbol.value : this.symbol,
+      companyName: data.companyName.present
+          ? data.companyName.value
+          : this.companyName,
+      shares: data.shares.present ? data.shares.value : this.shares,
+      avgCostBasis: data.avgCostBasis.present
+          ? data.avgCostBasis.value
+          : this.avgCostBasis,
+      currentPrice: data.currentPrice.present
+          ? data.currentPrice.value
+          : this.currentPrice,
+      acquiredAt: data.acquiredAt.present
+          ? data.acquiredAt.value
+          : this.acquiredAt,
+      currency: data.currency.present ? data.currency.value : this.currency,
+      note: data.note.present ? data.note.value : this.note,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PositionData(')
+          ..write('id: $id, ')
+          ..write('symbol: $symbol, ')
+          ..write('companyName: $companyName, ')
+          ..write('shares: $shares, ')
+          ..write('avgCostBasis: $avgCostBasis, ')
+          ..write('currentPrice: $currentPrice, ')
+          ..write('acquiredAt: $acquiredAt, ')
+          ..write('currency: $currency, ')
+          ..write('note: $note')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    symbol,
+    companyName,
+    shares,
+    avgCostBasis,
+    currentPrice,
+    acquiredAt,
+    currency,
+    note,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is PositionData &&
+          other.id == this.id &&
+          other.symbol == this.symbol &&
+          other.companyName == this.companyName &&
+          other.shares == this.shares &&
+          other.avgCostBasis == this.avgCostBasis &&
+          other.currentPrice == this.currentPrice &&
+          other.acquiredAt == this.acquiredAt &&
+          other.currency == this.currency &&
+          other.note == this.note);
+}
+
+class PortfolioPositionsCompanion extends UpdateCompanion<PositionData> {
+  final Value<int> id;
+  final Value<String> symbol;
+  final Value<String> companyName;
+  final Value<double> shares;
+  final Value<double> avgCostBasis;
+  final Value<double> currentPrice;
+  final Value<DateTime> acquiredAt;
+  final Value<String> currency;
+  final Value<String?> note;
+  const PortfolioPositionsCompanion({
+    this.id = const Value.absent(),
+    this.symbol = const Value.absent(),
+    this.companyName = const Value.absent(),
+    this.shares = const Value.absent(),
+    this.avgCostBasis = const Value.absent(),
+    this.currentPrice = const Value.absent(),
+    this.acquiredAt = const Value.absent(),
+    this.currency = const Value.absent(),
+    this.note = const Value.absent(),
+  });
+  PortfolioPositionsCompanion.insert({
+    this.id = const Value.absent(),
+    required String symbol,
+    this.companyName = const Value.absent(),
+    required double shares,
+    required double avgCostBasis,
+    this.currentPrice = const Value.absent(),
+    this.acquiredAt = const Value.absent(),
+    this.currency = const Value.absent(),
+    this.note = const Value.absent(),
+  }) : symbol = Value(symbol),
+       shares = Value(shares),
+       avgCostBasis = Value(avgCostBasis);
+  static Insertable<PositionData> custom({
+    Expression<int>? id,
+    Expression<String>? symbol,
+    Expression<String>? companyName,
+    Expression<double>? shares,
+    Expression<double>? avgCostBasis,
+    Expression<double>? currentPrice,
+    Expression<DateTime>? acquiredAt,
+    Expression<String>? currency,
+    Expression<String>? note,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (symbol != null) 'symbol': symbol,
+      if (companyName != null) 'company_name': companyName,
+      if (shares != null) 'shares': shares,
+      if (avgCostBasis != null) 'avg_cost_basis': avgCostBasis,
+      if (currentPrice != null) 'current_price': currentPrice,
+      if (acquiredAt != null) 'acquired_at': acquiredAt,
+      if (currency != null) 'currency': currency,
+      if (note != null) 'note': note,
+    });
+  }
+
+  PortfolioPositionsCompanion copyWith({
+    Value<int>? id,
+    Value<String>? symbol,
+    Value<String>? companyName,
+    Value<double>? shares,
+    Value<double>? avgCostBasis,
+    Value<double>? currentPrice,
+    Value<DateTime>? acquiredAt,
+    Value<String>? currency,
+    Value<String?>? note,
+  }) {
+    return PortfolioPositionsCompanion(
+      id: id ?? this.id,
+      symbol: symbol ?? this.symbol,
+      companyName: companyName ?? this.companyName,
+      shares: shares ?? this.shares,
+      avgCostBasis: avgCostBasis ?? this.avgCostBasis,
+      currentPrice: currentPrice ?? this.currentPrice,
+      acquiredAt: acquiredAt ?? this.acquiredAt,
+      currency: currency ?? this.currency,
+      note: note ?? this.note,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (symbol.present) {
+      map['symbol'] = Variable<String>(symbol.value);
+    }
+    if (companyName.present) {
+      map['company_name'] = Variable<String>(companyName.value);
+    }
+    if (shares.present) {
+      map['shares'] = Variable<double>(shares.value);
+    }
+    if (avgCostBasis.present) {
+      map['avg_cost_basis'] = Variable<double>(avgCostBasis.value);
+    }
+    if (currentPrice.present) {
+      map['current_price'] = Variable<double>(currentPrice.value);
+    }
+    if (acquiredAt.present) {
+      map['acquired_at'] = Variable<DateTime>(acquiredAt.value);
+    }
+    if (currency.present) {
+      map['currency'] = Variable<String>(currency.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PortfolioPositionsCompanion(')
+          ..write('id: $id, ')
+          ..write('symbol: $symbol, ')
+          ..write('companyName: $companyName, ')
+          ..write('shares: $shares, ')
+          ..write('avgCostBasis: $avgCostBasis, ')
+          ..write('currentPrice: $currentPrice, ')
+          ..write('acquiredAt: $acquiredAt, ')
+          ..write('currency: $currency, ')
+          ..write('note: $note')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $PaperTradesTable extends PaperTrades
+    with TableInfo<$PaperTradesTable, PaperTradeData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $PaperTradesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _symbolMeta = const VerificationMeta('symbol');
+  @override
+  late final GeneratedColumn<String> symbol = GeneratedColumn<String>(
+    'symbol',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 1,
+      maxTextLength: 10,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+    'type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _sharesMeta = const VerificationMeta('shares');
+  @override
+  late final GeneratedColumn<double> shares = GeneratedColumn<double>(
+    'shares',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _priceMeta = const VerificationMeta('price');
+  @override
+  late final GeneratedColumn<double> price = GeneratedColumn<double>(
+    'price',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _executedAtMeta = const VerificationMeta(
+    'executedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> executedAt = GeneratedColumn<DateTime>(
+    'executed_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+    'status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('OPEN'),
+  );
+  static const VerificationMeta _exitReasonMeta = const VerificationMeta(
+    'exitReason',
+  );
+  @override
+  late final GeneratedColumn<String> exitReason = GeneratedColumn<String>(
+    'exit_reason',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _exitPriceMeta = const VerificationMeta(
+    'exitPrice',
+  );
+  @override
+  late final GeneratedColumn<double> exitPrice = GeneratedColumn<double>(
+    'exit_price',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _closedAtMeta = const VerificationMeta(
+    'closedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> closedAt = GeneratedColumn<DateTime>(
+    'closed_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _realizedPnlMeta = const VerificationMeta(
+    'realizedPnl',
+  );
+  @override
+  late final GeneratedColumn<double> realizedPnl = GeneratedColumn<double>(
+    'realized_pnl',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    symbol,
+    type,
+    shares,
+    price,
+    executedAt,
+    status,
+    exitReason,
+    exitPrice,
+    closedAt,
+    realizedPnl,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'paper_trades';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<PaperTradeData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('symbol')) {
+      context.handle(
+        _symbolMeta,
+        symbol.isAcceptableOrUnknown(data['symbol']!, _symbolMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_symbolMeta);
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+        _typeMeta,
+        type.isAcceptableOrUnknown(data['type']!, _typeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('shares')) {
+      context.handle(
+        _sharesMeta,
+        shares.isAcceptableOrUnknown(data['shares']!, _sharesMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sharesMeta);
+    }
+    if (data.containsKey('price')) {
+      context.handle(
+        _priceMeta,
+        price.isAcceptableOrUnknown(data['price']!, _priceMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_priceMeta);
+    }
+    if (data.containsKey('executed_at')) {
+      context.handle(
+        _executedAtMeta,
+        executedAt.isAcceptableOrUnknown(data['executed_at']!, _executedAtMeta),
+      );
+    }
+    if (data.containsKey('status')) {
+      context.handle(
+        _statusMeta,
+        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
+      );
+    }
+    if (data.containsKey('exit_reason')) {
+      context.handle(
+        _exitReasonMeta,
+        exitReason.isAcceptableOrUnknown(data['exit_reason']!, _exitReasonMeta),
+      );
+    }
+    if (data.containsKey('exit_price')) {
+      context.handle(
+        _exitPriceMeta,
+        exitPrice.isAcceptableOrUnknown(data['exit_price']!, _exitPriceMeta),
+      );
+    }
+    if (data.containsKey('closed_at')) {
+      context.handle(
+        _closedAtMeta,
+        closedAt.isAcceptableOrUnknown(data['closed_at']!, _closedAtMeta),
+      );
+    }
+    if (data.containsKey('realized_pnl')) {
+      context.handle(
+        _realizedPnlMeta,
+        realizedPnl.isAcceptableOrUnknown(
+          data['realized_pnl']!,
+          _realizedPnlMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  PaperTradeData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return PaperTradeData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      symbol: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}symbol'],
+      )!,
+      type: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}type'],
+      )!,
+      shares: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}shares'],
+      )!,
+      price: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}price'],
+      )!,
+      executedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}executed_at'],
+      )!,
+      status: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}status'],
+      )!,
+      exitReason: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}exit_reason'],
+      ),
+      exitPrice: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}exit_price'],
+      ),
+      closedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}closed_at'],
+      ),
+      realizedPnl: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}realized_pnl'],
+      ),
+    );
+  }
+
+  @override
+  $PaperTradesTable createAlias(String alias) {
+    return $PaperTradesTable(attachedDatabase, alias);
+  }
+}
+
+class PaperTradeData extends DataClass implements Insertable<PaperTradeData> {
+  final int id;
+  final String symbol;
+  final String type;
+  final double shares;
+  final double price;
+  final DateTime executedAt;
+  final String status;
+  final String? exitReason;
+  final double? exitPrice;
+  final DateTime? closedAt;
+  final double? realizedPnl;
+  const PaperTradeData({
+    required this.id,
+    required this.symbol,
+    required this.type,
+    required this.shares,
+    required this.price,
+    required this.executedAt,
+    required this.status,
+    this.exitReason,
+    this.exitPrice,
+    this.closedAt,
+    this.realizedPnl,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['symbol'] = Variable<String>(symbol);
+    map['type'] = Variable<String>(type);
+    map['shares'] = Variable<double>(shares);
+    map['price'] = Variable<double>(price);
+    map['executed_at'] = Variable<DateTime>(executedAt);
+    map['status'] = Variable<String>(status);
+    if (!nullToAbsent || exitReason != null) {
+      map['exit_reason'] = Variable<String>(exitReason);
+    }
+    if (!nullToAbsent || exitPrice != null) {
+      map['exit_price'] = Variable<double>(exitPrice);
+    }
+    if (!nullToAbsent || closedAt != null) {
+      map['closed_at'] = Variable<DateTime>(closedAt);
+    }
+    if (!nullToAbsent || realizedPnl != null) {
+      map['realized_pnl'] = Variable<double>(realizedPnl);
+    }
+    return map;
+  }
+
+  PaperTradesCompanion toCompanion(bool nullToAbsent) {
+    return PaperTradesCompanion(
+      id: Value(id),
+      symbol: Value(symbol),
+      type: Value(type),
+      shares: Value(shares),
+      price: Value(price),
+      executedAt: Value(executedAt),
+      status: Value(status),
+      exitReason: exitReason == null && nullToAbsent
+          ? const Value.absent()
+          : Value(exitReason),
+      exitPrice: exitPrice == null && nullToAbsent
+          ? const Value.absent()
+          : Value(exitPrice),
+      closedAt: closedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(closedAt),
+      realizedPnl: realizedPnl == null && nullToAbsent
+          ? const Value.absent()
+          : Value(realizedPnl),
+    );
+  }
+
+  factory PaperTradeData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return PaperTradeData(
+      id: serializer.fromJson<int>(json['id']),
+      symbol: serializer.fromJson<String>(json['symbol']),
+      type: serializer.fromJson<String>(json['type']),
+      shares: serializer.fromJson<double>(json['shares']),
+      price: serializer.fromJson<double>(json['price']),
+      executedAt: serializer.fromJson<DateTime>(json['executedAt']),
+      status: serializer.fromJson<String>(json['status']),
+      exitReason: serializer.fromJson<String?>(json['exitReason']),
+      exitPrice: serializer.fromJson<double?>(json['exitPrice']),
+      closedAt: serializer.fromJson<DateTime?>(json['closedAt']),
+      realizedPnl: serializer.fromJson<double?>(json['realizedPnl']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'symbol': serializer.toJson<String>(symbol),
+      'type': serializer.toJson<String>(type),
+      'shares': serializer.toJson<double>(shares),
+      'price': serializer.toJson<double>(price),
+      'executedAt': serializer.toJson<DateTime>(executedAt),
+      'status': serializer.toJson<String>(status),
+      'exitReason': serializer.toJson<String?>(exitReason),
+      'exitPrice': serializer.toJson<double?>(exitPrice),
+      'closedAt': serializer.toJson<DateTime?>(closedAt),
+      'realizedPnl': serializer.toJson<double?>(realizedPnl),
+    };
+  }
+
+  PaperTradeData copyWith({
+    int? id,
+    String? symbol,
+    String? type,
+    double? shares,
+    double? price,
+    DateTime? executedAt,
+    String? status,
+    Value<String?> exitReason = const Value.absent(),
+    Value<double?> exitPrice = const Value.absent(),
+    Value<DateTime?> closedAt = const Value.absent(),
+    Value<double?> realizedPnl = const Value.absent(),
+  }) => PaperTradeData(
+    id: id ?? this.id,
+    symbol: symbol ?? this.symbol,
+    type: type ?? this.type,
+    shares: shares ?? this.shares,
+    price: price ?? this.price,
+    executedAt: executedAt ?? this.executedAt,
+    status: status ?? this.status,
+    exitReason: exitReason.present ? exitReason.value : this.exitReason,
+    exitPrice: exitPrice.present ? exitPrice.value : this.exitPrice,
+    closedAt: closedAt.present ? closedAt.value : this.closedAt,
+    realizedPnl: realizedPnl.present ? realizedPnl.value : this.realizedPnl,
+  );
+  PaperTradeData copyWithCompanion(PaperTradesCompanion data) {
+    return PaperTradeData(
+      id: data.id.present ? data.id.value : this.id,
+      symbol: data.symbol.present ? data.symbol.value : this.symbol,
+      type: data.type.present ? data.type.value : this.type,
+      shares: data.shares.present ? data.shares.value : this.shares,
+      price: data.price.present ? data.price.value : this.price,
+      executedAt: data.executedAt.present
+          ? data.executedAt.value
+          : this.executedAt,
+      status: data.status.present ? data.status.value : this.status,
+      exitReason: data.exitReason.present
+          ? data.exitReason.value
+          : this.exitReason,
+      exitPrice: data.exitPrice.present ? data.exitPrice.value : this.exitPrice,
+      closedAt: data.closedAt.present ? data.closedAt.value : this.closedAt,
+      realizedPnl: data.realizedPnl.present
+          ? data.realizedPnl.value
+          : this.realizedPnl,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PaperTradeData(')
+          ..write('id: $id, ')
+          ..write('symbol: $symbol, ')
+          ..write('type: $type, ')
+          ..write('shares: $shares, ')
+          ..write('price: $price, ')
+          ..write('executedAt: $executedAt, ')
+          ..write('status: $status, ')
+          ..write('exitReason: $exitReason, ')
+          ..write('exitPrice: $exitPrice, ')
+          ..write('closedAt: $closedAt, ')
+          ..write('realizedPnl: $realizedPnl')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    symbol,
+    type,
+    shares,
+    price,
+    executedAt,
+    status,
+    exitReason,
+    exitPrice,
+    closedAt,
+    realizedPnl,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is PaperTradeData &&
+          other.id == this.id &&
+          other.symbol == this.symbol &&
+          other.type == this.type &&
+          other.shares == this.shares &&
+          other.price == this.price &&
+          other.executedAt == this.executedAt &&
+          other.status == this.status &&
+          other.exitReason == this.exitReason &&
+          other.exitPrice == this.exitPrice &&
+          other.closedAt == this.closedAt &&
+          other.realizedPnl == this.realizedPnl);
+}
+
+class PaperTradesCompanion extends UpdateCompanion<PaperTradeData> {
+  final Value<int> id;
+  final Value<String> symbol;
+  final Value<String> type;
+  final Value<double> shares;
+  final Value<double> price;
+  final Value<DateTime> executedAt;
+  final Value<String> status;
+  final Value<String?> exitReason;
+  final Value<double?> exitPrice;
+  final Value<DateTime?> closedAt;
+  final Value<double?> realizedPnl;
+  const PaperTradesCompanion({
+    this.id = const Value.absent(),
+    this.symbol = const Value.absent(),
+    this.type = const Value.absent(),
+    this.shares = const Value.absent(),
+    this.price = const Value.absent(),
+    this.executedAt = const Value.absent(),
+    this.status = const Value.absent(),
+    this.exitReason = const Value.absent(),
+    this.exitPrice = const Value.absent(),
+    this.closedAt = const Value.absent(),
+    this.realizedPnl = const Value.absent(),
+  });
+  PaperTradesCompanion.insert({
+    this.id = const Value.absent(),
+    required String symbol,
+    required String type,
+    required double shares,
+    required double price,
+    this.executedAt = const Value.absent(),
+    this.status = const Value.absent(),
+    this.exitReason = const Value.absent(),
+    this.exitPrice = const Value.absent(),
+    this.closedAt = const Value.absent(),
+    this.realizedPnl = const Value.absent(),
+  }) : symbol = Value(symbol),
+       type = Value(type),
+       shares = Value(shares),
+       price = Value(price);
+  static Insertable<PaperTradeData> custom({
+    Expression<int>? id,
+    Expression<String>? symbol,
+    Expression<String>? type,
+    Expression<double>? shares,
+    Expression<double>? price,
+    Expression<DateTime>? executedAt,
+    Expression<String>? status,
+    Expression<String>? exitReason,
+    Expression<double>? exitPrice,
+    Expression<DateTime>? closedAt,
+    Expression<double>? realizedPnl,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (symbol != null) 'symbol': symbol,
+      if (type != null) 'type': type,
+      if (shares != null) 'shares': shares,
+      if (price != null) 'price': price,
+      if (executedAt != null) 'executed_at': executedAt,
+      if (status != null) 'status': status,
+      if (exitReason != null) 'exit_reason': exitReason,
+      if (exitPrice != null) 'exit_price': exitPrice,
+      if (closedAt != null) 'closed_at': closedAt,
+      if (realizedPnl != null) 'realized_pnl': realizedPnl,
+    });
+  }
+
+  PaperTradesCompanion copyWith({
+    Value<int>? id,
+    Value<String>? symbol,
+    Value<String>? type,
+    Value<double>? shares,
+    Value<double>? price,
+    Value<DateTime>? executedAt,
+    Value<String>? status,
+    Value<String?>? exitReason,
+    Value<double?>? exitPrice,
+    Value<DateTime?>? closedAt,
+    Value<double?>? realizedPnl,
+  }) {
+    return PaperTradesCompanion(
+      id: id ?? this.id,
+      symbol: symbol ?? this.symbol,
+      type: type ?? this.type,
+      shares: shares ?? this.shares,
+      price: price ?? this.price,
+      executedAt: executedAt ?? this.executedAt,
+      status: status ?? this.status,
+      exitReason: exitReason ?? this.exitReason,
+      exitPrice: exitPrice ?? this.exitPrice,
+      closedAt: closedAt ?? this.closedAt,
+      realizedPnl: realizedPnl ?? this.realizedPnl,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (symbol.present) {
+      map['symbol'] = Variable<String>(symbol.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    if (shares.present) {
+      map['shares'] = Variable<double>(shares.value);
+    }
+    if (price.present) {
+      map['price'] = Variable<double>(price.value);
+    }
+    if (executedAt.present) {
+      map['executed_at'] = Variable<DateTime>(executedAt.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
+    }
+    if (exitReason.present) {
+      map['exit_reason'] = Variable<String>(exitReason.value);
+    }
+    if (exitPrice.present) {
+      map['exit_price'] = Variable<double>(exitPrice.value);
+    }
+    if (closedAt.present) {
+      map['closed_at'] = Variable<DateTime>(closedAt.value);
+    }
+    if (realizedPnl.present) {
+      map['realized_pnl'] = Variable<double>(realizedPnl.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PaperTradesCompanion(')
+          ..write('id: $id, ')
+          ..write('symbol: $symbol, ')
+          ..write('type: $type, ')
+          ..write('shares: $shares, ')
+          ..write('price: $price, ')
+          ..write('executedAt: $executedAt, ')
+          ..write('status: $status, ')
+          ..write('exitReason: $exitReason, ')
+          ..write('exitPrice: $exitPrice, ')
+          ..write('closedAt: $closedAt, ')
+          ..write('realizedPnl: $realizedPnl')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $PaperSettingsTable extends PaperSettings
+    with TableInfo<$PaperSettingsTable, PaperSettingsData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $PaperSettingsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _startingCapitalMeta = const VerificationMeta(
+    'startingCapital',
+  );
+  @override
+  late final GeneratedColumn<double> startingCapital = GeneratedColumn<double>(
+    'starting_capital',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(100000.0),
+  );
+  static const VerificationMeta _takeProfitPercentMeta = const VerificationMeta(
+    'takeProfitPercent',
+  );
+  @override
+  late final GeneratedColumn<double> takeProfitPercent =
+      GeneratedColumn<double>(
+        'take_profit_percent',
+        aliasedName,
+        false,
+        type: DriftSqlType.double,
+        requiredDuringInsert: false,
+        defaultValue: const Constant(15.0),
+      );
+  static const VerificationMeta _stopLossPercentMeta = const VerificationMeta(
+    'stopLossPercent',
+  );
+  @override
+  late final GeneratedColumn<double> stopLossPercent = GeneratedColumn<double>(
+    'stop_loss_percent',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(10.0),
+  );
+  static const VerificationMeta _maxOpenTradesMeta = const VerificationMeta(
+    'maxOpenTrades',
+  );
+  @override
+  late final GeneratedColumn<int> maxOpenTrades = GeneratedColumn<int>(
+    'max_open_trades',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(5),
+  );
+  static const VerificationMeta _positionSizePercentMeta =
+      const VerificationMeta('positionSizePercent');
+  @override
+  late final GeneratedColumn<double> positionSizePercent =
+      GeneratedColumn<double>(
+        'position_size_percent',
+        aliasedName,
+        false,
+        type: DriftSqlType.double,
+        requiredDuringInsert: false,
+        defaultValue: const Constant(20.0),
+      );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    startingCapital,
+    takeProfitPercent,
+    stopLossPercent,
+    maxOpenTrades,
+    positionSizePercent,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'paper_settings';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<PaperSettingsData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('starting_capital')) {
+      context.handle(
+        _startingCapitalMeta,
+        startingCapital.isAcceptableOrUnknown(
+          data['starting_capital']!,
+          _startingCapitalMeta,
+        ),
+      );
+    }
+    if (data.containsKey('take_profit_percent')) {
+      context.handle(
+        _takeProfitPercentMeta,
+        takeProfitPercent.isAcceptableOrUnknown(
+          data['take_profit_percent']!,
+          _takeProfitPercentMeta,
+        ),
+      );
+    }
+    if (data.containsKey('stop_loss_percent')) {
+      context.handle(
+        _stopLossPercentMeta,
+        stopLossPercent.isAcceptableOrUnknown(
+          data['stop_loss_percent']!,
+          _stopLossPercentMeta,
+        ),
+      );
+    }
+    if (data.containsKey('max_open_trades')) {
+      context.handle(
+        _maxOpenTradesMeta,
+        maxOpenTrades.isAcceptableOrUnknown(
+          data['max_open_trades']!,
+          _maxOpenTradesMeta,
+        ),
+      );
+    }
+    if (data.containsKey('position_size_percent')) {
+      context.handle(
+        _positionSizePercentMeta,
+        positionSizePercent.isAcceptableOrUnknown(
+          data['position_size_percent']!,
+          _positionSizePercentMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  PaperSettingsData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return PaperSettingsData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      startingCapital: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}starting_capital'],
+      )!,
+      takeProfitPercent: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}take_profit_percent'],
+      )!,
+      stopLossPercent: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}stop_loss_percent'],
+      )!,
+      maxOpenTrades: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}max_open_trades'],
+      )!,
+      positionSizePercent: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}position_size_percent'],
+      )!,
+    );
+  }
+
+  @override
+  $PaperSettingsTable createAlias(String alias) {
+    return $PaperSettingsTable(attachedDatabase, alias);
+  }
+}
+
+class PaperSettingsData extends DataClass
+    implements Insertable<PaperSettingsData> {
+  final int id;
+  final double startingCapital;
+  final double takeProfitPercent;
+  final double stopLossPercent;
+  final int maxOpenTrades;
+  final double positionSizePercent;
+  const PaperSettingsData({
+    required this.id,
+    required this.startingCapital,
+    required this.takeProfitPercent,
+    required this.stopLossPercent,
+    required this.maxOpenTrades,
+    required this.positionSizePercent,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['starting_capital'] = Variable<double>(startingCapital);
+    map['take_profit_percent'] = Variable<double>(takeProfitPercent);
+    map['stop_loss_percent'] = Variable<double>(stopLossPercent);
+    map['max_open_trades'] = Variable<int>(maxOpenTrades);
+    map['position_size_percent'] = Variable<double>(positionSizePercent);
+    return map;
+  }
+
+  PaperSettingsCompanion toCompanion(bool nullToAbsent) {
+    return PaperSettingsCompanion(
+      id: Value(id),
+      startingCapital: Value(startingCapital),
+      takeProfitPercent: Value(takeProfitPercent),
+      stopLossPercent: Value(stopLossPercent),
+      maxOpenTrades: Value(maxOpenTrades),
+      positionSizePercent: Value(positionSizePercent),
+    );
+  }
+
+  factory PaperSettingsData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return PaperSettingsData(
+      id: serializer.fromJson<int>(json['id']),
+      startingCapital: serializer.fromJson<double>(json['startingCapital']),
+      takeProfitPercent: serializer.fromJson<double>(json['takeProfitPercent']),
+      stopLossPercent: serializer.fromJson<double>(json['stopLossPercent']),
+      maxOpenTrades: serializer.fromJson<int>(json['maxOpenTrades']),
+      positionSizePercent: serializer.fromJson<double>(
+        json['positionSizePercent'],
+      ),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'startingCapital': serializer.toJson<double>(startingCapital),
+      'takeProfitPercent': serializer.toJson<double>(takeProfitPercent),
+      'stopLossPercent': serializer.toJson<double>(stopLossPercent),
+      'maxOpenTrades': serializer.toJson<int>(maxOpenTrades),
+      'positionSizePercent': serializer.toJson<double>(positionSizePercent),
+    };
+  }
+
+  PaperSettingsData copyWith({
+    int? id,
+    double? startingCapital,
+    double? takeProfitPercent,
+    double? stopLossPercent,
+    int? maxOpenTrades,
+    double? positionSizePercent,
+  }) => PaperSettingsData(
+    id: id ?? this.id,
+    startingCapital: startingCapital ?? this.startingCapital,
+    takeProfitPercent: takeProfitPercent ?? this.takeProfitPercent,
+    stopLossPercent: stopLossPercent ?? this.stopLossPercent,
+    maxOpenTrades: maxOpenTrades ?? this.maxOpenTrades,
+    positionSizePercent: positionSizePercent ?? this.positionSizePercent,
+  );
+  PaperSettingsData copyWithCompanion(PaperSettingsCompanion data) {
+    return PaperSettingsData(
+      id: data.id.present ? data.id.value : this.id,
+      startingCapital: data.startingCapital.present
+          ? data.startingCapital.value
+          : this.startingCapital,
+      takeProfitPercent: data.takeProfitPercent.present
+          ? data.takeProfitPercent.value
+          : this.takeProfitPercent,
+      stopLossPercent: data.stopLossPercent.present
+          ? data.stopLossPercent.value
+          : this.stopLossPercent,
+      maxOpenTrades: data.maxOpenTrades.present
+          ? data.maxOpenTrades.value
+          : this.maxOpenTrades,
+      positionSizePercent: data.positionSizePercent.present
+          ? data.positionSizePercent.value
+          : this.positionSizePercent,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PaperSettingsData(')
+          ..write('id: $id, ')
+          ..write('startingCapital: $startingCapital, ')
+          ..write('takeProfitPercent: $takeProfitPercent, ')
+          ..write('stopLossPercent: $stopLossPercent, ')
+          ..write('maxOpenTrades: $maxOpenTrades, ')
+          ..write('positionSizePercent: $positionSizePercent')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    startingCapital,
+    takeProfitPercent,
+    stopLossPercent,
+    maxOpenTrades,
+    positionSizePercent,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is PaperSettingsData &&
+          other.id == this.id &&
+          other.startingCapital == this.startingCapital &&
+          other.takeProfitPercent == this.takeProfitPercent &&
+          other.stopLossPercent == this.stopLossPercent &&
+          other.maxOpenTrades == this.maxOpenTrades &&
+          other.positionSizePercent == this.positionSizePercent);
+}
+
+class PaperSettingsCompanion extends UpdateCompanion<PaperSettingsData> {
+  final Value<int> id;
+  final Value<double> startingCapital;
+  final Value<double> takeProfitPercent;
+  final Value<double> stopLossPercent;
+  final Value<int> maxOpenTrades;
+  final Value<double> positionSizePercent;
+  const PaperSettingsCompanion({
+    this.id = const Value.absent(),
+    this.startingCapital = const Value.absent(),
+    this.takeProfitPercent = const Value.absent(),
+    this.stopLossPercent = const Value.absent(),
+    this.maxOpenTrades = const Value.absent(),
+    this.positionSizePercent = const Value.absent(),
+  });
+  PaperSettingsCompanion.insert({
+    this.id = const Value.absent(),
+    this.startingCapital = const Value.absent(),
+    this.takeProfitPercent = const Value.absent(),
+    this.stopLossPercent = const Value.absent(),
+    this.maxOpenTrades = const Value.absent(),
+    this.positionSizePercent = const Value.absent(),
+  });
+  static Insertable<PaperSettingsData> custom({
+    Expression<int>? id,
+    Expression<double>? startingCapital,
+    Expression<double>? takeProfitPercent,
+    Expression<double>? stopLossPercent,
+    Expression<int>? maxOpenTrades,
+    Expression<double>? positionSizePercent,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (startingCapital != null) 'starting_capital': startingCapital,
+      if (takeProfitPercent != null) 'take_profit_percent': takeProfitPercent,
+      if (stopLossPercent != null) 'stop_loss_percent': stopLossPercent,
+      if (maxOpenTrades != null) 'max_open_trades': maxOpenTrades,
+      if (positionSizePercent != null)
+        'position_size_percent': positionSizePercent,
+    });
+  }
+
+  PaperSettingsCompanion copyWith({
+    Value<int>? id,
+    Value<double>? startingCapital,
+    Value<double>? takeProfitPercent,
+    Value<double>? stopLossPercent,
+    Value<int>? maxOpenTrades,
+    Value<double>? positionSizePercent,
+  }) {
+    return PaperSettingsCompanion(
+      id: id ?? this.id,
+      startingCapital: startingCapital ?? this.startingCapital,
+      takeProfitPercent: takeProfitPercent ?? this.takeProfitPercent,
+      stopLossPercent: stopLossPercent ?? this.stopLossPercent,
+      maxOpenTrades: maxOpenTrades ?? this.maxOpenTrades,
+      positionSizePercent: positionSizePercent ?? this.positionSizePercent,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (startingCapital.present) {
+      map['starting_capital'] = Variable<double>(startingCapital.value);
+    }
+    if (takeProfitPercent.present) {
+      map['take_profit_percent'] = Variable<double>(takeProfitPercent.value);
+    }
+    if (stopLossPercent.present) {
+      map['stop_loss_percent'] = Variable<double>(stopLossPercent.value);
+    }
+    if (maxOpenTrades.present) {
+      map['max_open_trades'] = Variable<int>(maxOpenTrades.value);
+    }
+    if (positionSizePercent.present) {
+      map['position_size_percent'] = Variable<double>(
+        positionSizePercent.value,
+      );
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PaperSettingsCompanion(')
+          ..write('id: $id, ')
+          ..write('startingCapital: $startingCapital, ')
+          ..write('takeProfitPercent: $takeProfitPercent, ')
+          ..write('stopLossPercent: $stopLossPercent, ')
+          ..write('maxOpenTrades: $maxOpenTrades, ')
+          ..write('positionSizePercent: $positionSizePercent')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -3622,6 +5256,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $AnalysisResultsTable analysisResults = $AnalysisResultsTable(
     this,
   );
+  late final $PortfolioPositionsTable portfolioPositions =
+      $PortfolioPositionsTable(this);
+  late final $PaperTradesTable paperTrades = $PaperTradesTable(this);
+  late final $PaperSettingsTable paperSettings = $PaperSettingsTable(this);
   late final Index idxWatchlistSymbol = Index(
     'idx_watchlist_symbol',
     'CREATE INDEX idx_watchlist_symbol ON watchlist_items (symbol)',
@@ -3642,6 +5280,14 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     'idx_analysis_created',
     'CREATE INDEX idx_analysis_created ON analysis_results (created_at)',
   );
+  late final Index idxPositionSymbol = Index(
+    'idx_position_symbol',
+    'CREATE INDEX idx_position_symbol ON portfolio_positions (symbol)',
+  );
+  late final Index idxPaperSymbol = Index(
+    'idx_paper_symbol',
+    'CREATE INDEX idx_paper_symbol ON paper_trades (symbol)',
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3654,11 +5300,16 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     aiProviders,
     stageAssignments,
     analysisResults,
+    portfolioPositions,
+    paperTrades,
+    paperSettings,
     idxWatchlistSymbol,
     idxCacheSymbol,
     idxStageUnique,
     idxAnalysisSymbol,
     idxAnalysisCreated,
+    idxPositionSymbol,
+    idxPaperSymbol,
   ];
 }
 
@@ -5496,6 +7147,834 @@ typedef $$AnalysisResultsTableProcessedTableManager =
       AnalysisResultData,
       PrefetchHooks Function()
     >;
+typedef $$PortfolioPositionsTableCreateCompanionBuilder =
+    PortfolioPositionsCompanion Function({
+      Value<int> id,
+      required String symbol,
+      Value<String> companyName,
+      required double shares,
+      required double avgCostBasis,
+      Value<double> currentPrice,
+      Value<DateTime> acquiredAt,
+      Value<String> currency,
+      Value<String?> note,
+    });
+typedef $$PortfolioPositionsTableUpdateCompanionBuilder =
+    PortfolioPositionsCompanion Function({
+      Value<int> id,
+      Value<String> symbol,
+      Value<String> companyName,
+      Value<double> shares,
+      Value<double> avgCostBasis,
+      Value<double> currentPrice,
+      Value<DateTime> acquiredAt,
+      Value<String> currency,
+      Value<String?> note,
+    });
+
+class $$PortfolioPositionsTableFilterComposer
+    extends Composer<_$AppDatabase, $PortfolioPositionsTable> {
+  $$PortfolioPositionsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get symbol => $composableBuilder(
+    column: $table.symbol,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get companyName => $composableBuilder(
+    column: $table.companyName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get shares => $composableBuilder(
+    column: $table.shares,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get avgCostBasis => $composableBuilder(
+    column: $table.avgCostBasis,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get currentPrice => $composableBuilder(
+    column: $table.currentPrice,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get acquiredAt => $composableBuilder(
+    column: $table.acquiredAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get currency => $composableBuilder(
+    column: $table.currency,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$PortfolioPositionsTableOrderingComposer
+    extends Composer<_$AppDatabase, $PortfolioPositionsTable> {
+  $$PortfolioPositionsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get symbol => $composableBuilder(
+    column: $table.symbol,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get companyName => $composableBuilder(
+    column: $table.companyName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get shares => $composableBuilder(
+    column: $table.shares,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get avgCostBasis => $composableBuilder(
+    column: $table.avgCostBasis,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get currentPrice => $composableBuilder(
+    column: $table.currentPrice,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get acquiredAt => $composableBuilder(
+    column: $table.acquiredAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get currency => $composableBuilder(
+    column: $table.currency,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$PortfolioPositionsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $PortfolioPositionsTable> {
+  $$PortfolioPositionsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get symbol =>
+      $composableBuilder(column: $table.symbol, builder: (column) => column);
+
+  GeneratedColumn<String> get companyName => $composableBuilder(
+    column: $table.companyName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get shares =>
+      $composableBuilder(column: $table.shares, builder: (column) => column);
+
+  GeneratedColumn<double> get avgCostBasis => $composableBuilder(
+    column: $table.avgCostBasis,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get currentPrice => $composableBuilder(
+    column: $table.currentPrice,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get acquiredAt => $composableBuilder(
+    column: $table.acquiredAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get currency =>
+      $composableBuilder(column: $table.currency, builder: (column) => column);
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+}
+
+class $$PortfolioPositionsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $PortfolioPositionsTable,
+          PositionData,
+          $$PortfolioPositionsTableFilterComposer,
+          $$PortfolioPositionsTableOrderingComposer,
+          $$PortfolioPositionsTableAnnotationComposer,
+          $$PortfolioPositionsTableCreateCompanionBuilder,
+          $$PortfolioPositionsTableUpdateCompanionBuilder,
+          (
+            PositionData,
+            BaseReferences<
+              _$AppDatabase,
+              $PortfolioPositionsTable,
+              PositionData
+            >,
+          ),
+          PositionData,
+          PrefetchHooks Function()
+        > {
+  $$PortfolioPositionsTableTableManager(
+    _$AppDatabase db,
+    $PortfolioPositionsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$PortfolioPositionsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PortfolioPositionsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$PortfolioPositionsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> symbol = const Value.absent(),
+                Value<String> companyName = const Value.absent(),
+                Value<double> shares = const Value.absent(),
+                Value<double> avgCostBasis = const Value.absent(),
+                Value<double> currentPrice = const Value.absent(),
+                Value<DateTime> acquiredAt = const Value.absent(),
+                Value<String> currency = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+              }) => PortfolioPositionsCompanion(
+                id: id,
+                symbol: symbol,
+                companyName: companyName,
+                shares: shares,
+                avgCostBasis: avgCostBasis,
+                currentPrice: currentPrice,
+                acquiredAt: acquiredAt,
+                currency: currency,
+                note: note,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String symbol,
+                Value<String> companyName = const Value.absent(),
+                required double shares,
+                required double avgCostBasis,
+                Value<double> currentPrice = const Value.absent(),
+                Value<DateTime> acquiredAt = const Value.absent(),
+                Value<String> currency = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+              }) => PortfolioPositionsCompanion.insert(
+                id: id,
+                symbol: symbol,
+                companyName: companyName,
+                shares: shares,
+                avgCostBasis: avgCostBasis,
+                currentPrice: currentPrice,
+                acquiredAt: acquiredAt,
+                currency: currency,
+                note: note,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$PortfolioPositionsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $PortfolioPositionsTable,
+      PositionData,
+      $$PortfolioPositionsTableFilterComposer,
+      $$PortfolioPositionsTableOrderingComposer,
+      $$PortfolioPositionsTableAnnotationComposer,
+      $$PortfolioPositionsTableCreateCompanionBuilder,
+      $$PortfolioPositionsTableUpdateCompanionBuilder,
+      (
+        PositionData,
+        BaseReferences<_$AppDatabase, $PortfolioPositionsTable, PositionData>,
+      ),
+      PositionData,
+      PrefetchHooks Function()
+    >;
+typedef $$PaperTradesTableCreateCompanionBuilder =
+    PaperTradesCompanion Function({
+      Value<int> id,
+      required String symbol,
+      required String type,
+      required double shares,
+      required double price,
+      Value<DateTime> executedAt,
+      Value<String> status,
+      Value<String?> exitReason,
+      Value<double?> exitPrice,
+      Value<DateTime?> closedAt,
+      Value<double?> realizedPnl,
+    });
+typedef $$PaperTradesTableUpdateCompanionBuilder =
+    PaperTradesCompanion Function({
+      Value<int> id,
+      Value<String> symbol,
+      Value<String> type,
+      Value<double> shares,
+      Value<double> price,
+      Value<DateTime> executedAt,
+      Value<String> status,
+      Value<String?> exitReason,
+      Value<double?> exitPrice,
+      Value<DateTime?> closedAt,
+      Value<double?> realizedPnl,
+    });
+
+class $$PaperTradesTableFilterComposer
+    extends Composer<_$AppDatabase, $PaperTradesTable> {
+  $$PaperTradesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get symbol => $composableBuilder(
+    column: $table.symbol,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get shares => $composableBuilder(
+    column: $table.shares,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get price => $composableBuilder(
+    column: $table.price,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get executedAt => $composableBuilder(
+    column: $table.executedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get exitReason => $composableBuilder(
+    column: $table.exitReason,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get exitPrice => $composableBuilder(
+    column: $table.exitPrice,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get closedAt => $composableBuilder(
+    column: $table.closedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get realizedPnl => $composableBuilder(
+    column: $table.realizedPnl,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$PaperTradesTableOrderingComposer
+    extends Composer<_$AppDatabase, $PaperTradesTable> {
+  $$PaperTradesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get symbol => $composableBuilder(
+    column: $table.symbol,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get shares => $composableBuilder(
+    column: $table.shares,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get price => $composableBuilder(
+    column: $table.price,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get executedAt => $composableBuilder(
+    column: $table.executedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get exitReason => $composableBuilder(
+    column: $table.exitReason,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get exitPrice => $composableBuilder(
+    column: $table.exitPrice,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get closedAt => $composableBuilder(
+    column: $table.closedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get realizedPnl => $composableBuilder(
+    column: $table.realizedPnl,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$PaperTradesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $PaperTradesTable> {
+  $$PaperTradesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get symbol =>
+      $composableBuilder(column: $table.symbol, builder: (column) => column);
+
+  GeneratedColumn<String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<double> get shares =>
+      $composableBuilder(column: $table.shares, builder: (column) => column);
+
+  GeneratedColumn<double> get price =>
+      $composableBuilder(column: $table.price, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get executedAt => $composableBuilder(
+    column: $table.executedAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<String> get exitReason => $composableBuilder(
+    column: $table.exitReason,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get exitPrice =>
+      $composableBuilder(column: $table.exitPrice, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get closedAt =>
+      $composableBuilder(column: $table.closedAt, builder: (column) => column);
+
+  GeneratedColumn<double> get realizedPnl => $composableBuilder(
+    column: $table.realizedPnl,
+    builder: (column) => column,
+  );
+}
+
+class $$PaperTradesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $PaperTradesTable,
+          PaperTradeData,
+          $$PaperTradesTableFilterComposer,
+          $$PaperTradesTableOrderingComposer,
+          $$PaperTradesTableAnnotationComposer,
+          $$PaperTradesTableCreateCompanionBuilder,
+          $$PaperTradesTableUpdateCompanionBuilder,
+          (
+            PaperTradeData,
+            BaseReferences<_$AppDatabase, $PaperTradesTable, PaperTradeData>,
+          ),
+          PaperTradeData,
+          PrefetchHooks Function()
+        > {
+  $$PaperTradesTableTableManager(_$AppDatabase db, $PaperTradesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$PaperTradesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PaperTradesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$PaperTradesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> symbol = const Value.absent(),
+                Value<String> type = const Value.absent(),
+                Value<double> shares = const Value.absent(),
+                Value<double> price = const Value.absent(),
+                Value<DateTime> executedAt = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<String?> exitReason = const Value.absent(),
+                Value<double?> exitPrice = const Value.absent(),
+                Value<DateTime?> closedAt = const Value.absent(),
+                Value<double?> realizedPnl = const Value.absent(),
+              }) => PaperTradesCompanion(
+                id: id,
+                symbol: symbol,
+                type: type,
+                shares: shares,
+                price: price,
+                executedAt: executedAt,
+                status: status,
+                exitReason: exitReason,
+                exitPrice: exitPrice,
+                closedAt: closedAt,
+                realizedPnl: realizedPnl,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String symbol,
+                required String type,
+                required double shares,
+                required double price,
+                Value<DateTime> executedAt = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<String?> exitReason = const Value.absent(),
+                Value<double?> exitPrice = const Value.absent(),
+                Value<DateTime?> closedAt = const Value.absent(),
+                Value<double?> realizedPnl = const Value.absent(),
+              }) => PaperTradesCompanion.insert(
+                id: id,
+                symbol: symbol,
+                type: type,
+                shares: shares,
+                price: price,
+                executedAt: executedAt,
+                status: status,
+                exitReason: exitReason,
+                exitPrice: exitPrice,
+                closedAt: closedAt,
+                realizedPnl: realizedPnl,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$PaperTradesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $PaperTradesTable,
+      PaperTradeData,
+      $$PaperTradesTableFilterComposer,
+      $$PaperTradesTableOrderingComposer,
+      $$PaperTradesTableAnnotationComposer,
+      $$PaperTradesTableCreateCompanionBuilder,
+      $$PaperTradesTableUpdateCompanionBuilder,
+      (
+        PaperTradeData,
+        BaseReferences<_$AppDatabase, $PaperTradesTable, PaperTradeData>,
+      ),
+      PaperTradeData,
+      PrefetchHooks Function()
+    >;
+typedef $$PaperSettingsTableCreateCompanionBuilder =
+    PaperSettingsCompanion Function({
+      Value<int> id,
+      Value<double> startingCapital,
+      Value<double> takeProfitPercent,
+      Value<double> stopLossPercent,
+      Value<int> maxOpenTrades,
+      Value<double> positionSizePercent,
+    });
+typedef $$PaperSettingsTableUpdateCompanionBuilder =
+    PaperSettingsCompanion Function({
+      Value<int> id,
+      Value<double> startingCapital,
+      Value<double> takeProfitPercent,
+      Value<double> stopLossPercent,
+      Value<int> maxOpenTrades,
+      Value<double> positionSizePercent,
+    });
+
+class $$PaperSettingsTableFilterComposer
+    extends Composer<_$AppDatabase, $PaperSettingsTable> {
+  $$PaperSettingsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get startingCapital => $composableBuilder(
+    column: $table.startingCapital,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get takeProfitPercent => $composableBuilder(
+    column: $table.takeProfitPercent,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get stopLossPercent => $composableBuilder(
+    column: $table.stopLossPercent,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get maxOpenTrades => $composableBuilder(
+    column: $table.maxOpenTrades,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get positionSizePercent => $composableBuilder(
+    column: $table.positionSizePercent,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$PaperSettingsTableOrderingComposer
+    extends Composer<_$AppDatabase, $PaperSettingsTable> {
+  $$PaperSettingsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get startingCapital => $composableBuilder(
+    column: $table.startingCapital,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get takeProfitPercent => $composableBuilder(
+    column: $table.takeProfitPercent,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get stopLossPercent => $composableBuilder(
+    column: $table.stopLossPercent,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get maxOpenTrades => $composableBuilder(
+    column: $table.maxOpenTrades,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get positionSizePercent => $composableBuilder(
+    column: $table.positionSizePercent,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$PaperSettingsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $PaperSettingsTable> {
+  $$PaperSettingsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<double> get startingCapital => $composableBuilder(
+    column: $table.startingCapital,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get takeProfitPercent => $composableBuilder(
+    column: $table.takeProfitPercent,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get stopLossPercent => $composableBuilder(
+    column: $table.stopLossPercent,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get maxOpenTrades => $composableBuilder(
+    column: $table.maxOpenTrades,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get positionSizePercent => $composableBuilder(
+    column: $table.positionSizePercent,
+    builder: (column) => column,
+  );
+}
+
+class $$PaperSettingsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $PaperSettingsTable,
+          PaperSettingsData,
+          $$PaperSettingsTableFilterComposer,
+          $$PaperSettingsTableOrderingComposer,
+          $$PaperSettingsTableAnnotationComposer,
+          $$PaperSettingsTableCreateCompanionBuilder,
+          $$PaperSettingsTableUpdateCompanionBuilder,
+          (
+            PaperSettingsData,
+            BaseReferences<
+              _$AppDatabase,
+              $PaperSettingsTable,
+              PaperSettingsData
+            >,
+          ),
+          PaperSettingsData,
+          PrefetchHooks Function()
+        > {
+  $$PaperSettingsTableTableManager(_$AppDatabase db, $PaperSettingsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$PaperSettingsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PaperSettingsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$PaperSettingsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<double> startingCapital = const Value.absent(),
+                Value<double> takeProfitPercent = const Value.absent(),
+                Value<double> stopLossPercent = const Value.absent(),
+                Value<int> maxOpenTrades = const Value.absent(),
+                Value<double> positionSizePercent = const Value.absent(),
+              }) => PaperSettingsCompanion(
+                id: id,
+                startingCapital: startingCapital,
+                takeProfitPercent: takeProfitPercent,
+                stopLossPercent: stopLossPercent,
+                maxOpenTrades: maxOpenTrades,
+                positionSizePercent: positionSizePercent,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<double> startingCapital = const Value.absent(),
+                Value<double> takeProfitPercent = const Value.absent(),
+                Value<double> stopLossPercent = const Value.absent(),
+                Value<int> maxOpenTrades = const Value.absent(),
+                Value<double> positionSizePercent = const Value.absent(),
+              }) => PaperSettingsCompanion.insert(
+                id: id,
+                startingCapital: startingCapital,
+                takeProfitPercent: takeProfitPercent,
+                stopLossPercent: stopLossPercent,
+                maxOpenTrades: maxOpenTrades,
+                positionSizePercent: positionSizePercent,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$PaperSettingsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $PaperSettingsTable,
+      PaperSettingsData,
+      $$PaperSettingsTableFilterComposer,
+      $$PaperSettingsTableOrderingComposer,
+      $$PaperSettingsTableAnnotationComposer,
+      $$PaperSettingsTableCreateCompanionBuilder,
+      $$PaperSettingsTableUpdateCompanionBuilder,
+      (
+        PaperSettingsData,
+        BaseReferences<_$AppDatabase, $PaperSettingsTable, PaperSettingsData>,
+      ),
+      PaperSettingsData,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -5514,4 +7993,10 @@ class $AppDatabaseManager {
       $$StageAssignmentsTableTableManager(_db, _db.stageAssignments);
   $$AnalysisResultsTableTableManager get analysisResults =>
       $$AnalysisResultsTableTableManager(_db, _db.analysisResults);
+  $$PortfolioPositionsTableTableManager get portfolioPositions =>
+      $$PortfolioPositionsTableTableManager(_db, _db.portfolioPositions);
+  $$PaperTradesTableTableManager get paperTrades =>
+      $$PaperTradesTableTableManager(_db, _db.paperTrades);
+  $$PaperSettingsTableTableManager get paperSettings =>
+      $$PaperSettingsTableTableManager(_db, _db.paperSettings);
 }

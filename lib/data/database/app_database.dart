@@ -102,6 +102,52 @@ class AnalysisResults extends Table {
       dateTime().withDefault(currentDateAndTime)();
 }
 
+@TableIndex(name: 'idx_position_symbol', columns: {#symbol})
+@DataClassName('PositionData')
+class PortfolioPositions extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get symbol => text().withLength(min: 1, max: 10)();
+  TextColumn get companyName => text().withDefault(const Constant(''))();
+  RealColumn get shares => real()();
+  RealColumn get avgCostBasis => real()();
+  RealColumn get currentPrice => real().withDefault(const Constant(0.0))();
+  DateTimeColumn get acquiredAt =>
+      dateTime().withDefault(currentDateAndTime)();
+  TextColumn get currency => text().withDefault(const Constant('USD'))();
+  TextColumn get note => text().nullable()();
+}
+
+@TableIndex(name: 'idx_paper_symbol', columns: {#symbol})
+@DataClassName('PaperTradeData')
+class PaperTrades extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get symbol => text().withLength(min: 1, max: 10)();
+  TextColumn get type => text()();
+  RealColumn get shares => real()();
+  RealColumn get price => real()();
+  DateTimeColumn get executedAt =>
+      dateTime().withDefault(currentDateAndTime)();
+  TextColumn get status => text().withDefault(const Constant('OPEN'))();
+  TextColumn get exitReason => text().nullable()();
+  RealColumn get exitPrice => real().nullable()();
+  DateTimeColumn get closedAt => dateTime().nullable()();
+  RealColumn get realizedPnl => real().nullable()();
+}
+
+@DataClassName('PaperSettingsData')
+class PaperSettings extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  RealColumn get startingCapital =>
+      real().withDefault(const Constant(100000.0))();
+  RealColumn get takeProfitPercent =>
+      real().withDefault(const Constant(15.0))();
+  RealColumn get stopLossPercent =>
+      real().withDefault(const Constant(10.0))();
+  IntColumn get maxOpenTrades => integer().withDefault(const Constant(5))();
+  RealColumn get positionSizePercent =>
+      real().withDefault(const Constant(20.0))();
+}
+
 @DriftDatabase(tables: [
   UserSettings,
   ApiKeys,
@@ -110,12 +156,15 @@ class AnalysisResults extends Table {
   AiProviders,
   StageAssignments,
   AnalysisResults,
+  PortfolioPositions,
+  PaperTrades,
+  PaperSettings,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -175,6 +224,12 @@ class AppDatabase extends _$AppDatabase {
                 model: const Value('sonar-pro'),
               ),
             );
+          }
+          if (from < 4) {
+            await m.createTable(portfolioPositions);
+            await m.createTable(paperTrades);
+            await m.createTable(paperSettings);
+            await into(paperSettings).insert(PaperSettingsCompanion());
           }
         },
       );

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'holdings_tab.dart';
+import 'paper_trading_tab.dart';
 
 class PortfolioScreen extends StatelessWidget {
   const PortfolioScreen({super.key});
@@ -22,8 +24,8 @@ class PortfolioScreen extends StatelessWidget {
         ),
         body: const TabBarView(
           children: [
-            _PlaceholderTab(label: 'Holdings'),
-            _PlaceholderTab(label: 'Paper Trade'),
+            HoldingsTab(),
+            PaperTradingTab(),
             _PlaceholderTab(label: 'Backtest'),
             _PlaceholderTab(label: 'Journal'),
           ],
