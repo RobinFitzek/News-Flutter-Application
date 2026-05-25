@@ -1,0 +1,83 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import '../views/auth/login_screen.dart';
+import '../views/dashboard/dashboard_screen.dart';
+import '../views/stocks/stocks_screen.dart';
+import '../views/analyze/analyze_screen.dart';
+import '../views/portfolio/portfolio_screen.dart';
+import '../views/settings/settings_screen.dart';
+import '../views/stock_detail/stock_detail_screen.dart';
+import '../views/analysis_detail/analysis_detail_screen.dart';
+import '../widgets/app_scaffold.dart';
+
+final appRouterProvider = Provider<GoRouter>((ref) {
+  return GoRouter(
+    initialLocation: '/',
+    redirect: (context, state) {
+      return null;
+    },
+    routes: [
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) {
+          return AppScaffold(navigationShell: navigationShell);
+        },
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/',
+                builder: (context, state) => const DashboardScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/stocks',
+                builder: (context, state) => const StocksScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/analyze',
+                builder: (context, state) => const AnalyzeScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/portfolio',
+                builder: (context, state) => const PortfolioScreen(),
+              ),
+            ],
+          ),
+        ],
+      ),
+      GoRoute(
+        path: '/settings',
+        builder: (context, state) => const SettingsScreen(),
+      ),
+      GoRoute(
+        path: '/stock/:symbol',
+        builder: (context, state) {
+          final symbol = state.pathParameters['symbol']!;
+          return StockDetailScreen(symbol: symbol);
+        },
+      ),
+      GoRoute(
+        path: '/analysis/:id',
+        builder: (context, state) {
+          final id = int.parse(state.pathParameters['id']!);
+          return AnalysisDetailScreen(analysisId: id);
+        },
+      ),
+      GoRoute(
+        path: '/auth/login',
+        builder: (context, state) => const LoginScreen(),
+      ),
+    ],
+  );
+});
