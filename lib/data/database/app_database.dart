@@ -148,6 +148,79 @@ class PaperSettings extends Table {
       real().withDefault(const Constant(20.0))();
 }
 
+@TableIndex(name: 'idx_fin_ratio_symbol', columns: {#symbol}, unique: true)
+@DataClassName('FinancialRatioData')
+class FinancialRatios extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get symbol => text().withLength(min: 1, max: 10)();
+  RealColumn get peRatio => real().nullable()();
+  RealColumn get pbRatio => real().nullable()();
+  RealColumn get eps => real().nullable()();
+  RealColumn get dividendYield => real().nullable()();
+  RealColumn get beta => real().nullable()();
+  TextColumn get week52High => text().withDefault(const Constant(''))();
+  TextColumn get week52Low => text().withDefault(const Constant(''))();
+  RealColumn get marketCap => real().nullable()();
+  RealColumn get revenueGrowth => real().nullable()();
+  RealColumn get profitMargin => real().nullable()();
+  RealColumn get debtToEquity => real().nullable()();
+  RealColumn get roe => real().nullable()();
+  DateTimeColumn get updatedAt => dateTime().nullable()();
+}
+
+@TableIndex(name: 'idx_ca_symbol', columns: {#symbol})
+@DataClassName('CorporateActionData')
+class CorporateActions extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get symbol => text().withLength(min: 1, max: 10)();
+  TextColumn get type => text()();
+  DateTimeColumn get date => dateTime()();
+  TextColumn get description => text().nullable()();
+  RealColumn get amount => real().nullable()();
+  TextColumn get currency => text().withDefault(const Constant('USD'))();
+}
+
+@TableIndex(name: 'idx_earnings_symbol', columns: {#symbol})
+@DataClassName('EarningsEventData')
+class EarningsEvents extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get symbol => text().withLength(min: 1, max: 10)();
+  DateTimeColumn get reportDate => dateTime()();
+  RealColumn get estimatedEps => real().nullable()();
+  RealColumn get actualEps => real().nullable()();
+  RealColumn get surprise => real().nullable()();
+  RealColumn get surprisePercent => real().nullable()();
+  TextColumn get period => text().withDefault(const Constant(''))();
+}
+
+@TableIndex(name: 'idx_insider_symbol', columns: {#symbol})
+@DataClassName('InsiderTransactionData')
+class InsiderTransactions extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get symbol => text().withLength(min: 1, max: 10)();
+  TextColumn get insiderName => text()();
+  TextColumn get title => text()();
+  TextColumn get type => text()();
+  RealColumn get shares => real()();
+  RealColumn get price => real()();
+  RealColumn get totalValue => real()();
+  DateTimeColumn get filingDate => dateTime()();
+  DateTimeColumn get transactionDate => dateTime()();
+}
+
+@TableIndex(name: 'idx_inst_symbol', columns: {#symbol})
+@DataClassName('InstitutionalHolderData')
+class InstitutionalHolders extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get symbol => text().withLength(min: 1, max: 10)();
+  TextColumn get holderName => text()();
+  RealColumn get shares => real()();
+  RealColumn get value => real()();
+  RealColumn get percentOut => real()();
+  DateTimeColumn get reportDate => dateTime()();
+  RealColumn get change => real().nullable()();
+}
+
 @DriftDatabase(tables: [
   UserSettings,
   ApiKeys,
@@ -159,12 +232,17 @@ class PaperSettings extends Table {
   PortfolioPositions,
   PaperTrades,
   PaperSettings,
+  FinancialRatios,
+  CorporateActions,
+  EarningsEvents,
+  InsiderTransactions,
+  InstitutionalHolders,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -230,6 +308,13 @@ class AppDatabase extends _$AppDatabase {
             await m.createTable(paperTrades);
             await m.createTable(paperSettings);
             await into(paperSettings).insert(PaperSettingsCompanion());
+          }
+          if (from < 5) {
+            await m.createTable(financialRatios);
+            await m.createTable(corporateActions);
+            await m.createTable(earningsEvents);
+            await m.createTable(insiderTransactions);
+            await m.createTable(institutionalHolders);
           }
         },
       );

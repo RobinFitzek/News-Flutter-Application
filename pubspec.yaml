@@ -55,7 +55,8 @@ dependencies:
   dio: ^5.7.0
 
   # Background tasks
-  workmanager: ^0.5.2
+  # Background tasks (disabled for now — re-add when needed)
+  # workmanager: ^0.5.2
 
   # UI
   fl_chart: ^0.69.2

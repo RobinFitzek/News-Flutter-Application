@@ -42,6 +42,17 @@ class YahooFinanceClient {
             (meta['regularMarketDayLow'] as num?)?.toDouble() ?? currentPrice,
         'volume': meta['regularMarketVolume'] as int? ?? 0,
         'marketCap': meta['marketCap'] as double?,
+        'fiftyTwoWeekHigh':
+            (meta['fiftyTwoWeekHigh'] as num?)?.toDouble(),
+        'fiftyTwoWeekLow':
+            (meta['fiftyTwoWeekLow'] as num?)?.toDouble(),
+        'trailingPE': meta['trailingPE'] as double?,
+        'forwardPE': meta['forwardPE'] as double?,
+        'beta': meta['beta'] as double?,
+        'dividendYield': meta['dividendYield'] as double?,
+        'eps': meta['epsTrailingTwelveMonths'] as double?,
+        'bookValue': meta['bookValue'] as double?,
+        'priceToBook': meta['priceToBook'] as double?,
         'timestamp': DateTime.now().toIso8601String(),
       };
     } on DioException catch (e) {
@@ -126,6 +137,89 @@ class YahooFinanceClient {
       );
     } catch (e) {
       throw Exception('Failed to search symbols: $e');
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getEarningsHistory(String symbol) async {
+    try {
+      final response = await _dio.get(
+        '/v8/finance/chart/$symbol',
+        queryParameters: {'interval': '3mo', 'range': '2y', 'events': 'div,splits,earnings'},
+      );
+      final result = response.data['chart']['result'][0];
+      final earnings = result['events']?['earnings'] as Map<String, dynamic>?;
+      if (earnings == null) return [];
+
+      return earnings.values.map((e) {
+        final date =
+            DateTime.fromMillisecondsSinceEpoch((e['date'] as int) * 1000);
+        return {
+          'symbol': symbol.toUpperCase(),
+          'reportDate': date.toIso8601String(),
+          'estimatedEps': (e['epsEstimate'] as num?)?.toDouble(),
+          'actualEps': (e['epsActual'] as num?)?.toDouble(),
+          'surprise': (e['surprise'] as num?)?.toDouble(),
+          'surprisePercent': (e['surprisePercent'] as num?)?.toDouble(),
+          'period': e['period']?.toString() ?? '',
+        };
+      }).toList()
+        ..sort((a, b) => (b['reportDate'] as String)
+            .compareTo(a['reportDate'] as String));
+    } on DioException {
+      return [];
+    } catch (e) {
+      throw Exception('Failed to fetch earnings: $e');
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getCorporateActions(String symbol) async {
+    try {
+      final response = await _dio.get(
+        '/v8/finance/chart/$symbol',
+        queryParameters: {'interval': '1d', 'range': '2y', 'events': 'div,splits'},
+      );
+      final result = response.data['chart']['result'][0];
+      final events = <Map<String, dynamic>>[];
+
+      final dividends = result['events']?['dividends'] as Map<String, dynamic>?;
+      if (dividends != null) {
+        for (final d in dividends.values) {
+          final date =
+              DateTime.fromMillisecondsSinceEpoch((d['date'] as int) * 1000);
+          events.add({
+            'symbol': symbol.toUpperCase(),
+            'type': 'dividend',
+            'date': date.toIso8601String(),
+            'description': 'Cash dividend',
+            'amount': (d['amount'] as num).toDouble(),
+            'currency': 'USD',
+          });
+        }
+      }
+
+      final splits = result['events']?['splits'] as Map<String, dynamic>?;
+      if (splits != null) {
+        for (final s in splits.values) {
+          final date =
+              DateTime.fromMillisecondsSinceEpoch((s['date'] as int) * 1000);
+          events.add({
+            'symbol': symbol.toUpperCase(),
+            'type': 'split',
+            'date': date.toIso8601String(),
+            'description': '${s['numerator']}/${s['denominator']} split',
+            'amount': null,
+            'currency': 'USD',
+          });
+        }
+      }
+
+      events.sort((a, b) =>
+          (b['date'] as String).compareTo(a['date'] as String));
+      return events;
+    } on DioException {
+      return [];
+    } catch (e) {
+      throw Exception('Failed to fetch corporate actions: $e');
     }
   }
 }
