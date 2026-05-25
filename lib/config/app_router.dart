@@ -14,6 +14,7 @@ import '../views/research/macro_screen.dart';
 import '../views/research/pairs_screen.dart';
 import '../views/research/options_flow_screen.dart';
 import '../views/research/institutions_screen.dart';
+import '../views/research/sector_screen.dart';
 import '../widgets/app_scaffold.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -110,6 +111,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/research/institutions',
         builder: (context, state) => const InstitutionsScreen(),
+      ),
+      GoRoute(
+        path: '/research/sector',
+        builder: (context, state) => const SectorScreen(),
       ),
     ],
   );
