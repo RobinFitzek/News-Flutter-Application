@@ -17,6 +17,9 @@ import '../views/research/institutions_screen.dart';
 import '../views/research/sector_screen.dart';
 import '../views/research/fear_greed_screen.dart';
 import '../views/research/comparison_screen.dart';
+import '../views/learning/learning_screen.dart';
+import '../views/learning/price_alerts_screen.dart';
+import '../views/learning/scenario_screen.dart';
 import '../widgets/app_scaffold.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -125,6 +128,18 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/compare',
         builder: (context, state) => const ComparisonScreen(),
+      ),
+      GoRoute(
+        path: '/learning',
+        builder: (context, state) => const LearningScreen(),
+      ),
+      GoRoute(
+        path: '/alerts',
+        builder: (context, state) => const PriceAlertsScreen(),
+      ),
+      GoRoute(
+        path: '/scenarios',
+        builder: (context, state) => const ScenarioScreen(),
       ),
     ],
   );
