@@ -34,7 +34,7 @@ class AuthViewModel extends StateNotifier<AuthState> {
   Future<void> login() async {
     state = state.copyWith(isLoading: true, errorMessage: null);
     try {
-      await authRepository.login();
+      authRepository.loginSync();
       state = state.copyWith(isLoading: false, isAuthenticated: true);
     } catch (e) {
       state = state.copyWith(
@@ -45,7 +45,7 @@ class AuthViewModel extends StateNotifier<AuthState> {
   }
 
   Future<void> logout() async {
-    await authRepository.logout();
+    authRepository.logoutSync();
     state = state.copyWith(isAuthenticated: false);
   }
 }

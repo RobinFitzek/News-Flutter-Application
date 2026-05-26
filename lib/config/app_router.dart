@@ -30,6 +30,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
   final authRepo = ref.watch(authRepositoryProvider);
   return GoRouter(
     initialLocation: '/',
+    refreshListenable: authRepo,
     redirect: (context, state) {
       if (state.matchedLocation == '/auth/login') return null;
       return authRepo.isLoggedInSync() ? null : '/auth/login';
@@ -40,125 +41,47 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           return AppScaffold(navigationShell: navigationShell);
         },
         branches: [
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: '/',
-                builder: (context, state) => const DashboardScreen(),
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: '/stocks',
-                builder: (context, state) => const StocksScreen(),
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: '/analyze',
-                builder: (context, state) {
-                  final symbol = state.uri.queryParameters['symbol'];
-                  return AnalyzeScreen(initialSymbol: symbol);
-                },
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: '/portfolio',
-                builder: (context, state) => const PortfolioScreen(),
-              ),
-            ],
-          ),
+          StatefulShellBranch(routes: [
+            GoRoute(path: '/', builder: (_, __) => const DashboardScreen()),
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(path: '/stocks', builder: (_, __) => const StocksScreen()),
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(path: '/analyze', builder: (context, state) {
+              final symbol = state.uri.queryParameters['symbol'];
+              return AnalyzeScreen(initialSymbol: symbol);
+            }),
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(path: '/portfolio', builder: (_, __) => const PortfolioScreen()),
+          ]),
         ],
       ),
-      GoRoute(
-        path: '/settings',
-        builder: (context, state) => const SettingsScreen(),
-      ),
-      GoRoute(
-        path: '/stock/:symbol',
-        builder: (context, state) {
-          final symbol = state.pathParameters['symbol']!;
-          return StockDetailScreen(symbol: symbol);
-        },
-      ),
-      GoRoute(
-        path: '/analysis/:id',
-        builder: (context, state) {
-          final id = int.parse(state.pathParameters['id']!);
-          return AnalysisDetailScreen(analysisId: id);
-        },
-      ),
-      GoRoute(
-        path: '/auth/login',
-        builder: (context, state) => const LoginScreen(),
-      ),
-      GoRoute(
-        path: '/research/insider',
-        builder: (context, state) => const InsiderScreen(),
-      ),
-      GoRoute(
-        path: '/research/darkpool',
-        builder: (context, state) => const DarkPoolScreen(),
-      ),
-      GoRoute(
-        path: '/research/macro',
-        builder: (context, state) => const MacroScreen(),
-      ),
-      GoRoute(
-        path: '/research/pairs',
-        builder: (context, state) => const PairsScreen(),
-      ),
-      GoRoute(
-        path: '/research/options',
-        builder: (context, state) => const OptionsFlowScreen(),
-      ),
-      GoRoute(
-        path: '/research/institutions',
-        builder: (context, state) => const InstitutionsScreen(),
-      ),
-      GoRoute(
-        path: '/research/sector',
-        builder: (context, state) => const SectorScreen(),
-      ),
-      GoRoute(
-        path: '/research/feargreed',
-        builder: (context, state) => const FearGreedScreen(),
-      ),
-      GoRoute(
-        path: '/compare',
-        builder: (context, state) => const ComparisonScreen(),
-      ),
-      GoRoute(
-        path: '/learning',
-        builder: (context, state) => const LearningScreen(),
-      ),
-      GoRoute(
-        path: '/alerts',
-        builder: (context, state) => const PriceAlertsScreen(),
-      ),
-      GoRoute(
-        path: '/scenarios',
-        builder: (context, state) => const ScenarioScreen(),
-      ),
-      GoRoute(
-        path: '/research/geo',
-        builder: (context, state) => const GeopoliticalScreen(),
-      ),
-      GoRoute(
-        path: '/research/calendar',
-        builder: (context, state) => const EconomicCalendarScreen(),
-      ),
-      GoRoute(
-        path: '/report',
-        builder: (context, state) => const WeeklyReportScreen(),
-      ),
+      GoRoute(path: '/settings', builder: (_, __) => const SettingsScreen()),
+      GoRoute(path: '/stock/:symbol', builder: (context, state) {
+        final symbol = state.pathParameters['symbol']!;
+        return StockDetailScreen(symbol: symbol);
+      }),
+      GoRoute(path: '/analysis/:id', builder: (context, state) {
+        return AnalysisDetailScreen(analysisId: int.parse(state.pathParameters['id']!));
+      }),
+      GoRoute(path: '/auth/login', builder: (_, __) => const LoginScreen()),
+      GoRoute(path: '/research/insider', builder: (_, __) => const InsiderScreen()),
+      GoRoute(path: '/research/darkpool', builder: (_, __) => const DarkPoolScreen()),
+      GoRoute(path: '/research/macro', builder: (_, __) => const MacroScreen()),
+      GoRoute(path: '/research/pairs', builder: (_, __) => const PairsScreen()),
+      GoRoute(path: '/research/options', builder: (_, __) => const OptionsFlowScreen()),
+      GoRoute(path: '/research/institutions', builder: (_, __) => const InstitutionsScreen()),
+      GoRoute(path: '/research/sector', builder: (_, __) => const SectorScreen()),
+      GoRoute(path: '/research/feargreed', builder: (_, __) => const FearGreedScreen()),
+      GoRoute(path: '/compare', builder: (_, __) => const ComparisonScreen()),
+      GoRoute(path: '/learning', builder: (_, __) => const LearningScreen()),
+      GoRoute(path: '/alerts', builder: (_, __) => const PriceAlertsScreen()),
+      GoRoute(path: '/scenarios', builder: (_, __) => const ScenarioScreen()),
+      GoRoute(path: '/research/geo', builder: (_, __) => const GeopoliticalScreen()),
+      GoRoute(path: '/research/calendar', builder: (_, __) => const EconomicCalendarScreen()),
+      GoRoute(path: '/report', builder: (_, __) => const WeeklyReportScreen()),
     ],
   );
 });
