@@ -6,8 +6,16 @@ import '../../data/repositories/earnings_repository.dart';
 import '../../data/repositories/corporate_action_repository.dart';
 import '../../data/repositories/insider_repository.dart';
 import '../../data/repositories/institutional_repository.dart';
+import '../../data/datasources/remote/rss_client.dart';
 import '../../data/datasources/remote/yahoo_finance_client.dart';
+import '../../data/datasources/local/database_datasource.dart';
 import '../../data/datasources/remote/sec_edgar_client.dart';
+import '../../engine/dark_pool_tracker.dart';
+import '../../engine/moat_scorer.dart';
+import '../../engine/nlp_scorer.dart';
+import '../../engine/short_interest.dart';
+import '../../engine/supply_chain.dart';
+import '../../data/repositories/provider_repository.dart';
 import '../../models/chart_data.dart';
 import '../../models/chart_data_point.dart';
 
@@ -20,6 +28,12 @@ class StockDetailState {
     this.corporateActions = const [],
     this.insiderTransactions = const [],
     this.institutionalHolders = const [],
+    this.shortData,
+    this.squeezeSetup,
+    this.darkPoolSignals = const [],
+    this.moatData,
+    this.sentimentData,
+    this.supplyChain,
     this.isLoadingQuote = false,
     this.isLoadingChart = false,
     this.isLoadingDetails = false,
@@ -33,6 +47,12 @@ class StockDetailState {
   final List<CorporateActionData> corporateActions;
   final List<InsiderTransactionData> insiderTransactions;
   final List<InstitutionalHolderData> institutionalHolders;
+  final Map<String, dynamic>? shortData;
+  final Map<String, dynamic>? squeezeSetup;
+  final List<Map<String, dynamic>> darkPoolSignals;
+  final Map<String, dynamic>? moatData;
+  final Map<String, dynamic>? sentimentData;
+  final Map<String, dynamic>? supplyChain;
   final bool isLoadingQuote;
   final bool isLoadingChart;
   final bool isLoadingDetails;
@@ -46,6 +66,12 @@ class StockDetailState {
     List<CorporateActionData>? corporateActions,
     List<InsiderTransactionData>? insiderTransactions,
     List<InstitutionalHolderData>? institutionalHolders,
+    Map<String, dynamic>? shortData,
+    Map<String, dynamic>? squeezeSetup,
+    List<Map<String, dynamic>>? darkPoolSignals,
+    Map<String, dynamic>? moatData,
+    Map<String, dynamic>? sentimentData,
+    Map<String, dynamic>? supplyChain,
     bool? isLoadingQuote,
     bool? isLoadingChart,
     bool? isLoadingDetails,
@@ -60,6 +86,12 @@ class StockDetailState {
       corporateActions: corporateActions ?? this.corporateActions,
       insiderTransactions: insiderTransactions ?? this.insiderTransactions,
       institutionalHolders: institutionalHolders ?? this.institutionalHolders,
+      shortData: shortData ?? this.shortData,
+      squeezeSetup: squeezeSetup ?? this.squeezeSetup,
+      darkPoolSignals: darkPoolSignals ?? this.darkPoolSignals,
+      moatData: moatData ?? this.moatData,
+      sentimentData: sentimentData ?? this.sentimentData,
+      supplyChain: supplyChain ?? this.supplyChain,
       isLoadingQuote: isLoadingQuote ?? this.isLoadingQuote,
       isLoadingChart: isLoadingChart ?? this.isLoadingChart,
       isLoadingDetails: isLoadingDetails ?? this.isLoadingDetails,
@@ -78,6 +110,8 @@ class StockDetailViewModel extends StateNotifier<StockDetailState> {
     required this.insiderRepo,
     required this.institutionalRepo,
     required this.yahooClient,
+    required this.db,
+    required this.providerRepo,
   }) : super(const StockDetailState());
 
   final String symbol;
@@ -88,6 +122,8 @@ class StockDetailViewModel extends StateNotifier<StockDetailState> {
   final InsiderRepository insiderRepo;
   final InstitutionalRepository institutionalRepo;
   final YahooFinanceClient yahooClient;
+  final AppDatabase db;
+  final ProviderRepository providerRepo;
 
   Future<void> loadStock() async {
     state = state.copyWith(
@@ -209,11 +245,12 @@ class StockDetailViewModel extends StateNotifier<StockDetailState> {
 
     try {
       final secClient = SecEdgarClient();
-      final rawInsider = await secClient.getInsiderTransactions(symbol);
+      final rawInsider = await secClient.getInsiderTransactions(symbol, limit: 20);
+      await insiderRepo.clearForSymbol(symbol);
       if (rawInsider.isNotEmpty) {
-        await insiderRepo.clearForSymbol(symbol);
         final insiderData = rawInsider.map((t) => InsiderTransactionData(
-              id: 0, symbol: symbol.toUpperCase(),
+              id: 0,
+              symbol: symbol.toUpperCase(),
               insiderName: t['insiderName'] as String,
               title: t['title'] as String,
               type: t['type'] as String,
@@ -235,8 +272,63 @@ class StockDetailViewModel extends StateNotifier<StockDetailState> {
     }
 
     try {
+      final rawInst = await yahooClient.getInstitutionalHolders(symbol);
+      await institutionalRepo.clearForSymbol(symbol);
+      if (rawInst.isNotEmpty) {
+        final instData = rawInst.map((h) => InstitutionalHolderData(
+              id: 0,
+              symbol: symbol.toUpperCase(),
+              holderName: h['holderName'] as String,
+              shares: (h['shares'] as num).toDouble(),
+              value: (h['value'] as num).toDouble(),
+              percentOut: (h['percentOut'] as num).toDouble(),
+              reportDate: h['reportDate'] as DateTime,
+              change: (h['change'] as num?)?.toDouble(),
+            )).toList();
+        await institutionalRepo.saveAll(instData);
+      }
       state = state.copyWith(
         institutionalHolders: await institutionalRepo.getBySymbol(symbol),
+      );
+    } catch (_) {
+      state = state.copyWith(
+        institutionalHolders: await institutionalRepo.getBySymbol(symbol),
+      );
+    }
+
+    try {
+      final shortTracker = ShortInterestTracker(yahoo: yahooClient);
+      final shortData = await shortTracker.getShortData(symbol);
+      final squeeze = await shortTracker.checkSqueezeSetup(symbol);
+      final darkPool = await DarkPoolTracker(yahoo: yahooClient).scanTicker(symbol);
+      final moat = await MoatScorer(yahoo: yahooClient).moatScore(symbol);
+
+      final headlines = await RssClient().fetchHeadlines(
+        RssClient.headlineFeeds,
+        maxPerFeed: 30,
+      );
+      final companyName = state.quote?.companyName;
+      final sentiment = NlpScorer(db).scoreTicker(
+        symbol,
+        headlines,
+        companyName: companyName?.isNotEmpty == true ? companyName : null,
+      );
+
+      final supply = await SupplyChainMapper(
+        db,
+        providerRepo: providerRepo,
+      ).getSupplyChain(
+        symbol,
+        companyName: companyName,
+      );
+
+      state = state.copyWith(
+        shortData: shortData,
+        squeezeSetup: squeeze,
+        darkPoolSignals: darkPool,
+        moatData: moat,
+        sentimentData: sentiment,
+        supplyChain: supply,
       );
     } catch (_) {}
 
@@ -297,6 +389,8 @@ final stockDetailViewModelProvider = StateNotifierProvider.family<
       insiderRepo: insiderRepo,
       institutionalRepo: institutionalRepo,
       yahooClient: yahooClient,
+      db: ref.watch(databaseProvider),
+      providerRepo: ref.watch(providerRepositoryProvider),
     );
   },
 );

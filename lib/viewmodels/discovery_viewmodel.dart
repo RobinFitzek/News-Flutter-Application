@@ -2,9 +2,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/database/app_database.dart';
 import '../../data/repositories/discovery_repository.dart';
 import '../../data/repositories/provider_repository.dart';
-import '../../data/datasources/remote/provider_factory.dart';
+import '../../data/repositories/watchlist_repository.dart';
+import '../../data/datasources/local/database_datasource.dart';
+import '../../engine/discovery_engine.dart';
 import '../../models/stage_assignment.dart';
-import 'dart:convert';
 
 class DiscoveryState {
   const DiscoveryState({
@@ -12,24 +13,28 @@ class DiscoveryState {
     this.isLoading = false,
     this.isDiscovering = false,
     this.errorMessage,
+    this.lastStrategy,
   });
 
   final List<DiscoveryData> discoveries;
   final bool isLoading;
   final bool isDiscovering;
   final String? errorMessage;
+  final String? lastStrategy;
 
   DiscoveryState copyWith({
     List<DiscoveryData>? discoveries,
     bool? isLoading,
     bool? isDiscovering,
     String? errorMessage,
+    String? lastStrategy,
   }) {
     return DiscoveryState(
       discoveries: discoveries ?? this.discoveries,
       isLoading: isLoading ?? this.isLoading,
       isDiscovering: isDiscovering ?? this.isDiscovering,
       errorMessage: errorMessage ?? this.errorMessage,
+      lastStrategy: lastStrategy ?? this.lastStrategy,
     );
   }
 }
@@ -38,10 +43,17 @@ class DiscoveryViewModel extends StateNotifier<DiscoveryState> {
   DiscoveryViewModel({
     required this.discoveryRepo,
     required this.providerRepo,
-  }) : super(const DiscoveryState());
+    required this.watchlistRepo,
+    required this.db,
+  }) : super(const DiscoveryState()) {
+    _engine = DiscoveryEngine();
+  }
 
   final DiscoveryRepository discoveryRepo;
   final ProviderRepository providerRepo;
+  final WatchlistRepository watchlistRepo;
+  final AppDatabase db;
+  late final DiscoveryEngine _engine;
 
   Future<void> loadDiscoveries() async {
     state = state.copyWith(isLoading: true, errorMessage: null);
@@ -56,81 +68,53 @@ class DiscoveryViewModel extends StateNotifier<DiscoveryState> {
   Future<void> runDiscovery() async {
     state = state.copyWith(isDiscovering: true, errorMessage: null);
     try {
-      final provider = await providerRepo.getByStage(AnalysisStage.newsResearch);
-      if (provider == null || provider.apiKey.isEmpty) {
+      final watchlist = await watchlistRepo.getAll();
+      final watchlistSymbols =
+          watchlist.map((w) => w.symbol.toUpperCase()).toSet();
+
+      final aiProvider = await providerRepo.getByStage(AnalysisStage.newsResearch);
+
+      // Primary: quant momentum discovery (zero API cost)
+      var discoveries = await _engine.discoverTrending(
+        watchlistSymbols: watchlistSymbols,
+        limit: 8,
+      );
+      var strategy = 'momentum (quant screener)';
+
+      // Enrich with AI if provider available and momentum found few results
+      if (discoveries.length < 3 &&
+          aiProvider != null &&
+          aiProvider.apiKey.isNotEmpty) {
+        final aiDiscoveries = await _engine.discoverTrending(
+          watchlistSymbols: watchlistSymbols,
+          limit: 5,
+          aiProvider: aiProvider,
+        );
+        if (aiDiscoveries.isNotEmpty) {
+          discoveries = aiDiscoveries;
+          strategy = 'ai + momentum fallback';
+        }
+      }
+
+      if (discoveries.isEmpty) {
         state = state.copyWith(
           isDiscovering: false,
-          errorMessage: 'No AI provider configured for discovery. Set one in Settings.',
+          errorMessage: 'No new discoveries found. Try expanding your criteria.',
         );
         return;
       }
 
-      final client = ProviderFactory.createFromData(provider);
-      final prompt = '''You are a stock discovery analyst. Find 5 promising stocks that are under-the-radar but have strong potential in the current market.
-
-For each stock, provide:
-1. Ticker symbol
-2. Company name
-3. Why it's promising (1-2 sentences)
-4. Strategy category (one of: value, growth, momentum, dividend, turnaround)
-5. Estimated upside potential as a percentage
-
-Respond ONLY with valid JSON — no markdown:
-[
-  {
-    "symbol": "AAPL",
-    "companyName": "Apple Inc.",
-    "reason": "Strong ecosystem growth...",
-    "strategy": "growth",
-    "currentPrice": 150.00,
-    "confidence": 0.75,
-    "potentialUpside": 15.0
-  }
-]''';
-
-      final response = await client.generateText(prompt);
-      final discoveries = _parseDiscoveries(response);
-
-      if (discoveries.isNotEmpty) {
-        await discoveryRepo.clearAll();
-        await discoveryRepo.saveAll(discoveries);
-      }
+      await discoveryRepo.clearAll();
+      await discoveryRepo.saveAll(discoveries);
 
       final active = await discoveryRepo.getActive();
-      state = state.copyWith(discoveries: active, isDiscovering: false);
+      state = state.copyWith(
+        discoveries: active,
+        isDiscovering: false,
+        lastStrategy: strategy,
+      );
     } catch (e) {
       state = state.copyWith(isDiscovering: false, errorMessage: e.toString());
-    }
-  }
-
-  List<DiscoveryData> _parseDiscoveries(String raw) {
-    try {
-      String jsonStr = raw.trim();
-      if (jsonStr.startsWith('```')) {
-        final firstNewline = jsonStr.indexOf('\n');
-        if (firstNewline != -1) jsonStr = jsonStr.substring(firstNewline + 1);
-        if (jsonStr.endsWith('```')) jsonStr = jsonStr.substring(0, jsonStr.length - 3);
-        jsonStr = jsonStr.trim();
-      }
-      final list = jsonDecode(jsonStr) as List<dynamic>;
-      return list.map((item) {
-        final m = item as Map<String, dynamic>;
-        return DiscoveryData(
-          id: 0,
-          symbol: (m['symbol'] as String).toUpperCase(),
-          companyName: m['companyName'] as String? ?? '',
-          reason: m['reason'] as String? ?? 'AI discovered opportunity',
-          strategy: m['strategy'] as String? ?? 'ai',
-          currentPrice: (m['currentPrice'] as num?)?.toDouble() ?? 100.0,
-          confidence: (m['confidence'] as num?)?.toDouble() ?? 0.5,
-          discoveredAt: DateTime.now(),
-          isPromoted: false,
-          isDismissed: false,
-          potentialUpside: (m['potentialUpside'] as num?)?.toDouble(),
-        );
-      }).toList();
-    } catch (_) {
-      return [];
     }
   }
 
@@ -155,10 +139,10 @@ Respond ONLY with valid JSON — no markdown:
 
 final discoveryViewModelProvider =
     StateNotifierProvider<DiscoveryViewModel, DiscoveryState>((ref) {
-  final discoveryRepo = ref.watch(discoveryRepositoryProvider);
-  final providerRepo = ref.watch(providerRepositoryProvider);
   return DiscoveryViewModel(
-    discoveryRepo: discoveryRepo,
-    providerRepo: providerRepo,
+    discoveryRepo: ref.watch(discoveryRepositoryProvider),
+    providerRepo: ref.watch(providerRepositoryProvider),
+    watchlistRepo: ref.watch(watchlistRepositoryProvider),
+    db: ref.watch(databaseProvider),
   );
 });

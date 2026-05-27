@@ -1,10 +1,10 @@
-import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/database/app_database.dart';
+import '../../data/datasources/local/database_datasource.dart';
 import '../../data/repositories/analysis_repository.dart';
 import '../../data/repositories/provider_repository.dart';
-import '../../data/datasources/remote/yahoo_finance_client.dart';
-import '../../data/datasources/remote/provider_factory.dart';
+import '../../engine/analysis_pipeline.dart';
+import '../../engine/position_sizing.dart';
 import '../../models/stage_assignment.dart';
 
 class AnalysisState {
@@ -14,6 +14,8 @@ class AnalysisState {
     this.isLoading = false,
     this.isAnalyzing = false,
     this.errorMessage,
+    this.lastPipelineStage,
+    this.positionSizing,
   });
 
   final AnalysisResultData? currentAnalysis;
@@ -21,6 +23,8 @@ class AnalysisState {
   final bool isLoading;
   final bool isAnalyzing;
   final String? errorMessage;
+  final String? lastPipelineStage;
+  final Map<String, dynamic>? positionSizing;
 
   AnalysisState copyWith({
     AnalysisResultData? currentAnalysis,
@@ -28,8 +32,11 @@ class AnalysisState {
     bool? isLoading,
     bool? isAnalyzing,
     String? errorMessage,
+    String? lastPipelineStage,
+    Map<String, dynamic>? positionSizing,
     bool clearError = false,
     bool clearCurrent = false,
+    bool clearPositionSizing = false,
   }) {
     return AnalysisState(
       currentAnalysis:
@@ -39,6 +46,10 @@ class AnalysisState {
       isAnalyzing: isAnalyzing ?? this.isAnalyzing,
       errorMessage:
           clearError ? null : (errorMessage ?? this.errorMessage),
+      lastPipelineStage: lastPipelineStage ?? this.lastPipelineStage,
+      positionSizing: clearPositionSizing
+          ? null
+          : (positionSizing ?? this.positionSizing),
     );
   }
 }
@@ -47,162 +58,83 @@ class AnalysisViewModel extends StateNotifier<AnalysisState> {
   AnalysisViewModel({
     required this.analysisRepo,
     required this.providerRepo,
+    required this.db,
   }) : super(const AnalysisState()) {
-    _yahooClient = YahooFinanceClient();
+    _pipeline = AnalysisPipeline(db: db, providerRepo: providerRepo);
   }
 
   final AnalysisRepository analysisRepo;
   final ProviderRepository providerRepo;
-  late final YahooFinanceClient _yahooClient;
+  final AppDatabase db;
+  late final AnalysisPipeline _pipeline;
 
-  String _newsPrompt(String symbol) =>
-      'Find the 3-5 most recent and impactful news headlines about $symbol stock. '
-      'For each, include the date and a one-sentence summary. '
-      'Focus on news that could move the stock price this week.';
-
-  String _analysisPrompt(
-    String symbol,
-    double price,
-    String timeframe,
-    String news,
-  ) =>
-      '''You are an expert stock market analyst. Analyze $symbol at \$${price.toStringAsFixed(2)} for a $timeframe outlook.
-
-Recent news:
-$news
-
-Using your knowledge of the company, technical analysis, sector trends, and the news above, provide a $timeframe price prediction.
-
-Respond ONLY with valid JSON — no markdown, no extra text:
-{
-  "predictedPrice": number,
-  "confidence": number (0.0 to 1.0),
-  "recommendation": "BUY" or "SELL" or "HOLD",
-  "reasoning": "2-3 paragraph analysis explaining your prediction"
-}''';
-
-  Future<void> analyzeStock(String symbol,
-      {String timeframe = 'daily'}) async {
-    state = state.copyWith(isAnalyzing: true, clearError: true, clearCurrent: true);
+  Future<void> analyzeStock(String symbol, {String timeframe = 'daily'}) async {
+    state = state.copyWith(
+      isAnalyzing: true,
+      clearError: true,
+      clearCurrent: true,
+      lastPipelineStage: 'Stage 1: Quant Screen',
+    );
 
     try {
-      final quote = await _yahooClient.getStockQuote(symbol);
-      final currentPrice = (quote['currentPrice'] as num).toDouble();
-
-      String? newsSummary;
       final newsProvider = await providerRepo.getByStage(AnalysisStage.newsResearch);
-      if (newsProvider == null) {
+      if (newsProvider == null || newsProvider.apiKey.isEmpty) {
         state = state.copyWith(
           isAnalyzing: false,
           errorMessage:
-              'No provider assigned for newsResearch. Set one in Settings.',
-        );
-        return;
-      }
-      if (newsProvider.apiKey.isEmpty) {
-        state = state.copyWith(
-          isAnalyzing: false,
-          errorMessage:
-              '${newsProvider.name} has no API key. Add one in Settings.',
+              'No provider assigned for newsResearch (Stage 2). Set one in Settings.',
         );
         return;
       }
 
-      try {
-        final newsClient = ProviderFactory.createFromData(newsProvider);
-        newsSummary = await newsClient.generateText(_newsPrompt(symbol));
-      } catch (e) {
-        newsSummary = 'News research unavailable: ${e.toString().split('\n').first}';
-      }
-
-      final analysisProvider =
+      final synthesisProvider =
           await providerRepo.getByStage(AnalysisStage.finalAnalysis);
-      if (analysisProvider == null) {
+      if (synthesisProvider == null || synthesisProvider.apiKey.isEmpty) {
         state = state.copyWith(
           isAnalyzing: false,
           errorMessage:
-              'No provider assigned for finalAnalysis. Set one in Settings.',
-        );
-        return;
-      }
-      if (analysisProvider.apiKey.isEmpty) {
-        state = state.copyWith(
-          isAnalyzing: false,
-          errorMessage:
-              '${analysisProvider.name} has no API key. Add one in Settings.',
+              'No provider assigned for finalAnalysis (Stage 3). Set one in Settings.',
         );
         return;
       }
 
-      final analysisClient = ProviderFactory.createFromData(analysisProvider);
-      final rawResponse = await analysisClient.generateText(
-        _analysisPrompt(symbol, currentPrice, timeframe, newsSummary),
-      );
+      state = state.copyWith(lastPipelineStage: 'Stage 2: News & Intelligence');
+      final result = await _pipeline.analyzeSingle(symbol, strategy: 'balanced');
+      state = state.copyWith(lastPipelineStage: 'Stage 3: Research Synthesis');
 
-      final parsed = _parseAnalysisResponse(rawResponse, currentPrice);
-
-      final result = AnalysisResultData(
-        id: 0,
-        symbol: symbol.toUpperCase(),
-        predictedPrice: parsed['predictedPrice'] as double,
-        confidence: parsed['confidence'] as double,
-        recommendation: parsed['recommendation'] as String,
-        reasoning: parsed['reasoning'] as String,
-        newsSummary: newsSummary,
-        timeframe: timeframe,
-        currentPrice: currentPrice,
-        createdAt: DateTime.now(),
-      );
-
-      final saved = await analysisRepo.save(result);
+      final saved = await analysisRepo.saveFromPipeline(result, timeframe: timeframe);
       await loadHistory();
+
+      Map<String, dynamic>? sizing;
+      try {
+        final positions = await db.select(db.portfolioPositions).get();
+        final portfolioValue = positions.fold<double>(
+          0,
+          (s, p) => s + p.shares * p.currentPrice,
+        );
+        if (portfolioValue > 0) {
+          sizing = await PositionSizer().recommend(
+            ticker: saved.symbol,
+            portfolioValue: portfolioValue,
+            confidence: saved.confidence,
+            signal: saved.signal,
+            existingTickers: positions.map((p) => p.symbol).toList(),
+          );
+        }
+      } catch (_) {}
 
       state = state.copyWith(
         currentAnalysis: saved,
         isAnalyzing: false,
+        lastPipelineStage: 'Complete',
+        positionSizing: sizing,
       );
     } catch (e) {
       state = state.copyWith(
         isAnalyzing: false,
         errorMessage: e.toString(),
+        lastPipelineStage: 'Failed',
       );
-    }
-  }
-
-  Map<String, dynamic> _parseAnalysisResponse(String raw, double fallbackPrice) {
-    try {
-      String jsonStr = raw.trim();
-      if (jsonStr.startsWith('```')) {
-        final firstNewline = jsonStr.indexOf('\n');
-        if (firstNewline != -1) {
-          jsonStr = jsonStr.substring(firstNewline + 1);
-        }
-        if (jsonStr.endsWith('```')) {
-          jsonStr = jsonStr.substring(0, jsonStr.length - 3);
-        }
-        jsonStr = jsonStr.trim();
-      }
-
-      final startBrace = jsonStr.indexOf('{');
-      final endBrace = jsonStr.lastIndexOf('}');
-      if (startBrace != -1 && endBrace != -1 && endBrace > startBrace) {
-        jsonStr = jsonStr.substring(startBrace, endBrace + 1);
-      }
-
-      final map = jsonDecode(jsonStr) as Map<String, dynamic>;
-      return {
-        'predictedPrice': (map['predictedPrice'] as num?)?.toDouble() ?? fallbackPrice,
-        'confidence': (map['confidence'] as num?)?.toDouble() ?? 0.5,
-        'recommendation': map['recommendation'] as String? ?? 'HOLD',
-        'reasoning': map['reasoning'] as String? ?? 'Analysis parsing failed.',
-      };
-    } catch (_) {
-      return {
-        'predictedPrice': fallbackPrice,
-        'confidence': 0.5,
-        'recommendation': 'HOLD',
-        'reasoning': 'Analysis parsing failed.',
-      };
     }
   }
 
@@ -230,8 +162,10 @@ final analysisViewModelProvider =
     StateNotifierProvider<AnalysisViewModel, AnalysisState>((ref) {
   final analysisRepo = ref.watch(analysisRepositoryProvider);
   final providerRepo = ref.watch(providerRepositoryProvider);
+  final db = ref.watch(databaseProvider);
   return AnalysisViewModel(
     analysisRepo: analysisRepo,
     providerRepo: providerRepo,
+    db: db,
   );
 });

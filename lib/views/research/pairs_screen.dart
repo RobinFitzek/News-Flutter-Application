@@ -1,111 +1,135 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../data/datasources/remote/yahoo_finance_client.dart';
+
+import '../../config/stockholm_colors.dart';
+import '../../engine/pairs_trader.dart';
+import '../../widgets/glass_card.dart';
 import '../../widgets/shimmer_loading.dart';
 
-class PairsViewModel {
-  final YahooFinanceClient _client;
-  PairsViewModel() : _client = YahooFinanceClient();
-  bool isLoading = false;
-  List<Map<String, dynamic>> pairs = [];
-  String? error;
-
-  static const _commonPairs = [
-    ('KO', 'PEP', 'Consumer Staples'),
-    ('JPM', 'BAC', 'Big Banks'),
-    ('XOM', 'CVX', 'Oil Majors'),
-    ('HD', 'LOW', 'Home Improvement'),
-    ('PFE', 'MRK', 'Pharma'),
-    ('MA', 'V', 'Payments'),
-    ('CAT', 'DE', 'Industrial'),
-    ('NEE', 'DUK', 'Utilities'),
-  ];
-
-  Future<void> load() async {
-    isLoading = true;
-    error = null;
-    pairs = [];
-
-    for (final pair in _commonPairs) {
-      try {
-        final q1 = await _client.getStockQuote(pair.$1);
-        final q2 = await _client.getStockQuote(pair.$2);
-        final c1 = q1['changePercent'] as double;
-        final c2 = q2['changePercent'] as double;
-        final spread = (c1 - c2).abs();
-        pairs.add({
-          'symbol1': pair.$1,
-          'symbol2': pair.$2,
-          'sector': pair.$3,
-          'change1': c1,
-          'change2': c2,
-          'spread': spread,
-          'signal': spread > 2 ? (c1 > c2 ? 'LONG ${pair.$2} / SHORT ${pair.$1}' : 'LONG ${pair.$1} / SHORT ${pair.$2}') : 'No signal',
-          'price1': q1['currentPrice'],
-          'price2': q2['currentPrice'],
-        });
-      } catch (_) {}
-    }
-    pairs.sort((a, b) => (b['spread'] as double).compareTo(a['spread'] as double));
-    isLoading = false;
-  }
-}
-
-class PairsScreen extends ConsumerStatefulWidget {
+class PairsScreen extends StatefulWidget {
   const PairsScreen({super.key});
 
   @override
-  ConsumerState<PairsScreen> createState() => _PairsScreenState();
+  State<PairsScreen> createState() => _PairsScreenState();
 }
 
-class _PairsScreenState extends ConsumerState<PairsScreen> {
-  final _vm = PairsViewModel();
-  bool _loaded = false;
+class _PairsScreenState extends State<PairsScreen> {
+  final _engine = PairsTrader();
+  List<Map<String, dynamic>> _pairs = [];
+  bool _loading = true;
+  String? _error;
 
   @override
   void initState() {
     super.initState();
-    Future.microtask(() async { await _vm.load(); if (mounted) setState(() => _loaded = true); });
+    _load();
+  }
+
+  Future<void> _load() async {
+    setState(() { _loading = true; _error = null; });
+    try {
+      _pairs = await _engine.scanDefaultPairs();
+    } catch (e) {
+      _error = e.toString();
+    }
+    if (mounted) setState(() => _loading = false);
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!_loaded) return Scaffold(appBar: AppBar(title: const Text('Pairs Trading')), body: const ShimmerLoading(count: 4));
-
     return Scaffold(
       appBar: AppBar(title: const Text('Pairs Trading')),
-      body: RefreshIndicator(
-        onRefresh: () async { await _vm.load(); if (mounted) setState(() {}); },
-        child: ListView(padding: const EdgeInsets.all(16), children: [
-          Text('Common Pairs', style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold)),
+      body: _loading
+          ? const ShimmerLoading(count: 4)
+          : RefreshIndicator(
+              onRefresh: _load,
+              child: ListView(
+                padding: const EdgeInsets.all(16),
+                children: [
+                  if (_error != null)
+                    GlassCard(
+                      child: Text(_error!,
+                          style: const TextStyle(color: StockholmColors.signalNegative)),
+                    ),
+                  Text(
+                    'Statistical pairs — spread z-score with correlation filter',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: StockholmColors.textSecondary),
+                  ),
+                  const SizedBox(height: 12),
+                  ..._pairs.map(_pairCard),
+                ],
+              ),
+            ),
+    );
+  }
+
+  Widget _pairCard(Map<String, dynamic> p) {
+    if (p.containsKey('error')) {
+      return GlassCard(
+        margin: const EdgeInsets.only(bottom: 8),
+        child: Text('${p['ticker_a']}/${p['ticker_b']}: ${p['error']}'),
+      );
+    }
+
+    final z = (p['current_zscore'] as num?)?.toDouble() ?? 0;
+    final signal = p['signal']?.toString() ?? 'hold';
+    final active = signal == 'long_spread' || signal == 'short_spread';
+    final color = active ? StockholmColors.signalWarning : StockholmColors.textMuted;
+
+    return GlassCard(
+      margin: const EdgeInsets.only(bottom: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text('${p['ticker_a']} / ${p['ticker_b']}',
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
+              const Spacer(),
+              Text(p['sector']?.toString() ?? '',
+                  style: const TextStyle(
+                      fontSize: 11, color: StockholmColors.textSecondary)),
+            ],
+          ),
           const SizedBox(height: 8),
-          ..._vm.pairs.map((p) {
-            final spread = p['spread'] as double;
-            final signal = p['signal'] as String;
-            final hasSignal = spread > 2;
-            return Card(
-              margin: const EdgeInsets.only(bottom: 8),
-              child: Padding(padding: const EdgeInsets.all(16), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  Text('${p['symbol1']} / ${p['symbol2']}', style: const TextStyle(fontWeight: FontWeight.bold)),
-                  Container(padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2), decoration: BoxDecoration(color: Theme.of(context).colorScheme.surfaceContainerHighest, borderRadius: BorderRadius.circular(4)), child: Text(p['sector'] as String, style: const TextStyle(fontSize: 11))),
-                ]),
-                const SizedBox(height: 8),
-                Row(children: [
-                  Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Text('${p['symbol1']}: \$${(p['price1'] as double).toStringAsFixed(2)}', style: const TextStyle(fontSize: 13)),
-                    Text('${p['symbol2']}: \$${(p['price2'] as double).toStringAsFixed(2)}', style: const TextStyle(fontSize: 13)),
-                  ]),
-                  const Spacer(),
-                  Text('Spread: ${spread.toStringAsFixed(2)}%', style: TextStyle(color: hasSignal ? Colors.orange : Colors.grey, fontWeight: FontWeight.w600)),
-                ]),
-                const SizedBox(height: 4),
-                Text(signal, style: TextStyle(fontSize: 12, color: hasSignal ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurfaceVariant)),
-              ])),
-            );
-          }),
-        ]),
+          _row('Z-Score', z.toStringAsFixed(2), color: color),
+          _row('Correlation', '${p['correlation']}'),
+          _row('Hedge ratio', '${p['hedge_ratio']}'),
+          _row('Cointegrated proxy', p['cointegrated'] == true ? 'Yes' : 'No'),
+          const SizedBox(height: 6),
+          Text(_signalLabel(signal),
+              style: TextStyle(
+                  color: color, fontWeight: FontWeight.w600, fontSize: 12)),
+        ],
       ),
     );
   }
+
+  String _signalLabel(String signal) {
+    switch (signal) {
+      case 'long_spread':
+        return 'Signal: LONG spread (buy A / sell B)';
+      case 'short_spread':
+        return 'Signal: SHORT spread (sell A / buy B)';
+      case 'exit':
+        return 'Signal: EXIT — spread normalized';
+      default:
+        return 'Signal: HOLD';
+    }
+  }
+
+  Widget _row(String k, String v, {Color? color}) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(k, style: const TextStyle(fontSize: 13)),
+            Text(v,
+                style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 13,
+                    color: color)),
+          ],
+        ),
+      );
 }

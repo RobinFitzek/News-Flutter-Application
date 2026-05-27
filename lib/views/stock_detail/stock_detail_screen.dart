@@ -8,6 +8,7 @@ import 'tabs/financials_tab.dart';
 import 'tabs/earnings_tab.dart';
 import 'tabs/insider_tab.dart';
 import 'tabs/institutions_tab.dart';
+import 'tabs/research_tab.dart';
 import '../research/corporate_actions_screen.dart';
 
 class StockDetailScreen extends ConsumerStatefulWidget {
@@ -26,7 +27,7 @@ class _StockDetailScreenState extends ConsumerState<StockDetailScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 6, vsync: this);
+    _tabController = TabController(length: 7, vsync: this);
     Future.microtask(() {
       ref
           .read(stockDetailViewModelProvider(widget.symbol).notifier)
@@ -70,6 +71,7 @@ class _StockDetailScreenState extends ConsumerState<StockDetailScreen>
             Tab(text: 'Earnings'),
             Tab(text: 'Insider'),
             Tab(text: 'Institutions'),
+            Tab(text: 'Research'),
             Tab(text: 'Actions'),
           ],
         ),
@@ -93,6 +95,7 @@ class _StockDetailScreenState extends ConsumerState<StockDetailScreen>
                       .loadChart(range: range),
                 ),
                 FinancialsTab(
+                  symbol: widget.symbol,
                   ratios: state.financialRatios,
                   isLoading: state.isLoadingDetails,
                 ),
@@ -106,6 +109,16 @@ class _StockDetailScreenState extends ConsumerState<StockDetailScreen>
                 ),
                 InstitutionsTab(
                   holders: state.institutionalHolders,
+                  isLoading: state.isLoadingDetails,
+                ),
+                ResearchTab(
+                  symbol: widget.symbol,
+                  shortData: state.shortData,
+                  squeezeSetup: state.squeezeSetup,
+                  darkPoolSignals: state.darkPoolSignals,
+                  moatData: state.moatData,
+                  sentimentData: state.sentimentData,
+                  supplyChain: state.supplyChain,
                   isLoading: state.isLoadingDetails,
                 ),
                 CorporateActionsScreen(

@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/datasources/remote/yahoo_finance_client.dart';
+import '../../engine/rs_ranking.dart';
+import '../../config/stockholm_colors.dart';
+import '../../widgets/glass_card.dart';
 import '../../widgets/shimmer_loading.dart';
-import 'dart:math';
 
 class ComparisonViewModel {
   final YahooFinanceClient _client = YahooFinanceClient();
+  final RsRanking _rs = RsRanking();
   bool isLoading = false;
   Map<String, Map<String, dynamic>> data = {};
+  List<Map<String, dynamic>> rsRanking = [];
   String? error;
 
   Future<void> load(List<String> symbols) async {
     isLoading = true;
     error = null;
     data = {};
+    rsRanking = await _rs.rankSymbols(symbols);
     for (final s in symbols) {
       try {
         final q = await _client.getStockQuote(s);
@@ -75,27 +80,76 @@ class _ComparisonScreenState extends ConsumerState<ComparisonScreen> {
           ElevatedButton(onPressed: _load, child: const Text('Compare')),
         ])),
         Expanded(
-          child: !_loaded ? const ShimmerLoading(count: 4) : _vm.error != null ? Center(child: Text(_vm.error!)) : _vm.data.isEmpty ? const Center(child: Text('Enter symbols to compare')) :
-          SingleChildScrollView(scrollDirection: Axis.horizontal, child: DataTable(columns: [
-            const DataColumn(label: Text('Metric')),
-            ..._symbols.map((s) => DataColumn(label: Text(_vm.data[s]?['symbol'] ?? s))),
-          ], rows: [
-            _row('Price', (d) => '\$${(d?['price'] as double?)?.toStringAsFixed(2) ?? '--'}'),
-            _row('Change', (d) {
-              final c = d?['change'];
-              return c != null ? '${(c as double) >= 0 ? '+' : ''}${c.toStringAsFixed(2)}%' : '--';
-            }),
-            _row('Market Cap', (d) {
-              final mc = d?['marketCap'];
-              return mc != null ? '\$${(mc / 1e9).toStringAsFixed(1)}B' : '--';
-            }),
-            _row('P/E Ratio', (d) => d?['pe']?.toString() ?? '--'),
-            _row('Beta', (d) => d?['beta']?.toString() ?? '--'),
-            _row('Dividend', (d) {
-              final div = d?['dividend'];
-              return div != null ? '${(div * 100).toStringAsFixed(2)}%' : '--';
-            }),
-          ])),
+          child: !_loaded
+              ? const ShimmerLoading(count: 4)
+              : _vm.error != null
+                  ? Center(child: Text(_vm.error!))
+                  : _vm.data.isEmpty
+                      ? const Center(child: Text('Enter symbols to compare'))
+                      : ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+              if (_vm.rsRanking.isNotEmpty) ...[
+                Text('Relative Strength vs SPY (6M)',
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: StockholmColors.signalNeutral,
+                        )),
+                const SizedBox(height: 8),
+                ..._vm.rsRanking.map((r) => GlassCard(
+                      margin: const EdgeInsets.only(bottom: 6),
+                      child: ListTile(
+                        dense: true,
+                        title: Text('#${r['rank']} ${r['symbol']}'),
+                        trailing: Text(
+                          '${r['relative_strength']}% RS',
+                          style: TextStyle(
+                            color: r['outperforming'] == true
+                                ? StockholmColors.signalPositive
+                                : StockholmColors.signalNegative,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    )),
+                const SizedBox(height: 16),
+              ],
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: DataTable(
+                  columns: [
+                    const DataColumn(label: Text('Metric')),
+                    ..._symbols.map((s) =>
+                        DataColumn(label: Text(_vm.data[s]?['symbol'] ?? s))),
+                  ],
+                  rows: [
+                    _row('Price', (d) =>
+                        '\$${(d?['price'] as double?)?.toStringAsFixed(2) ?? '--'}'),
+                    _row('Change', (d) {
+                      final c = d?['change'];
+                      return c != null
+                          ? '${(c as double) >= 0 ? '+' : ''}${c.toStringAsFixed(2)}%'
+                          : '--';
+                    }),
+                    _row('Market Cap', (d) {
+                      final mc = d?['marketCap'];
+                      return mc != null
+                          ? '\$${(mc / 1e9).toStringAsFixed(1)}B'
+                          : '--';
+                    }),
+                    _row('P/E Ratio', (d) => d?['pe']?.toString() ?? '--'),
+                    _row('Beta', (d) => d?['beta']?.toString() ?? '--'),
+                    _row('Dividend', (d) {
+                      final div = d?['dividend'];
+                      return div != null
+                          ? '${(div * 100).toStringAsFixed(2)}%'
+                          : '--';
+                    }),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ]),
     );

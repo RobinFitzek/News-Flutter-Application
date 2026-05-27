@@ -218,4 +218,39 @@ class BacktestEngine {
       'symbols': trades.map((t) => t['symbol'] as String).toSet().join(','),
     };
   }
+
+  /// Random-entry baseline for significance comparison — mirrors server random-baseline.
+  Future<Map<String, dynamic>> runRandomBaseline({
+    required List<String> symbols,
+    required double initialCapital,
+    required int startDaysAgo,
+    int iterations = 50,
+  }) async {
+    final rng = Random();
+    final returns = <double>[];
+    for (var i = 0; i < iterations; i++) {
+      final shuffled = List<String>.from(symbols)..shuffle(rng);
+      try {
+        final result = await run(
+          symbols: shuffled.take(min(3, shuffled.length)).toList(),
+          strategy: 'buy_and_hold',
+          initialCapital: initialCapital,
+          startDaysAgo: startDaysAgo,
+        );
+        returns.add(result['totalReturnPercent'] as double);
+      } catch (_) {}
+    }
+    if (returns.isEmpty) {
+      return {'error': 'Could not compute random baseline'};
+    }
+    returns.sort();
+    final mean = returns.reduce((a, b) => a + b) / returns.length;
+    return {
+      'iterations': returns.length,
+      'mean_return_pct': double.parse(mean.toStringAsFixed(2)),
+      'median_return_pct': returns[returns.length ~/ 2],
+      'min_return_pct': returns.first,
+      'max_return_pct': returns.last,
+    };
+  }
 }

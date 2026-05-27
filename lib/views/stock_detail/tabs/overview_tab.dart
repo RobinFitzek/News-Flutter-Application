@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
 import '../../../data/database/app_database.dart';
 import '../../../widgets/error_retry_widget.dart';
+import '../widgets/technical_intel_section.dart';
 import '../../../data/repositories/watchlist_repository.dart';
 
 class OverviewTab extends ConsumerWidget {
@@ -56,6 +57,8 @@ class OverviewTab extends ConsumerWidget {
             _buildChartCard(context),
             const SizedBox(height: 16),
             _buildKeyStatsCard(context),
+            const SizedBox(height: 16),
+            TechnicalIntelSection(symbol: symbol),
             const SizedBox(height: 16),
             _buildStockNotes(context, ref),
             const SizedBox(height: 16),

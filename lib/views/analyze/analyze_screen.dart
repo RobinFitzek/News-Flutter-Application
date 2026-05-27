@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../viewmodels/analysis_viewmodel.dart';
 import '../../config/theme.dart';
+import '../../config/stockholm_colors.dart';
+import '../../widgets/glass_card.dart';
 
 class AnalyzeScreen extends ConsumerStatefulWidget {
   const AnalyzeScreen({super.key, this.initialSymbol});
@@ -75,14 +77,19 @@ class _AnalyzeScreenState extends ConsumerState<AnalyzeScreen> {
             ),
             const SizedBox(height: 16),
             if (state.isAnalyzing)
-              const Card(
+              Card(
                 child: Padding(
-                  padding: EdgeInsets.all(32),
+                  padding: const EdgeInsets.all(32),
                   child: Column(
                     children: [
-                      CircularProgressIndicator(),
-                      SizedBox(height: 16),
-                      Text('AI is analyzing...'),
+                      const CircularProgressIndicator(),
+                      const SizedBox(height: 16),
+                      Text(state.lastPipelineStage ?? 'Analyzing...'),
+                      const SizedBox(height: 8),
+                      const Text(
+                        '3-Stage Pipeline: Quant → News → Synthesis',
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
                     ],
                   ),
                 ),
@@ -107,6 +114,32 @@ class _AnalyzeScreenState extends ConsumerState<AnalyzeScreen> {
                 analysis: state.currentAnalysis!,
                 gainLossColor: (c) => _gainLossColor(context, c),
               ),
+              if (state.positionSizing != null) ...[
+                const SizedBox(height: 12),
+                GlassCard(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Position Sizing Recommendation',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(fontWeight: FontWeight.bold)),
+                        const SizedBox(height: 8),
+                        Text(
+                          '${state.positionSizing!['recommended_pct']}% of portfolio '
+                          '(\$${state.positionSizing!['recommended_usd']})',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: StockholmColors.signalPositive),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ],
             const SizedBox(height: 24),
             _buildSectionHeader(context, 'Research Tools'),
@@ -118,10 +151,12 @@ class _AnalyzeScreenState extends ConsumerState<AnalyzeScreen> {
                 children: <Widget>[
               _ResearchToolChip(icon: Icons.person_search, label: 'Insider', onTap: () => context.push('/research/insider')),
               _ResearchToolChip(icon: Icons.water_drop, label: 'Dark Pool', onTap: () => context.push('/research/darkpool')),
+              _ResearchToolChip(icon: Icons.savings, label: 'Graham', onTap: () => context.push('/research/graham')),
               _ResearchToolChip(icon: Icons.public, label: 'Macro', onTap: () => context.push('/research/macro')),
               _ResearchToolChip(icon: Icons.compare_arrows, label: 'Pairs', onTap: () => context.push('/research/pairs')),
               _ResearchToolChip(icon: Icons.call_split, label: 'Options', onTap: () => context.push('/research/options')),
               _ResearchToolChip(icon: Icons.people, label: 'Institutions', onTap: () => context.push('/research/institutions')),
+              _ResearchToolChip(icon: Icons.warning_amber, label: 'Scenarios', onTap: () => context.push('/scenarios')),
             ],
               ),
             ),

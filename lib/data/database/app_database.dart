@@ -40,6 +40,8 @@ class WatchlistItems extends Table {
   RealColumn get lastPrice => real().named('last_price').nullable()();
   RealColumn get lastPriceChange =>
       real().named('last_price_change').nullable()();
+  DateTimeColumn get lastScannedAt =>
+      dateTime().named('last_scanned_at').nullable()();
 }
 
 @TableIndex(name: 'idx_cache_symbol', columns: {#symbol}, unique: true)
@@ -91,13 +93,26 @@ class StageAssignments extends Table {
 class AnalysisResults extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get symbol => text().withLength(min: 1, max: 10)();
-  RealColumn get predictedPrice => real()();
-  RealColumn get confidence => real()();
-  TextColumn get recommendation => text()();
-  TextColumn get reasoning => text()();
+  RealColumn get predictedPrice => real().withDefault(const Constant(0.0))();
+  RealColumn get confidence => real().withDefault(const Constant(0.5))();
+  TextColumn get recommendation => text().withDefault(const Constant(''))();
+  TextColumn get reasoning => text().withDefault(const Constant(''))();
   TextColumn get newsSummary => text().withDefault(const Constant(''))();
   TextColumn get timeframe => text().withDefault(const Constant('daily'))();
-  RealColumn get currentPrice => real()();
+  RealColumn get currentPrice => real().withDefault(const Constant(0.0))();
+  // Extended fields matching server analysis_history
+  TextColumn get signal => text().withDefault(const Constant('Neutral'))();
+  IntColumn get riskScore => integer().withDefault(const Constant(5))();
+  IntColumn get geoRiskScore => integer().nullable()();
+  IntColumn get quantScore => integer().nullable()();
+  TextColumn get bullCase => text().withDefault(const Constant(''))();
+  TextColumn get bearCase => text().withDefault(const Constant(''))();
+  TextColumn get sources => text().withDefault(const Constant(''))();
+  TextColumn get fundamental => text().withDefault(const Constant(''))();
+  TextColumn get technical => text().withDefault(const Constant(''))();
+  TextColumn get geopoliticalContext => text().nullable()();
+  TextColumn get stage1Reason => text().withDefault(const Constant(''))();
+  TextColumn get quantMetricsJson => text().withDefault(const Constant(''))();
   DateTimeColumn get createdAt =>
       dateTime().withDefault(currentDateAndTime)();
 }
@@ -235,6 +250,85 @@ class Discoveries extends Table {
   BoolColumn get isPromoted => boolean().withDefault(const Constant(false))();
   BoolColumn get isDismissed => boolean().withDefault(const Constant(false))();
   RealColumn get potentialUpside => real().nullable()();
+  DateTimeColumn get promotedAt =>
+      dateTime().named('promoted_at').nullable()();
+}
+
+@TableIndex(name: 'idx_discovery_outcome_id', columns: {#discoveryId}, unique: true)
+@DataClassName('DiscoveryOutcomeData')
+class DiscoveryOutcomes extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get discoveryId => integer().named('discovery_id')();
+  TextColumn get symbol => text().withLength(min: 1, max: 10)();
+  DateTimeColumn get promotedAt => dateTime().named('promoted_at')();
+  RealColumn get promotedPrice => real().named('promoted_price')();
+  RealColumn get price30d => real().named('price_30d').nullable()();
+  RealColumn get price60d => real().named('price_60d').nullable()();
+  RealColumn get price90d => real().named('price_90d').nullable()();
+  RealColumn get return30d => real().named('return_30d').nullable()();
+  RealColumn get return60d => real().named('return_60d').nullable()();
+  RealColumn get return90d => real().named('return_90d').nullable()();
+  TextColumn get strategy => text().withDefault(const Constant('ai'))();
+  DateTimeColumn get updatedAt =>
+      dateTime().named('updated_at').withDefault(currentDateAndTime)();
+}
+
+@DataClassName('WeightVersionData')
+class WeightVersions extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  DateTimeColumn get timestamp => dateTime().withDefault(currentDateAndTime)();
+  TextColumn get oldWeights => text().named('old_weights')();
+  TextColumn get newWeights => text().named('new_weights')();
+  TextColumn get reason => text().nullable()();
+  TextColumn get trigger => text()();
+  RealColumn get accuracyBefore => real().named('accuracy_before').nullable()();
+  RealColumn get accuracyAfter => real().named('accuracy_after').nullable()();
+}
+
+@DataClassName('McptResultData')
+class McptResults extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get testType => text().named('test_type')();
+  DateTimeColumn get runDate => dateTime().named('run_date')();
+  RealColumn get pValue => real().named('p_value').nullable()();
+  RealColumn get actualMetric => real().named('actual_metric').nullable()();
+  RealColumn get permutedMean => real().named('permuted_mean').nullable()();
+  RealColumn get permutedStd => real().named('permuted_std').nullable()();
+  IntColumn get nPermutations => integer().named('n_permutations').nullable()();
+  IntColumn get nSignals => integer().named('n_signals').nullable()();
+  BoolColumn get significant => boolean().nullable()();
+  TextColumn get details => text().withDefault(const Constant(''))();
+}
+
+@TableIndex(name: 'idx_price_alert_symbol', columns: {#symbol})
+@DataClassName('PriceAlertData')
+class PriceAlerts extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get symbol => text().withLength(min: 1, max: 10)();
+  RealColumn get targetPrice => real().named('target_price')();
+  TextColumn get direction =>
+      text().withDefault(const Constant('above'))();
+  BoolColumn get isActive => boolean().withDefault(const Constant(true))();
+  BoolColumn get triggered => boolean().withDefault(const Constant(false))();
+  DateTimeColumn get createdAt =>
+      dateTime().named('created_at').withDefault(currentDateAndTime)();
+  DateTimeColumn get triggeredAt =>
+      dateTime().named('triggered_at').nullable()();
+}
+
+@TableIndex(
+  name: 'idx_financial_cache_unique',
+  columns: {#symbol, #dataType},
+  unique: true,
+)
+@DataClassName('FinancialCacheData')
+class FinancialCache extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get symbol => text().withLength(min: 1, max: 10)();
+  TextColumn get dataType => text().named('data_type')();
+  TextColumn get dataJson => text().named('data_json')();
+  DateTimeColumn get fetchedAt =>
+      dateTime().named('fetched_at').withDefault(currentDateAndTime)();
 }
 
 @DataClassName('BacktestResultData')
@@ -286,6 +380,176 @@ class WatchlistGroups extends Table {
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
 }
 
+@DataClassName('AppSettingData')
+class AppSettings extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get key => text().unique()();
+  TextColumn get value => text()();
+}
+
+@TableIndex(name: 'idx_api_cost_month', columns: {#month, #api})
+@DataClassName('ApiCostLogData')
+class ApiCostLog extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get api => text()();
+  TextColumn get model => text()();
+  IntColumn get inputTokens => integer().withDefault(const Constant(0))();
+  IntColumn get outputTokens => integer().withDefault(const Constant(0))();
+  RealColumn get costUsd => real()();
+  TextColumn get month => text()();
+  TextColumn get day => text()();
+  TextColumn get ticker => text().nullable()();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+}
+
+@DataClassName('GeopoliticalEventData')
+class GeopoliticalEvents extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get severity => integer().withDefault(const Constant(5))();
+  TextColumn get summary => text()();
+  TextColumn get rawSummary => text().withDefault(const Constant(''))();
+  DateTimeColumn get scannedAt => dateTime().withDefault(currentDateAndTime)();
+}
+
+@TableIndex(name: 'idx_auto_trade_ticker', columns: {#ticker})
+@TableIndex(name: 'idx_auto_trade_status', columns: {#status})
+@DataClassName('AutoPaperTradeData')
+class AutoPaperTrades extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get analysisId => integer().nullable()();
+  TextColumn get ticker => text().withLength(min: 1, max: 10)();
+  TextColumn get direction => text()();
+  DateTimeColumn get entryDate => dateTime().nullable()();
+  RealColumn get entryPrice => real().nullable()();
+  DateTimeColumn get exitDate => dateTime().nullable()();
+  RealColumn get exitPrice => real().nullable()();
+  TextColumn get status => text().withDefault(const Constant('open'))();
+  TextColumn get closeReason => text().nullable()();
+  RealColumn get pnlPct => real().nullable()();
+  TextColumn get blockedReason => text().nullable()();
+}
+
+@TableIndex(name: 'idx_auto_pending_token', columns: {#token}, unique: true)
+@DataClassName('AutoTradePendingData')
+class AutoTradePending extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get token => text().unique()();
+  IntColumn get analysisId => integer()();
+  TextColumn get ticker => text().withLength(min: 1, max: 10)();
+  TextColumn get direction => text()();
+  TextColumn get signal => text()();
+  IntColumn get score => integer().nullable()();
+  RealColumn get proposedEntryPrice => real()();
+  RealColumn get proposedShares => real()();
+  RealColumn get proposedSizeUsd => real()();
+  RealColumn get riskTpPrice => real()();
+  RealColumn get riskSlPrice => real()();
+  DateTimeColumn get createdAt => dateTime()();
+  DateTimeColumn get expiresAt => dateTime()();
+  TextColumn get status => text().withDefault(const Constant('pending'))();
+  DateTimeColumn get decidedAt => dateTime().nullable()();
+}
+
+@TableIndex(name: 'idx_signal_grade_symbol', columns: {#symbol})
+@TableIndex(name: 'idx_signal_grade_analysis', columns: {#analysisId})
+@DataClassName('SignalGradeData')
+class SignalGrades extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get analysisId => integer()();
+  TextColumn get symbol => text().withLength(min: 1, max: 10)();
+  TextColumn get signal => text()();
+  IntColumn get confidence => integer().withDefault(const Constant(50))();
+  IntColumn get quantScore => integer().nullable()();
+  DateTimeColumn get signalDate => dateTime()();
+  RealColumn get priceAtSignal => real().nullable()();
+  RealColumn get price30d => real().nullable()();
+  RealColumn get price60d => real().nullable()();
+  RealColumn get price90d => real().nullable()();
+  RealColumn get return30d => real().nullable()();
+  RealColumn get return60d => real().nullable()();
+  RealColumn get return90d => real().nullable()();
+  TextColumn get grade => text().withDefault(const Constant('pending'))();
+  DateTimeColumn get gradedAt => dateTime().nullable()();
+}
+
+@TableIndex(name: 'idx_ticker_sentiment_symbol', columns: {#ticker, #scoredAt})
+@DataClassName('TickerSentimentData')
+class TickerSentimentSnapshots extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get ticker => text().withLength(min: 1, max: 10)();
+  RealColumn get compoundScore => real().withDefault(const Constant(0.0))();
+  RealColumn get positive => real().withDefault(const Constant(0.0))();
+  RealColumn get neutral => real().withDefault(const Constant(1.0))();
+  RealColumn get negative => real().withDefault(const Constant(0.0))();
+  IntColumn get headlineCount => integer().withDefault(const Constant(0))();
+  DateTimeColumn get scoredAt => dateTime().withDefault(currentDateAndTime)();
+}
+
+@TableIndex(
+  name: 'idx_supply_chain_unique',
+  columns: {#ticker, #companyName, #relationshipType},
+  unique: true,
+)
+@TableIndex(name: 'idx_supply_chain_ticker', columns: {#ticker})
+@DataClassName('SupplyChainEntryData')
+class SupplyChainEntries extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get ticker => text().withLength(min: 1, max: 10)();
+  TextColumn get relatedTicker => text().nullable()();
+  TextColumn get companyName => text()();
+  TextColumn get relationshipType => text()();
+  TextColumn get description => text().nullable()();
+  DateTimeColumn get cachedAt => dateTime().withDefault(currentDateAndTime)();
+}
+
+@DataClassName('TickerGraveyardData')
+class TickerGraveyard extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get ticker => text().unique()();
+  TextColumn get lastSeen => text().nullable()();
+  TextColumn get reason => text()();
+  DateTimeColumn get addedAt => dateTime().withDefault(currentDateAndTime)();
+}
+
+@DataClassName('CashPositionData')
+class CashPositions extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  RealColumn get amount => real()();
+  TextColumn get description => text().withDefault(const Constant(''))();
+  DateTimeColumn get transactionDate =>
+      dateTime().withDefault(currentDateAndTime)();
+}
+
+@DataClassName('PortfolioAlertAckData')
+class PortfolioAlertAcks extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get alertKey => text().unique()();
+  DateTimeColumn get acknowledgedAt =>
+      dateTime().withDefault(currentDateAndTime)();
+}
+
+@TableIndex(name: 'idx_prediction_symbol', columns: {#symbol})
+@DataClassName('PredictionOutcomeData')
+class PredictionOutcomes extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get symbol => text().withLength(min: 1, max: 10)();
+  DateTimeColumn get predictionDate => dateTime().withDefault(currentDateAndTime)();
+  TextColumn get signal => text()();
+  TextColumn get predictedDirection => text().withDefault(const Constant('neutral'))();
+  IntColumn get confidence => integer().withDefault(const Constant(50))();
+  RealColumn get actualPriceAtPrediction => real()();
+  RealColumn get actualPriceAfter => real().nullable()();
+  TextColumn get actualDirection => text().nullable()();
+  RealColumn get accuracyScore => real().nullable()();
+  IntColumn get daysElapsed => integer().nullable()();
+  DateTimeColumn get verifiedAt => dateTime().nullable()();
+  TextColumn get signalType => text().withDefault(const Constant('default'))();
+  IntColumn get verificationWindowDays => integer().withDefault(const Constant(60))();
+  RealColumn get benchmarkReturn => real().nullable()();
+  BoolColumn get beatBenchmark => boolean().nullable()();
+  IntColumn get analysisId => integer().nullable()();
+}
+
 @DriftDatabase(tables: [
   UserSettings,
   ApiKeys,
@@ -306,12 +570,29 @@ class WatchlistGroups extends Table {
   BacktestResults,
   JournalEntries,
   WatchlistGroups,
+  AppSettings,
+  ApiCostLog,
+  GeopoliticalEvents,
+  PredictionOutcomes,
+  SignalGrades,
+  AutoPaperTrades,
+  AutoTradePending,
+  TickerSentimentSnapshots,
+  SupplyChainEntries,
+  DiscoveryOutcomes,
+  WeightVersions,
+  McptResults,
+  PriceAlerts,
+  FinancialCache,
+  TickerGraveyard,
+  CashPositions,
+  PortfolioAlertAcks,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 8;
+  int get schemaVersion => 17;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -394,6 +675,55 @@ class AppDatabase extends _$AppDatabase {
           }
           if (from < 8) {
             await m.createTable(watchlistGroups);
+          }
+          if (from < 9) {
+            await m.addColumn(analysisResults, analysisResults.signal);
+            await m.addColumn(analysisResults, analysisResults.riskScore);
+            await m.addColumn(analysisResults, analysisResults.geoRiskScore);
+            await m.addColumn(analysisResults, analysisResults.quantScore);
+            await m.addColumn(analysisResults, analysisResults.bullCase);
+            await m.addColumn(analysisResults, analysisResults.bearCase);
+            await m.addColumn(analysisResults, analysisResults.sources);
+            await m.addColumn(analysisResults, analysisResults.fundamental);
+            await m.addColumn(analysisResults, analysisResults.technical);
+            await m.addColumn(analysisResults, analysisResults.geopoliticalContext);
+            await m.addColumn(analysisResults, analysisResults.stage1Reason);
+            await m.addColumn(analysisResults, analysisResults.quantMetricsJson);
+            await m.createTable(appSettings);
+            await m.createTable(apiCostLog);
+            await m.createTable(geopoliticalEvents);
+          }
+          if (from < 10) {
+            await m.createTable(predictionOutcomes);
+          }
+          if (from < 11) {
+            await m.createTable(signalGrades);
+          }
+          if (from < 12) {
+            await m.createTable(autoPaperTrades);
+            await m.createTable(autoTradePending);
+          }
+          if (from < 13) {
+            await m.createTable(tickerSentimentSnapshots);
+            await m.createTable(supplyChainEntries);
+          }
+          if (from < 14) {
+            await m.addColumn(watchlistItems, watchlistItems.lastScannedAt);
+          }
+          if (from < 15) {
+            await m.addColumn(discoveries, discoveries.promotedAt);
+            await m.createTable(discoveryOutcomes);
+            await m.createTable(weightVersions);
+            await m.createTable(mcptResults);
+          }
+          if (from < 16) {
+            await m.createTable(priceAlerts);
+            await m.createTable(financialCache);
+          }
+          if (from < 17) {
+            await m.createTable(tickerGraveyard);
+            await m.createTable(cashPositions);
+            await m.createTable(portfolioAlertAcks);
           }
         },
       );

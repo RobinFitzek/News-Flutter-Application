@@ -3,6 +3,7 @@ import 'package:drift/drift.dart';
 import '../datasources/local/database_datasource.dart';
 import '../database/app_database.dart';
 import '../../engine/backtest_engine.dart';
+import '../../engine/quant_backtest_engine.dart';
 import '../../data/datasources/remote/yahoo_finance_client.dart';
 
 abstract class BacktestRepository {
@@ -43,13 +44,26 @@ class BacktestRepositoryImpl implements BacktestRepository {
     required double initialCapital,
     required int days,
   }) async {
-    final engine = BacktestEngine(yahooClient: YahooFinanceClient());
-    final result = await engine.run(
-      symbols: symbols,
-      strategy: strategy,
-      initialCapital: initialCapital,
-      startDaysAgo: days,
-    );
+    final Map<String, dynamic> result;
+
+    if (strategy == 'quant_walkforward') {
+      final engine = QuantBacktestEngine(yahoo: YahooFinanceClient());
+      result = await engine.runWalkForward(
+        symbols: symbols,
+        lookbackMonths: (days / 30).round().clamp(6, 24),
+      );
+      if (result.containsKey('error')) {
+        throw Exception(result['error'] as String);
+      }
+    } else {
+      final engine = BacktestEngine(yahooClient: YahooFinanceClient());
+      result = await engine.run(
+        symbols: symbols,
+        strategy: strategy,
+        initialCapital: initialCapital,
+        startDaysAgo: days,
+      );
+    }
 
     final data = BacktestResultData(
       id: 0,

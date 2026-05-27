@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../../data/database/app_database.dart';
 import '../../data/datasources/local/database_datasource.dart';
 import '../../data/datasources/remote/yahoo_finance_client.dart';
+import '../../data/repositories/watchlist_repository.dart';
 import '../../widgets/shimmer_loading.dart';
 
 class InsiderScreen extends ConsumerStatefulWidget {
@@ -20,13 +21,19 @@ class _InsiderScreenState extends ConsumerState<InsiderScreen> {
 
   Future<void> _load({String? symbol}) async {
     setState(() => _loaded = false);
-    final client = YahooFinanceClient();
     final db = ref.read(databaseProvider);
     try {
-      if (symbol != null) {
-        _data = await (db.select(db.insiderTransactions)..where((t) => t.symbol.equals(symbol.toUpperCase()))).get();
+      if (symbol != null && symbol.isNotEmpty) {
+        _data = await (db.select(db.insiderTransactions)
+              ..where((t) => t.symbol.equals(symbol.toUpperCase())))
+            .get();
       } else {
-        _data = await db.select(db.insiderTransactions).get();
+        final watchlist = await ref.read(watchlistRepositoryProvider).getAll();
+        final symbols = watchlist.map((w) => w.symbol.toUpperCase()).toSet();
+        final all = await db.select(db.insiderTransactions).get();
+        _data = symbols.isEmpty
+            ? all
+            : all.where((t) => symbols.contains(t.symbol.toUpperCase())).toList();
         _data.sort((a, b) => b.transactionDate.compareTo(a.transactionDate));
       }
     } catch (_) {}

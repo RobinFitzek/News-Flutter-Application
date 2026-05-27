@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import '../../../config/stockholm_colors.dart';
 import '../../../data/database/app_database.dart';
+import '../../../widgets/glass_card.dart';
 
 class InsiderTab extends StatelessWidget {
-  const InsiderTab(
-      {super.key, this.transactions = const [], this.isLoading = false});
+  const InsiderTab({
+    super.key,
+    this.transactions = const [],
+    this.isLoading = false,
+  });
 
   final List<InsiderTransactionData> transactions;
   final bool isLoading;
@@ -12,7 +18,7 @@ class InsiderTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator(strokeWidth: 2));
     }
 
     if (transactions.isEmpty) {
@@ -22,52 +28,61 @@ class InsiderTab extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.person_search,
-                  size: 48,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant),
+              const Icon(Icons.person_search,
+                  size: 48, color: StockholmColors.textMuted),
               const SizedBox(height: 16),
               Text('No insider transactions found',
                   style: Theme.of(context).textTheme.bodyLarge),
               const SizedBox(height: 8),
-              Text('Insider trading data will be available in a future update',
-                  style: Theme.of(context).textTheme.bodySmall,
-                  textAlign: TextAlign.center),
+              const Text(
+                'SEC Form 4 filings are pulled from EDGAR when available.',
+                style: TextStyle(color: StockholmColors.textSecondary),
+                textAlign: TextAlign.center,
+              ),
             ],
           ),
         ),
       );
     }
 
-    return ListView.builder(
-      padding: const EdgeInsets.all(16),
-      itemCount: transactions.length,
-      itemBuilder: (context, index) {
-        final t = transactions[index];
-        final isBuy = t.type.toUpperCase() == 'BUY' || t.type.toUpperCase() == 'PURCHASE';
-        final typeColor = isBuy ? Colors.green : Colors.red;
+    final buys = transactions.where((t) => _isBuy(t.type)).length;
+    final sells = transactions.length - buys;
 
-        return Card(
-          margin: const EdgeInsets.only(bottom: 8),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        GlassCard(
+          margin: EdgeInsets.zero,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _summaryChip('Buys', buys, StockholmColors.signalPositive),
+              _summaryChip('Sells', sells, StockholmColors.signalNegative),
+              _summaryChip('Total', transactions.length, StockholmColors.signalNeutral),
+            ],
+          ),
+        ),
+        const SizedBox(height: 12),
+        ...transactions.map((t) {
+          final isBuy = _isBuy(t.type);
+          final typeColor =
+              isBuy ? StockholmColors.signalPositive : StockholmColors.signalNegative;
+
+          return GlassCard(
+            margin: const EdgeInsets.only(bottom: 8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
                       child: Text(t.insiderName,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall
-                              ?.copyWith(fontWeight: FontWeight.bold)),
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 2),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                       decoration: BoxDecoration(
-                        color: typeColor.withAlpha(30),
+                        color: typeColor.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(t.type,
@@ -78,40 +93,47 @@ class InsiderTab extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 4),
                 Text(t.title,
-                    style: Theme.of(context).textTheme.bodySmall),
+                    style: const TextStyle(
+                        fontSize: 12, color: StockholmColors.textSecondary)),
                 const SizedBox(height: 8),
-                _buildDetailRow(context, 'Shares',
-                    NumberFormat.compact().format(t.shares)),
-                _buildDetailRow(context, 'Price',
-                    '\$${t.price.toStringAsFixed(2)}'),
-                _buildDetailRow(context, 'Total Value',
-                    '\$${NumberFormat.compact().format(t.totalValue)}'),
-                _buildDetailRow(context, 'Transaction Date',
+                _row('Shares', NumberFormat.compact().format(t.shares)),
+                _row('Price', '\$${t.price.toStringAsFixed(2)}'),
+                _row('Value', '\$${NumberFormat.compact().format(t.totalValue)}'),
+                _row('Date',
                     DateFormat('MMM d, yyyy').format(t.transactionDate)),
               ],
             ),
-          ),
-        );
-      },
+          );
+        }),
+      ],
     );
   }
 
-  Widget _buildDetailRow(BuildContext context, String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: Theme.of(context).textTheme.bodyMedium),
-          Text(value,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium
-                  ?.copyWith(fontWeight: FontWeight.w600)),
-        ],
-      ),
-    );
+  bool _isBuy(String type) {
+    final u = type.toUpperCase();
+    return u == 'BUY' || u == 'PURCHASE' || u == 'A';
   }
+
+  Widget _summaryChip(String label, int count, Color color) => Column(
+        children: [
+          Text('$count',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, fontSize: 18, color: color)),
+          Text(label,
+              style: const TextStyle(
+                  fontSize: 11, color: StockholmColors.textSecondary)),
+        ],
+      );
+
+  Widget _row(String k, String v) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(k, style: const TextStyle(fontSize: 13)),
+            Text(v, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+          ],
+        ),
+      );
 }

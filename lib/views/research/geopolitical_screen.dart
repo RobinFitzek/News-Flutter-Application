@@ -1,42 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../data/datasources/remote/provider_factory.dart';
-import '../../data/repositories/provider_repository.dart';
-import '../../models/stage_assignment.dart';
+
+import '../../data/repositories/geopolitical_repository.dart';
+import '../../data/database/app_database.dart';
+import '../../engine/geopolitical_scanner.dart';
+import '../../config/stockholm_colors.dart';
+import '../../widgets/glass_card.dart';
 import '../../widgets/shimmer_loading.dart';
-
-class GeopoliticalViewModel {
-  final ProviderRepository providerRepo;
-  GeopoliticalViewModel({required this.providerRepo});
-
-  bool isLoading = false;
-  String? analysis;
-  String? error;
-
-  Future<void> scan() async {
-    isLoading = true;
-    error = null;
-    try {
-      final provider = await providerRepo.getByStage(AnalysisStage.newsResearch);
-      if (provider == null || provider.apiKey.isEmpty) {
-        error = 'No news research provider configured. Set one in Settings.';
-        isLoading = false;
-        return;
-      }
-
-      final client = ProviderFactory.createFromData(provider);
-      analysis = await client.generateText(
-        'Provide a brief geopolitical risk assessment for global stock markets today. '
-        'Cover: 1) Major geopolitical events affecting markets, 2) Trade/tariff developments, '
-        '3) Central bank policy outlook, 4) Regional hotspots. '
-        'Keep it concise — 3-4 short paragraphs total.'
-      );
-    } catch (e) {
-      error = e.toString();
-    }
-    isLoading = false;
-  }
-}
 
 class GeopoliticalScreen extends ConsumerStatefulWidget {
   const GeopoliticalScreen({super.key});
@@ -46,38 +16,123 @@ class GeopoliticalScreen extends ConsumerStatefulWidget {
 }
 
 class _GeopoliticalScreenState extends ConsumerState<GeopoliticalScreen> {
-  GeopoliticalViewModel? _vm;
-  bool _loaded = false;
+  GeopoliticalEventData? _scan;
+  List<GeopoliticalEventData> _history = [];
+  bool _loading = false;
+  String? _error;
 
   @override
   void initState() {
     super.initState();
-    _vm = GeopoliticalViewModel(providerRepo: ref.read(providerRepositoryProvider));
+    Future.microtask(_load);
+  }
+
+  Future<void> _load() async {
+    setState(() => _loading = true);
+    try {
+      final repo = ref.read(geopoliticalRepositoryProvider);
+      _scan = await repo.getLatestScan();
+      _history = await repo.getHistory(limit: 5);
+      _error = null;
+    } catch (e) {
+      _error = e.toString();
+    }
+    if (mounted) setState(() => _loading = false);
+  }
+
+  Future<void> _scanNow() async {
+    setState(() { _loading = true; _error = null; });
+    try {
+      final repo = ref.read(geopoliticalRepositoryProvider);
+      _scan = await repo.runScan();
+      _history = await repo.getHistory(limit: 5);
+    } catch (e) {
+      _error = e.toString();
+    }
+    if (mounted) setState(() => _loading = false);
   }
 
   @override
   Widget build(BuildContext context) {
+    final events = _scan != null
+        ? GeopoliticalScanner.parseGeoText(_scan!.rawSummary)['events'] as List
+        : <dynamic>[];
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Geopolitical Risk')),
-      body: _vm == null ? const ShimmerLoading(count: 2) : 
-        _vm!.analysis != null
-          ? SingleChildScrollView(padding: const EdgeInsets.all(16), child: Card(child: Padding(padding: const EdgeInsets.all(16), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('Risk Assessment', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold)),
-            const SizedBox(height: 12),
-            Text(_vm!.analysis!, style: const TextStyle(fontSize: 14, height: 1.5)),
-          ]))))
-          : _vm!.isLoading
-            ? const Center(child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [CircularProgressIndicator(), SizedBox(height: 16), Text('Scanning geopolitical risks...')]))
-            : Center(child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Icon(Icons.public, size: 64, color: Theme.of(context).colorScheme.onSurfaceVariant),
-              const SizedBox(height: 16),
-              Text('Geopolitical Risk Scanner', style: Theme.of(context).textTheme.titleMedium),
-              const SizedBox(height: 8),
-              if (_vm!.error != null) Text(_vm!.error!, style: TextStyle(color: Theme.of(context).colorScheme.error), textAlign: TextAlign.center),
-              const SizedBox(height: 16),
-              ElevatedButton.icon(onPressed: () async { await _vm!.scan(); if (mounted) setState(() => _loaded = true); }, icon: const Icon(Icons.search), label: const Text('Scan Now')),
-            ])),
-      floatingActionButton: _vm?.analysis != null ? FloatingActionButton(onPressed: () async { await _vm!.scan(); if (mounted) setState(() {}); }, child: const Icon(Icons.refresh)) : null,
+      appBar: AppBar(
+        title: const Text('Geopolitical Radar'),
+        actions: [
+          IconButton(onPressed: _loading ? null : _scanNow, icon: const Icon(Icons.refresh)),
+        ],
+      ),
+      body: _loading && _scan == null
+          ? const ShimmerLoading(count: 3)
+          : ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                if (_error != null)
+                  GlassCard(
+                    child: Text(_error!, style: const TextStyle(color: StockholmColors.signalNegative)),
+                  ),
+                if (_scan != null) ...[
+                  GlassCard(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text('Severity ${_scan!.severity}',
+                                style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold)),
+                            const Spacer(),
+                            Text(
+                              _scan!.scannedAt.toLocal().toString().substring(0, 16),
+                              style: const TextStyle(fontSize: 11, color: StockholmColors.textSecondary),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        Text(_scan!.summary, style: const TextStyle(fontSize: 14, height: 1.5)),
+                      ],
+                    ),
+                  ),
+                  if (events.isNotEmpty) ...[
+                    const SizedBox(height: 12),
+                    Text('Events', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 8),
+                    ...events.map((e) => GlassCard(
+                          margin: const EdgeInsets.only(bottom: 6),
+                          child: Row(
+                            children: [
+                              Expanded(child: Text(e['headline']?.toString() ?? '')),
+                              Text('S${e['severity']}', style: const TextStyle(fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                        )),
+                  ],
+                ] else
+                  Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.public, size: 64, color: StockholmColors.textMuted),
+                        const SizedBox(height: 16),
+                        const Text('No geopolitical scan yet'),
+                        const SizedBox(height: 16),
+                        ElevatedButton.icon(onPressed: _scanNow, icon: const Icon(Icons.search), label: const Text('Scan Now')),
+                      ],
+                    ),
+                  ),
+                if (_history.length > 1) ...[
+                  const SizedBox(height: 16),
+                  Text('History', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold)),
+                  ..._history.skip(1).map((h) => GlassCard(
+                        margin: const EdgeInsets.only(top: 6),
+                        child: Text('${h.scannedAt.toLocal().toString().substring(0, 16)} · Severity ${h.severity}\n${h.summary}',
+                            maxLines: 3, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12)),
+                      )),
+                ],
+              ],
+            ),
     );
   }
 }

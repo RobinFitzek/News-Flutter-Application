@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../viewmodels/watchlist_viewmodel.dart';
 import '../../widgets/watchlist_tile.dart';
 import '../../widgets/shimmer_loading.dart';
 import '../../widgets/error_retry_widget.dart';
 import '../../data/database/app_database.dart';
-import 'package:go_router/go_router.dart';
+import 'package:file_picker/file_picker.dart';
+import 'dart:convert';
 
 class WatchlistBody extends ConsumerStatefulWidget {
   const WatchlistBody({super.key});
@@ -98,6 +100,36 @@ class _WatchlistBodyState extends ConsumerState<WatchlistBody> {
       setState(() => _isAdding = true);
       await ref.read(watchlistViewModelProvider.notifier).addTicker(result);
         setState(() => _isAdding = false);
+    }
+  }
+
+  Future<void> _importCsv() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['csv', 'txt'],
+      withData: true,
+    );
+    if (result == null || result.files.isEmpty) return;
+    final bytes = result.files.first.bytes;
+    if (bytes == null) return;
+    final text = utf8.decode(bytes);
+    final lines = text.split('\n');
+    var imported = 0;
+    for (final line in lines) {
+      final parts = line.split(',');
+      if (parts.isEmpty) continue;
+      final symbol = parts.first.trim().toUpperCase().replaceAll('"', '');
+      if (symbol.isEmpty || symbol == 'SYMBOL' || symbol == 'TICKER') continue;
+      if (symbol.length > 6) continue;
+      try {
+        await ref.read(watchlistViewModelProvider.notifier).addTicker(symbol);
+        imported++;
+      } catch (_) {}
+    }
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Imported $imported tickers from CSV')),
+      );
     }
   }
 
@@ -247,9 +279,21 @@ class _WatchlistBodyState extends ConsumerState<WatchlistBody> {
           Positioned(
             bottom: 16,
             right: 16,
-            child: FloatingActionButton(
-              onPressed: _showAddDialog,
-              child: const Icon(Icons.add),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                FloatingActionButton.small(
+                  heroTag: 'import',
+                  onPressed: _importCsv,
+                  child: const Icon(Icons.upload_file),
+                ),
+                const SizedBox(height: 8),
+                FloatingActionButton(
+                  heroTag: 'add',
+                  onPressed: _showAddDialog,
+                  child: const Icon(Icons.add),
+                ),
+              ],
             ),
           ),
       ],

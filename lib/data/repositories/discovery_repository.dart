@@ -42,8 +42,12 @@ class DiscoveryRepositoryImpl implements DiscoveryRepository {
 
   @override
   Future<void> promote(int id) async {
-    await (db.update(db.discoveries)..where((t) => t.id.equals(id)))
-        .write(const DiscoveriesCompanion(isPromoted: Value(true)));
+    await (db.update(db.discoveries)..where((t) => t.id.equals(id))).write(
+      DiscoveriesCompanion(
+        isPromoted: const Value(true),
+        promotedAt: Value(DateTime.now()),
+      ),
+    );
   }
 
   @override

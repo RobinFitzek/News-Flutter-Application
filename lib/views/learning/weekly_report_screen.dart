@@ -5,6 +5,7 @@ import '../../data/repositories/analysis_repository.dart';
 import '../../data/repositories/portfolio_repository.dart';
 import '../../data/datasources/remote/provider_factory.dart';
 import '../../models/stage_assignment.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../widgets/shimmer_loading.dart';
 
 class ReportViewModel {
@@ -77,10 +78,16 @@ class _WeeklyReportScreenState extends ConsumerState<WeeklyReportScreen> {
     final vm = _vm!;
     return Scaffold(
       appBar: AppBar(title: const Text('Weekly Report'), actions: [
-        if (vm.report != null) IconButton(icon: const Icon(Icons.share), onPressed: () {
-          // Share placeholder
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Report ready to share')));
-        }),
+        if (vm.report != null)
+          IconButton(
+            icon: const Icon(Icons.share),
+            onPressed: () {
+              Share.share(
+                'Weekly Investment Report\n${DateTime.now().toIso8601String().substring(0, 10)}\n\n${vm.report!}',
+                subject: 'Weekly Investment Report',
+              );
+            },
+          ),
       ]),
       body: vm.isLoading
         ? const Center(child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [CircularProgressIndicator(), SizedBox(height: 16), Text('Generating report...')]))

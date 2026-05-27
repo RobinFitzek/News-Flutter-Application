@@ -3,6 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../viewmodels/discovery_viewmodel.dart';
 import '../../data/repositories/watchlist_repository.dart';
 import '../../data/database/app_database.dart';
+import '../../data/datasources/local/database_datasource.dart';
+import '../../engine/discovery_hit_rate.dart';
+import '../../config/stockholm_colors.dart';
+import '../../widgets/glass_card.dart';
 
 class DiscoverTab extends ConsumerStatefulWidget {
   const DiscoverTab({super.key});
@@ -12,12 +16,29 @@ class DiscoverTab extends ConsumerStatefulWidget {
 }
 
 class _DiscoverTabState extends ConsumerState<DiscoverTab> {
+  Map<String, dynamic>? _hitRate;
+  List<Map<String, dynamic>> _strategyRates = [];
+
   @override
   void initState() {
     super.initState();
     Future.microtask(() {
       ref.read(discoveryViewModelProvider.notifier).loadDiscoveries();
+      _loadHitRates();
     });
+  }
+
+  Future<void> _loadHitRates() async {
+    final engine = DiscoveryHitRate(ref.read(databaseProvider));
+    await engine.checkOutcomes();
+    final overall = await engine.getOverallHitRate();
+    final strategies = await engine.getStrategyHitRates();
+    if (mounted) {
+      setState(() {
+        _hitRate = overall;
+        _strategyRates = strategies;
+      });
+    }
   }
 
   @override
@@ -33,7 +54,7 @@ class _DiscoverTabState extends ConsumerState<DiscoverTab> {
               children: [
                 CircularProgressIndicator(),
                 SizedBox(height: 16),
-                Text('AI is discovering stocks...'),
+                Text('Scanning with quant engine...'),
               ],
             ),
           )
@@ -52,7 +73,7 @@ class _DiscoverTabState extends ConsumerState<DiscoverTab> {
                       style: Theme.of(context).textTheme.titleMedium),
                   const SizedBox(height: 8),
                   Text(
-                    'Let AI find promising stocks you might have missed',
+                    'Quant momentum scan (free) + optional AI enrichment',
                     style: Theme.of(context).textTheme.bodyMedium,
                     textAlign: TextAlign.center,
                   ),
@@ -61,8 +82,8 @@ class _DiscoverTabState extends ConsumerState<DiscoverTab> {
                     onPressed: () => ref
                         .read(discoveryViewModelProvider.notifier)
                         .runDiscovery(),
-                    icon: const Icon(Icons.psychology),
-                    label: const Text('Run AI Discovery'),
+                    icon: const Icon(Icons.analytics),
+                    label: const Text('Run Discovery Scan'),
                   ),
                   if (state.errorMessage != null) ...[
                     const SizedBox(height: 16),
@@ -81,25 +102,67 @@ class _DiscoverTabState extends ConsumerState<DiscoverTab> {
             itemCount: state.discoveries.length + 1,
             itemBuilder: (context, index) {
               if (index == 0) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                          '${state.discoveries.length} discoveries',
-                          style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.bold)),
-                      TextButton.icon(
-                        onPressed: () => ref
-                            .read(discoveryViewModelProvider.notifier)
-                            .runDiscovery(),
-                        icon: const Icon(Icons.refresh, size: 18),
-                        label: const Text('Refresh'),
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (_hitRate?['available'] == true)
+                      GlassCard(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Discovery Hit Rates',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall
+                                      ?.copyWith(fontWeight: FontWeight.bold)),
+                              const SizedBox(height: 8),
+                              _hitRow('30d',
+                                  '${_hitRate!['hit_rate_30d']}% avg ${_hitRate!['avg_return_30d']}%'),
+                              _hitRow('90d',
+                                  '${_hitRate!['hit_rate_90d']}% avg ${_hitRate!['avg_return_90d']}%'),
+                              if (_strategyRates.isNotEmpty) ...[
+                                const Divider(height: 16),
+                                ..._strategyRates.take(3).map((s) => _hitRow(
+                                      s['strategy'],
+                                      '30d ${s['hit_rate_30d']}% · 60d ${s['hit_rate_60d']}% · 90d ${s['hit_rate_90d']}%',
+                                    )),
+                              ],
+                            ],
+                          ),
+                        ),
                       ),
-                    ],
-                  ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                              '${state.discoveries.length} discoveries',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall
+                                  ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary,
+                                      fontWeight: FontWeight.bold)),
+                          TextButton.icon(
+                            onPressed: () {
+                              ref
+                                  .read(discoveryViewModelProvider.notifier)
+                                  .runDiscovery();
+                              _loadHitRates();
+                            },
+                            icon: const Icon(Icons.refresh, size: 18),
+                            label: const Text('Refresh'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 );
               }
               final d = state.discoveries[index - 1];
@@ -126,6 +189,21 @@ class _DiscoverTabState extends ConsumerState<DiscoverTab> {
       ],
     );
   }
+
+  Widget _hitRow(String label, String value) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(label,
+                style: const TextStyle(
+                    fontSize: 12, color: StockholmColors.textSecondary)),
+            Text(value,
+                style: const TextStyle(
+                    fontSize: 12, fontWeight: FontWeight.w600)),
+          ],
+        ),
+      );
 
   Future<void> _promoteToWatchlist(DiscoveryData d) async {
     try {
