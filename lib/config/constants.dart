@@ -6,6 +6,9 @@ class AppConstants {
   static const String geminiBaseUrl =
       'https://generativelanguage.googleapis.com/v1beta';
   static const String perplexityBaseUrl = 'https://api.perplexity.ai';
+  static const String openaiBaseUrl = 'https://api.openai.com/v1';
+  static const String anthropicBaseUrl = 'https://api.anthropic.com/v1';
+  static const String ollamaBaseUrl = 'http://localhost:11434';
 
   // Default settings
   static const int analysisIntervalHours = 4;

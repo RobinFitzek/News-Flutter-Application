@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../viewmodels/watchlist_viewmodel.dart';
 import '../../widgets/watchlist_tile.dart';
 import '../../widgets/shimmer_loading.dart';
 import '../../widgets/error_retry_widget.dart';
-import 'package:go_router/go_router.dart';
+import '../../data/database/app_database.dart';
+import 'package:file_picker/file_picker.dart';
+import 'dart:convert';
 
 class WatchlistBody extends ConsumerStatefulWidget {
   const WatchlistBody({super.key});
@@ -16,6 +19,16 @@ class WatchlistBody extends ConsumerStatefulWidget {
 class _WatchlistBodyState extends ConsumerState<WatchlistBody> {
   final _symbolController = TextEditingController();
   bool _isAdding = false;
+  String? _activeGroupFilter;
+
+  Set<String> _getGroups(List<WatchlistItemData> items) {
+    return items.where((i) => i.groupName != null).map((i) => i.groupName!).toSet();
+  }
+
+  List<WatchlistItemData> _filtered(List<WatchlistItemData> items) {
+    if (_activeGroupFilter == null) return items;
+    return items.where((i) => i.groupName == _activeGroupFilter).toList();
+  }
 
   @override
   void initState() {
@@ -86,8 +99,77 @@ class _WatchlistBodyState extends ConsumerState<WatchlistBody> {
     if (result != null && result.isNotEmpty) {
       setState(() => _isAdding = true);
       await ref.read(watchlistViewModelProvider.notifier).addTicker(result);
-      setState(() => _isAdding = false);
+        setState(() => _isAdding = false);
     }
+  }
+
+  Future<void> _importCsv() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['csv', 'txt'],
+      withData: true,
+    );
+    if (result == null || result.files.isEmpty) return;
+    final bytes = result.files.first.bytes;
+    if (bytes == null) return;
+    final text = utf8.decode(bytes);
+    final lines = text.split('\n');
+    var imported = 0;
+    for (final line in lines) {
+      final parts = line.split(',');
+      if (parts.isEmpty) continue;
+      final symbol = parts.first.trim().toUpperCase().replaceAll('"', '');
+      if (symbol.isEmpty || symbol == 'SYMBOL' || symbol == 'TICKER') continue;
+      if (symbol.length > 6) continue;
+      try {
+        await ref.read(watchlistViewModelProvider.notifier).addTicker(symbol);
+        imported++;
+      } catch (_) {}
+    }
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Imported $imported tickers from CSV')),
+      );
+    }
+  }
+
+  void _showEditDialog(WatchlistItemData item) {
+    final noteCtrl = TextEditingController(text: item.note);
+    final groupCtrl = TextEditingController(text: item.groupName);
+    String tier = item.tier;
+
+    showDialog(
+      context: context,
+      builder: (ctx) => StatefulBuilder(builder: (ctx, setDlg) => AlertDialog(
+        title: Text('Edit ${item.symbol}'),
+        content: SingleChildScrollView(child: Column(mainAxisSize: MainAxisSize.min, children: [
+          DropdownButtonFormField<String>(
+            value: tier,
+            decoration: const InputDecoration(labelText: 'Tier', border: OutlineInputBorder()),
+            items: const [
+              DropdownMenuItem(value: 'core', child: Text('Core')),
+              DropdownMenuItem(value: 'swing', child: Text('Swing')),
+              DropdownMenuItem(value: 'research', child: Text('Research')),
+              DropdownMenuItem(value: 'earnings', child: Text('Earnings')),
+            ],
+            onChanged: (v) => setDlg(() => tier = v ?? 'core'),
+          ),
+          const SizedBox(height: 12),
+          TextField(controller: groupCtrl, decoration: const InputDecoration(labelText: 'Group Name', hintText: 'e.g. Tech, Dividends', border: OutlineInputBorder())),
+          const SizedBox(height: 12),
+          TextField(controller: noteCtrl, maxLines: 3, decoration: const InputDecoration(labelText: 'Notes', border: OutlineInputBorder())),
+        ])),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
+          ElevatedButton(onPressed: () {
+            ref.read(watchlistViewModelProvider.notifier).changeTier(item.id, tier);
+            ref.read(watchlistViewModelProvider.notifier).updateGroup(item.id, groupCtrl.text.isNotEmpty ? groupCtrl.text : null);
+            ref.read(watchlistViewModelProvider.notifier).updateNote(item.id, noteCtrl.text.isNotEmpty ? noteCtrl.text : null);
+            Navigator.pop(ctx);
+          }, child: const Text('Save')),
+        ],
+      )),
+    );
   }
 
   @override
@@ -152,11 +234,25 @@ class _WatchlistBodyState extends ConsumerState<WatchlistBody> {
                                     .colorScheme
                                     .surfaceContainerHighest,
                               ),
+                            if (_getGroups(state.items).isNotEmpty)
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(children: [
+                                    FilterChip(label: const Text('All'), selected: _activeGroupFilter == null, onSelected: (_) => setState(() => _activeGroupFilter = null)),
+                                    ..._getGroups(state.items).map((g) => Padding(
+                                      padding: const EdgeInsets.only(left: 4),
+                                      child: FilterChip(label: Text(g), selected: _activeGroupFilter == g, onSelected: (_) => setState(() => _activeGroupFilter = _activeGroupFilter == g ? null : g)),
+                                    )),
+                                  ]),
+                                ),
+                              ),
                             Expanded(
                               child: ListView.builder(
-                                itemCount: state.items.length,
+                                itemCount: _filtered(state.items).length,
                                 itemBuilder: (context, index) {
-                                  final item = state.items[index];
+                                  final item = _filtered(state.items)[index];
                                   final quote = state.quotes[item.symbol];
                                   return WatchlistTile(
                                     key: ValueKey(item.id),
@@ -165,6 +261,7 @@ class _WatchlistBodyState extends ConsumerState<WatchlistBody> {
                                     onTap: () {
                                       context.push('/stock/${item.symbol}');
                                     },
+                                    onLongPress: () => _showEditDialog(item),
                                     onDelete: () {
                                       ref
                                           .read(watchlistViewModelProvider
@@ -182,9 +279,21 @@ class _WatchlistBodyState extends ConsumerState<WatchlistBody> {
           Positioned(
             bottom: 16,
             right: 16,
-            child: FloatingActionButton(
-              onPressed: _showAddDialog,
-              child: const Icon(Icons.add),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                FloatingActionButton.small(
+                  heroTag: 'import',
+                  onPressed: _importCsv,
+                  child: const Icon(Icons.upload_file),
+                ),
+                const SizedBox(height: 8),
+                FloatingActionButton(
+                  heroTag: 'add',
+                  onPressed: _showAddDialog,
+                  child: const Icon(Icons.add),
+                ),
+              ],
             ),
           ),
       ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../watchlist/watchlist_screen.dart';
+import 'discover_tab.dart';
 
 class StocksScreen extends StatelessWidget {
   const StocksScreen({super.key});
@@ -21,21 +22,10 @@ class StocksScreen extends StatelessWidget {
         body: const TabBarView(
           children: [
             WatchlistBody(),
-            DiscoverPlaceholder(),
+            DiscoverTab(),
           ],
         ),
       ),
-    );
-  }
-}
-
-class DiscoverPlaceholder extends StatelessWidget {
-  const DiscoverPlaceholder({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Discovery — coming soon'),
     );
   }
 }

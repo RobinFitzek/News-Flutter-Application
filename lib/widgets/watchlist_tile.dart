@@ -10,6 +10,7 @@ class WatchlistTile extends StatelessWidget {
     this.onTap,
     this.onDelete,
     this.onTierChange,
+    this.onLongPress,
   });
 
   final WatchlistItemData item;
@@ -17,6 +18,7 @@ class WatchlistTile extends StatelessWidget {
   final VoidCallback? onTap;
   final VoidCallback? onDelete;
   final Function(String tier)? onTierChange;
+  final VoidCallback? onLongPress;
 
   Color _tierColor(String tier) {
     switch (tier) {
@@ -77,6 +79,7 @@ class WatchlistTile extends StatelessWidget {
       ),
       child: ListTile(
         onTap: onTap,
+        onLongPress: onLongPress,
         leading: CircleAvatar(
           backgroundColor: _tierColor(item.tier),
           child: Text(
